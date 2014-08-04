@@ -41,9 +41,9 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 if (sr.isNew()) {
                     //Fixme: need to be a separate document
                     data.put("name", d.getDevice().getName());
-                    data.put("cgmbattery", d.getDevice().getCGMBattery());
-                    data.put("uploaderBattery", d.getDevice().getUploaderBattery());
-                    data.put("units", d.getDevice().getUnit().getValue());
+//                    data.put("cgmbattery", d.getDevice().getCGMBattery());
+//                    data.put("uploaderBattery", d.getDevice().getUploaderBattery());
+//                    data.put("units", d.getDevice().getUnit().getValue());
 
                     data.put("trend", sr.getTrend().getVal());
                     // NightScout comptability
@@ -59,8 +59,16 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 }
             }
             Log.i(TAG,"Records processed: "+r.length+" Records Uploaded: "+uploadCount);
-//            BasicDBObject data= new BasicDBObject();
-//            data.put("deviceCheckinDate",new Date().getTime());
+            if (!d.getDevice().isVirtual()) {
+                BasicDBObject data = new BasicDBObject();
+                data.put("name", d.getDevice().getName());
+                data.put("deviceCheckinDate", new Date().getTime());
+                data.put("uploaderBattery", d.getDevice().getUploaderBattery());
+                data.put("cgmbattery", d.getDevice().getCGMBattery());
+                data.put("units", d.getDevice().getUnit().getValue());
+                data.put("downloadStatus", d.getStatus().toString());
+                deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
+            }
             if (mongoClient != null)
                 mongoClient.close();
         } catch (UnknownHostException e) {

@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by klee24 on 8/2/14.
  */
@@ -102,8 +104,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
 
         if (lastRec != null && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
             icon = getIcon(lastRec.getEgv(), lastRec.getTrend());
-            msg+= "BG: " + lastRec.getEgv() + " " + dl.getDevice().getUnit().toString() + " and " + lastRec.getTrend().toString();
-//            msg+="\nLast reading: "+lastRec.getDate().toString();
+            msg+= "BG: " + lastRec.getEgv() + " " + dl.getDevice().getUnit().toString() + " and " + lastRec.getTrend().toString()+"\n";
+            msg+="Last reading: "+new SimpleDateFormat("HH:mm:ss MM/dd").format(lastRec.getDate());
             notifBuilder.setContentText(msg);
 //                notifBuilder.setDefaults(Notification.DEFAULT_ALL);
         }
