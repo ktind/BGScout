@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BG Scout</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="welcome_message">BG Scout!</string>
+    <string name="action_settings">Settings</string>
+    <string name="manage_service">Start service</string>
+    <string name="cgm_service_title">CGM Monitoring service</string>
+
+</resources>
