@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if ("com.ktind.cgm.bgscout.DeviceDownloadService".equals(service.service.getClassName())) {
+            if (DeviceDownloadService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -66,6 +66,8 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

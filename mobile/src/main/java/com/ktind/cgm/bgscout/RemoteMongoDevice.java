@@ -1,7 +1,9 @@
 package com.ktind.cgm.bgscout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.mongodb.*;
@@ -16,10 +18,12 @@ import java.util.List;
  */
 public class RemoteMongoDevice extends AbstractCGMDevice {
     private static final String TAG = RemoteMongoDevice.class.getSimpleName();
-    private String mongoURI = "";
-    private String collectionName="";
+
+    private String mongoURI = null;
+    private String collectionName = null;
+
     private DBCollection deviceData;
-    MongoClientURI uri = new MongoClientURI(mongoURI);
+    MongoClientURI uri=null;// = new MongoClientURI(mongoURI);
     DB db;
     MongoClient mongoClient = null;
     long lastQueryDate;
@@ -30,6 +34,16 @@ public class RemoteMongoDevice extends AbstractCGMDevice {
         // Quasi race condition - CGM takes a second or 2 to read and upload while the "virtual CGM" takes less time.
         // Give it some time to settle. If not it'll try again in 45 seconds.
         this.setPollInterval(304000);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+        String[] device_list={"device_1","device_2","device_3","device_4"};
+        for (String dev:device_list) {
+            if (sharedPref.getString(dev+"_name","").equals(getName())){
+                mongoURI=sharedPref.getString(dev+"_mongo_uri","");
+                collectionName=sharedPref.getString(dev+"_mongo_col","");
+            }
+        }
+        if (mongoURI!=null)
+            uri = new MongoClientURI(mongoURI);
         // stop infinite loops!
         virtual = true;
     }

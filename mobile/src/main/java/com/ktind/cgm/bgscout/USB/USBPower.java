@@ -1,5 +1,6 @@
 package com.ktind.cgm.bgscout.USB;
 
+import android.os.Build;
 import android.util.Log;
 
 import java.io.DataOutputStream;
@@ -11,6 +12,7 @@ public class USBPower {
     private static final String SET_POWER_ON_COMMAND = "echo 'on' > \"/sys/bus/usb/devices/1-1/power/level\"";
     private static final String SET_POWER_SUSPEND_COMMAND_A = "echo \"0\" > \"/sys/bus/usb/devices/1-1/power/autosuspend\"";
     private static final String SET_POWER_SUSPEND_COMMAND_B = "echo \"auto\" > \"/sys/bus/usb/devices/1-1/power/level\"";
+    private static final String SET_AUTHORIZED_ON_CMD = "echo 1 > /sys/bus/usb/devices/1-1/authorized";
 
     public static void PowerOff() {
         try {
@@ -24,6 +26,10 @@ public class USBPower {
 
     public static void PowerOn(){
         try {
+            // Model specific command
+            if (Build.MODEL.contains("ST18i")) {
+                runCommand(SET_AUTHORIZED_ON_CMD);
+            }
             runCommand(SET_POWER_ON_COMMAND);
             Log.i(TAG, "PowerOn USB complete");
         } catch (Exception e) {

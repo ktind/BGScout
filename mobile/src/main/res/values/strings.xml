@@ -7,5 +7,27 @@
     <string name="action_settings">Settings</string>
     <string name="manage_service">Start service</string>
     <string name="cgm_service_title">CGM Monitoring service</string>
+    <!--TODO possible to dynamically rename these devices?-->
+    <string name="device_1">Device 1</string>
+    <string name="device_2">Device 2</string>
+    <string name="device_3">Device 3</string>
+    <string name="device_4">Device 4</string>
+    <string name="pref_device_type_title">Type of device</string>
+    <string name="pref_device_mongo_upload_title">Upload to Mongo DB</string>
+    <string name="pref_default_device_mongo_uri">mongodb://{user}:{password}@{host}.mongolab.com:{11111}/{database}</string>
+    <string name="pref_device_mongo_uri_title">MongoDB URI</string>
+    <string name="pref_remote_mongo_uri_dialog_title">Enter MongoDB URI</string>
+    <string name="pref_remote_mongo_uri_dialog_msg">Replace example values in {}\'s with your correct values</string>
+    <string name="pref_remote_mongo_uri_default">mongodb://{user}:{password}@{host}.mongolab.com:{11111}/{database}</string>
+    <string name="pref_device_remote_mongo_uri_title">Mongo DB for Remote devices</string>
+    <string name="pref_device_high_title">High Threshold</string>
+    <string name="pref_default_device_high">180</string>
+    <string name="pref_device_low_title">Low Threshold</string>
+    <string name="pref_default_device_low">60</string>
+    <string name="high_ring_tone_title">High ringtone</string>
+    <string name="low_ring_tone_title">Low ringtone</string>
+    <string name="pref_device_remote_mongo_col_title">Collection Name</string>
+    <string name="pref_remote_mongo_col_dialog_title">Enter Collection name</string>
+    <string name="pref_remote_mongo_col_dialog_msg">This is the name of the collection where the CGM data will be stored</string>
 
 </resources>

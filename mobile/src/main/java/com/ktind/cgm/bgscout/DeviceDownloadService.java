@@ -4,12 +4,14 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.squareup.otto.Subscribe;
@@ -27,10 +29,40 @@ public class DeviceDownloadService extends Service {
     public void onCreate() {
         super.onCreate();
         CGMBus.getInstance().register(this);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String[] device_list={"device_1","device_2","device_3","device_4"};
+        int devCount=1;
+        for (String dev:device_list) {
+            boolean enabled = sharedPref.getBoolean(dev+"_enable", false);
+            if (enabled){
+                String name = sharedPref.getString(dev+"_name","");
+                // FIXME - not sure whats going on here? Why do I have to cast this from a string? Was it setup in the XML wrong?
+                int type = Integer.valueOf(sharedPref.getString(dev+"_type","0"));
+                AbstractCGMDevice cgm=null;
+                switch(type){
+                    case 0:
+                        cgm=new G4CGMDevice(name,devCount,getBaseContext(),mHandler);
+                        Log.d(TAG,"Creating new G4 device named "+name);
+                        break;
+                    case 1:
+                        cgm=new RemoteMongoDevice(name,devCount,getBaseContext(),mHandler);
+                        Log.d(TAG,"Creating new remote device named "+name);
+                        break;
+                    default:
+                        Log.e(TAG,"Unknown CGM type: "+type);
+                        break;
+                }
+                if (cgm!=null) {
+                    cgms.add(cgm);
+                    Log.d(TAG,"Adding CGM to list of cgms");
+                    devCount+=1;
+                } else {
+                    Log.d(TAG,"No device added. Should not see this message");
+                }
+            }
+        }
+        Log.i(TAG,"Added "+devCount+" devices to the device list");
 //        cgms.add(new G4CGMDevice("Melissa",1,getBaseContext(),mHandler));
-        cgms.add(new RemoteMongoDevice("Melissa",1,getBaseContext(),mHandler));
-//        cgms.add(new FakeCGMDevice("Billy",2,this.getBaseContext()));
-//        cgms.add(new FakeCGMDevice("Sue",3,this.getBaseContext()));
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), MainActivity.class), 0);
         notificationBuilder = new Notification.Builder(getApplicationContext())

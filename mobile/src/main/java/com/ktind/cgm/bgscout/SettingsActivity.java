@@ -101,25 +101,49 @@ public class SettingsActivity extends PreferenceActivity {
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
 
-        // Add 'notifications' preferences, and a corresponding header.
-        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_notifications);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_notification);
-
-        // Add 'data and sync' preferences, and a corresponding header.
-        fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_data_sync);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_data_sync);
+//        // Add 'notifications' preferences, and a corresponding header.
+//        PreferenceCategory fakeHeader = new PreferenceCategory(this);
+//        fakeHeader.setTitle(R.string.pref_header_notifications);
+//        getPreferenceScreen().addPreference(fakeHeader);
+//        addPreferencesFromResource(R.xml.pref_notification);
+//
+//        // Add 'data and sync' preferences, and a corresponding header.
+//        fakeHeader = new PreferenceCategory(this);
+//        fakeHeader.setTitle(R.string.pref_header_data_sync);
+//        getPreferenceScreen().addPreference(fakeHeader);
+//        addPreferencesFromResource(R.xml.pref_data_sync);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("example_text"));
-        bindPreferenceSummaryToValue(findPreference("example_list"));
-        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+//        bindPreferenceSummaryToValue(findPreference("example_text"));
+//        bindPreferenceSummaryToValue(findPreference("example_list"));
+//        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        bindPreferenceSummaryToValue(findPreference("device_1_name"));
+        bindPreferenceSummaryToValue(findPreference("device_2_name"));
+        bindPreferenceSummaryToValue(findPreference("device_3_name"));
+        bindPreferenceSummaryToValue(findPreference("device_4_name"));
+        bindPreferenceSummaryToValue(findPreference("device_1_high_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_1_low_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_2_high_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_2_low_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_3_high_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_3_low_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_4_high_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_4_low_threshold"));
+        bindPreferenceSummaryToValue(findPreference("device_1_high_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_1_low_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_2_high_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_2_low_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_3_high_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_3_low_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_4_high_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_4_low_ringtone"));
+        bindPreferenceSummaryToValue(findPreference("device_1_mongo_uri"));
+        bindPreferenceSummaryToValue(findPreference("device_2_mongo_uri"));
+        bindPreferenceSummaryToValue(findPreference("device_3_mongo_uri"));
+        bindPreferenceSummaryToValue(findPreference("device_4_mongo_uri"));
     }
 
     /** {@inheritDoc} */
@@ -159,7 +183,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    /**
+    /** TODO Implement something here
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
@@ -252,41 +276,41 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-        }
-    }
-
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-        }
-    }
+//    /**
+//     * This fragment shows notification preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class NotificationPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_notification);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//        }
+//    }
+//
+//    /**
+//     * This fragment shows data and sync preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_data_sync);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+//        }
+//    }
 }

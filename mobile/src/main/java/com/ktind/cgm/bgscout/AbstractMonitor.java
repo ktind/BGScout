@@ -18,6 +18,14 @@ abstract public class AbstractMonitor implements MonitorInterface {
         this.name=n;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getMonitorType() {
         return monitorType;
     }

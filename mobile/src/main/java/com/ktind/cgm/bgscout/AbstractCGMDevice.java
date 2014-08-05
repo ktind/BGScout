@@ -3,10 +3,13 @@ package com.ktind.cgm.bgscout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -40,10 +43,27 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
         this.setAppContext(appContext);
         this.setHandler(mH);
 
-        AbstractMonitor anm=new AndroidNotificationMonitor(getName(),deviceID,appContext);
-        AbstractMonitor mongo=new MongoUploadMonitor(getName());
-        monitors.add(anm);
-        monitors.add(mongo);
+//        AbstractMonitor anm=new AndroidNotificationMonitor(getName(),deviceID,appContext);
+//        AbstractMonitor mongo=new MongoUploadMonitor(getName());
+//        monitors.add(anm);
+//        monitors.add(mongo);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+        // TODO Copy/paste bad .... =(. Pull these values out to some central location
+        String[] device_list={"device_1","device_2","device_3","device_4"};
+        AbstractMonitor androidMonitor;
+        AbstractMonitor mongoUpload;
+        // FIXME there are more efficient ways to get this...
+        for (String dev: device_list){
+            if (sharedPref.getString(dev+"_name","").equals(getName())) {
+                androidMonitor = new AndroidNotificationMonitor(getName(), deviceID, appContext);
+                monitors.add(androidMonitor);
+                // Defaulting to a remote client to be safe..
+                if (Integer.valueOf(sharedPref.getString(dev + "_type", "1")) == 0) {
+                    mongoUpload = new MongoUploadMonitor(getName(),appContext);
+                    monitors.add(mongoUpload);
+                }
+            }
+        }
         monitorProxy.setMonitors(monitors);
     }
 
@@ -59,7 +79,7 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
         return level / (float) scale;
     }
 
-    abstract int getCGMBattery();
+    abstract int getCGMBattery() throws IOException;
 
     public int getDeviceID() {
         return deviceID;
@@ -138,7 +158,8 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
     }
 
     public long nextFire(long millis){
-        if (lastDownloadObject!=null){
+        // FIXME shouldn't assume this data is set. Need to wrap this in a method.
+        if (lastDownloadObject!=null && lastDownloadObject.getEgvRecords()!=null && lastDownloadObject.getEgvRecords().length>0){
             long diff=(millis-(new Date().getTime() - lastDownloadObject.getEgvRecords()[lastDownloadObject.getEgvRecords().length-1].getDate().getTime()));
             Log.d(TAG,"nextFire calculated to be: "+diff+" for "+getName()+" using a poll interval of "+millis);
             if (diff<0) {

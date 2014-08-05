@@ -52,9 +52,9 @@ public class G4CGMDevice extends AbstractCGMDevice  {
     }
 
     @Override
-    int getCGMBattery() {
+    int getCGMBattery() throws IOException {
         if (cgmBattery==-1)
-            cgmBattery=getCGMBattery();
+            cgmBattery=getBatteryLevel();
         return cgmBattery;
     }
 

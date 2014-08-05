@@ -1,9 +1,13 @@
 package com.ktind.cgm.bgscout;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.mongodb.*;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +17,8 @@ import java.util.Date;
  */
 public class MongoUploadMonitor extends AbstractMonitor {
     private static final String TAG = MongoUploadMonitor.class.getSimpleName();
+    Context appContext;
+
 
     MongoUploadMonitor(String name) {
         super(name);
@@ -20,14 +26,34 @@ public class MongoUploadMonitor extends AbstractMonitor {
         this.setMonitorType("mongo uploader");
     }
 
+    MongoUploadMonitor(String name,Context c) {
+        super(name);
+        this.setAllowVirtual(false);
+        this.setMonitorType("mongo uploader");
+        appContext=c;
+    }
+
+
     @Override
     protected void doProcess(DeviceDownloadObject d) {
         //FIXME add these as user configurable options
-        String mongoURI = "";
-        String collectionName="";
+        String mongoURI = null;
+        String collectionName=null;
+
         DBCollection deviceData;
 
-        MongoClientURI uri = new MongoClientURI(mongoURI);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+        String[] device_list={"device_1","device_2","device_3","device_4"};
+        for (String dev:device_list) {
+            if (sharedPref.getString(dev+"_name","").equals(getName())){
+                mongoURI=sharedPref.getString(dev+"_mongo_uri","");
+                collectionName=sharedPref.getString(dev+"_mongo_col","");
+            }
+        }
+        MongoClientURI uri=null;
+        if (mongoURI!=null)
+            uri = new MongoClientURI(mongoURI);
+
         DB db;
 
         try{
@@ -64,7 +90,12 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 data.put("name", d.getDevice().getName());
                 data.put("deviceCheckinDate", new Date().getTime());
                 data.put("uploaderBattery", d.getDevice().getUploaderBattery());
-                data.put("cgmbattery", d.getDevice().getCGMBattery());
+                try {
+                    data.put("cgmbattery", d.getDevice().getCGMBattery());
+                }catch (IOException e){
+                    // Only add the information if we can get it. We need this data to upload regardless.
+                    Log.d(TAG, "Problem retreiving battery from CGM. Is it connected?");
+                }
                 data.put("units", d.getDevice().getUnit().getValue());
                 data.put("downloadStatus", d.getStatus().toString());
                 deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
