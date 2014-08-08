@@ -165,6 +165,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MqttCallback
                 "  Message:\t" + egvString +
                 "  QoS:\t" + mqttMessage.getQos());
         EGVRecord[] recs = new EGVRecord[1];
+        // TODO protobuf here
         String[] recordArray=egvString.split(":");
         Log.d(TAG,"BG: "+recordArray[0]+"Date: "+recordArray[1]+" Trend: "+recordArray[2]);
         recs[0]=new EGVRecord(Integer.valueOf(recordArray[0]),new Date(Long.valueOf(recordArray[1])),Trend.values()[Integer.valueOf(recordArray[2])],true);
