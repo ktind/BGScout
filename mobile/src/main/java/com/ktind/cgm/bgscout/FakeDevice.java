@@ -11,22 +11,22 @@ import java.util.Random;
 /**
  * Created by klee24 on 8/2/14.
  */
-public class FakeCGMDevice extends AbstractCGMDevice {
+public class FakeDevice extends AbstractPollDevice {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
     private ArrayList<EGVRecord> egvHistory=new ArrayList<EGVRecord>(FakeCGMDeviceConstants.MAXEGV);
     private boolean initialRun;
     private Date lastReading=new Date(new Date().getTime()-10800000L);
 
-    public FakeCGMDevice(String n, int deviceID, Context appContext,Handler mH) {
+    public FakeDevice(String n, int deviceID, Context appContext, Handler mH) {
         //    public AbstractCGMDevice(String n,int deviceID,Context appContext){
         super(n,deviceID,appContext,mH);
         generateEGVHistory();
         initialRun=true;
-        virtual =false;
+        remote =false;
     }
 
     @Override
-    int getCGMBattery() {
+    int getDeviceBattery() {
         return 0;
     }
 
@@ -49,7 +49,7 @@ public class FakeCGMDevice extends AbstractCGMDevice {
 //    }
 
     private DeviceDownloadObject generateDownloadObject(){
-        Log.d(TAG,"Generating download object");
+        Log.d(TAG,"Generating start object");
         if (!initialRun)
             this.addEGV();
         DownloadStatus downloadStatus=generateStatus();
@@ -126,7 +126,7 @@ public class FakeCGMDevice extends AbstractCGMDevice {
             Log.d(TAG,"Fail triggered");
             status = DownloadStatus.values()[rand.nextInt(DownloadStatus.values().length)];
         }
-        Log.d(TAG,"Randomly generated download status: "+status.toString());
+        Log.d(TAG,"Randomly generated start status: "+status.toString());
         return status;
     }
 

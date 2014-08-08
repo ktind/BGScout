@@ -26,7 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by klee24 on 8/2/14.
  */
-public class G4CGMDevice extends AbstractCGMDevice  {
+public class G4CGMDevice extends AbstractPollDevice {
     protected String serialNum;
     protected String receiverID;
     protected int cgmBattery=-1;
@@ -47,20 +47,21 @@ public class G4CGMDevice extends AbstractCGMDevice  {
     public G4CGMDevice(String name,int devID,Context appContext,Handler mH){
         super(name,devID,appContext,mH);
 //        this.appContext=context;
-        virtual = false;
+        remote = false;
         cgmTransport=new G4USBSerialTransport(appContext);
     }
 
     @Override
-    int getCGMBattery() throws IOException {
+    int getDeviceBattery() throws IOException {
         if (cgmBattery==-1)
             cgmBattery=getBatteryLevel();
         return cgmBattery;
     }
 
     @Override
-    public void connect() throws DeviceNotConnected {
+    public void connect() throws DeviceNotConnected, IOException {
         cgmTransport.open();
+        setup();
     }
 
     public void setup() throws IOException {
@@ -68,8 +69,6 @@ public class G4CGMDevice extends AbstractCGMDevice  {
             unit = getGlucoseUnit();
             serialNum = getRcvrSerial();
             cgmBattery=getBatteryLevel();
-//            myBattery=getUploaderBattery();
-
         }else{
             Log.e("G4Device","Unable to setup device that I am not connected to");
         }
@@ -79,8 +78,8 @@ public class G4CGMDevice extends AbstractCGMDevice  {
     protected DeviceDownloadObject doDownload() {
         DeviceDownloadObject ddo=new DeviceDownloadObject();
         ddo.setDevice(this);
-        if (lastDownloadObject==null)
-            lastDownloadObject=ddo;
+//        if (lastDownloadObject==null)
+//            lastDownloadObject=ddo;
         try {
             cgmTransport.open();
             this.setup();
@@ -116,8 +115,10 @@ public class G4CGMDevice extends AbstractCGMDevice  {
             // FIXME reflect actual status
             DownloadStatus downloadStatus = DownloadStatus.SUCCESS;
             ddo = new DeviceDownloadObject(this, egvArray, downloadStatus);
-            lastDownloadObject = ddo;
-            myLastDownload=lastDownloadObject.getEgvRecords()[lastDownloadObject.getEgvRecords().length-1].getDate();
+            setLastDownloadObject(ddo);
+            if (getLastDownloadObject().getEgvRecords().length>0) {
+                myLastDownload = lastDownloadObject.getEgvRecords()[lastDownloadObject.getEgvRecords().length - 1].getDate();
+            }
         } catch (DeviceNotConnected e){
             Log.d(TAG, "Not finding device here!");
             EGVRecord[] records=lastDownloadObject.getEgvRecords();
@@ -130,6 +131,8 @@ public class G4CGMDevice extends AbstractCGMDevice  {
             ddo.setEgvRecords(records);
             lastDownloadObject=ddo;
             ddo.setStatus(DownloadStatus.IOERROR);
+        } catch (NoDownloadException e) {
+            e.printStackTrace();
         }
 
         for (G4EGVSpecialValue specialValue:G4EGVSpecialValue.values()) {

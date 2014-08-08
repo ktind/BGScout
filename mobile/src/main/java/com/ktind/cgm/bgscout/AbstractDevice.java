@@ -11,47 +11,39 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
- * Created by klee24 on 8/2/14.
+ * Created by klee24 on 8/7/14.
  */
-abstract public class AbstractCGMDevice implements CGMDeviceInterface {
-    private static final String TAG = DeviceDownloadService.class.getSimpleName();
+public abstract class AbstractDevice implements DeviceInterface {
+    private static final String TAG = AbstractDevice.class.getSimpleName();
     protected String name;
     protected int deviceID;
-//    private Date date;
-    protected GlucoseUnit unit =GlucoseUnit.MGDL;
+    protected GlucoseUnit unit=GlucoseUnit.MGDL;
     protected ArrayList<AbstractMonitor> monitors=new ArrayList<AbstractMonitor>();
     protected DeviceDownloadObject lastDownloadObject;
     protected Context appContext;
     protected CGMTransportAbstract cgmTransport;
     protected MonitorProxy monitorProxy=new MonitorProxy();
-    protected boolean virtual =false;
-    protected long nextFire=45000L;
+    protected boolean remote =false;
     protected Handler mHandler;
-    protected int pollInterval=302000;
+    protected String deviceType=null;
 
-    public boolean isVirtual() {
-        return virtual;
-    }
-
-    public AbstractCGMDevice(String n,int deviceID,Context appContext,Handler mH){
-        Log.i(TAG, "Creating CGM " + n);
+    public AbstractDevice(String n, int deviceID, Context appContext, Handler mH){
+        Log.i(TAG, "Creating "+getDeviceType()+" named " + n);
         setName(n);
         this.setDeviceID(deviceID);
         this.setAppContext(appContext);
         this.setHandler(mH);
 
-//        AbstractMonitor anm=new AndroidNotificationMonitor(getName(),deviceID,appContext);
-//        AbstractMonitor mongo=new MongoUploadMonitor(getName());
-//        monitors.add(anm);
-//        monitors.add(mongo);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
         // TODO Copy/paste bad .... =(. Pull these values out to some central location
         String[] device_list={"device_1","device_2","device_3","device_4"};
         AbstractMonitor androidMonitor;
         AbstractMonitor mongoUpload;
+//        AbstractMonitor mqttUpload=new MqttUploader(name,getAppContext());
+//        monitors.add(mqttUpload);
+
         // FIXME there are more efficient ways to get this...
         for (String dev: device_list){
             if (sharedPref.getString(dev+"_name","").equals(getName())) {
@@ -71,6 +63,7 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
         this.mHandler=mH;
     }
 
+    // TODO should probably be moved to a separate uploader object
     public float getUploaderBattery(){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = appContext.registerReceiver(null, ifilter);
@@ -79,7 +72,7 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
         return level / (float) scale;
     }
 
-    abstract int getCGMBattery() throws IOException;
+    abstract int getDeviceBattery() throws IOException;
 
     public int getDeviceID() {
         return deviceID;
@@ -92,14 +85,6 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
     public Context getAppContext() {
         return appContext;
     }
-
-    final public DeviceDownloadObject download(){
-        lastDownloadObject=this.doDownload();
-//        lastDownloadObject.setLastDownloadDate(new Date());
-        return lastDownloadObject;
-    }
-
-    abstract protected DeviceDownloadObject doDownload();
 
     public String getName() {
         return name;
@@ -125,10 +110,12 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
     public void fireMonitors() {
         // FIXME - Not sure this is healthy....?
         MonitorProxy myProxy=new MonitorProxy(monitorProxy);
-        myProxy.execute(lastDownloadObject);
+        try {
+            myProxy.execute(getLastDownloadObject());
+        } catch (NoDownloadException e){
+            Log.e(TAG,"No start object to fire on");
+        }
     }
-
-
 
     public boolean isConnected(){
         return cgmTransport.isOpen();
@@ -140,38 +127,41 @@ abstract public class AbstractCGMDevice implements CGMDeviceInterface {
 
 //    public abstract float getUploaderBattery();
 
-    public abstract void connect() throws DeviceNotConnected;
+    public abstract void connect() throws DeviceNotConnected, IOException;
 
     public abstract void disconnect();
 
-    public int getPollInterval() {
-        return pollInterval;
+    public class NoDownloadException extends Throwable {
     }
 
-    public void setPollInterval(int pollInterval) {
-        Log.d(TAG,"Setting poll interval to: "+pollInterval);
-        this.pollInterval = pollInterval;
+    public String getDeviceType() {
+        if (deviceType==null)
+            return "unknown";
+        return deviceType;
     }
 
-    public long nextFire(){
-        return nextFire(getPollInterval());
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
-    public long nextFire(long millis){
-        // FIXME shouldn't assume this data is set. Need to wrap this in a method.
-        if (lastDownloadObject!=null && lastDownloadObject.getEgvRecords()!=null && lastDownloadObject.getEgvRecords().length>0){
-            long diff=(millis-(new Date().getTime() - lastDownloadObject.getEgvRecords()[lastDownloadObject.getEgvRecords().length-1].getDate().getTime()));
-            Log.d(TAG,"nextFire calculated to be: "+diff+" for "+getName()+" using a poll interval of "+millis);
-            if (diff<0) {
-                Log.d(TAG,"nextFire returning 45 seconds because diff was negative");
-                return 45000;
-            }
-            return diff;
-        } else {
-            Log.d(TAG,"nextFire returning 45 seconds because there wasn't a lastdownloadobject set");
-            return 450000;
+    public boolean isRemote() {
+        return remote;
+    }
+
+    public DeviceDownloadObject getLastDownloadObject() throws NoDownloadException {
+        if (lastDownloadObject==null) {
+            Log.e(TAG, "No last start");
+            throw new NoDownloadException();
         }
+        return lastDownloadObject;
     }
 
-//    public abstract G4EGVRecord[] getReadings();
+    public void setLastDownloadObject(DeviceDownloadObject lastDownloadObject) {
+        this.lastDownloadObject = lastDownloadObject;
+    }
+
+    @Override
+    public void stop() {
+        this.stopMonitors();
+    }
 }

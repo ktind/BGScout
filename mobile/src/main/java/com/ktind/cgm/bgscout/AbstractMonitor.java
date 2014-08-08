@@ -47,7 +47,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
     @Override
     final public void process(DeviceDownloadObject d) {
         Log.d(TAG,"Monitor "+name+" has fired for "+monitorType);
-        if (isAllowVirtual() || ! d.getDevice().isVirtual()){
+        if (isAllowVirtual() || ! d.getDevice().isRemote()){
             Log.d(TAG, "Processing monitor "+name+" for "+monitorType);
             this.doProcess(d);
         } else {

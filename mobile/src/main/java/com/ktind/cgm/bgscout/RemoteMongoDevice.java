@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by klee24 on 8/3/14.
  */
-public class RemoteMongoDevice extends AbstractCGMDevice {
+public class RemoteMongoDevice extends AbstractPollDevice {
     private static final String TAG = RemoteMongoDevice.class.getSimpleName();
 
     private String mongoURI = null;
@@ -31,7 +31,7 @@ public class RemoteMongoDevice extends AbstractCGMDevice {
 
     public RemoteMongoDevice(String n,int deviceID,Context appContext,Handler mH){
         super(n,deviceID,appContext,mH);
-        // Quasi race condition - CGM takes a second or 2 to read and upload while the "virtual CGM" takes less time.
+        // Quasi race condition - CGM takes a second or 2 to read and upload while the "remote CGM" takes less time.
         // Give it some time to settle. If not it'll try again in 45 seconds.
         this.setPollInterval(304000);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
@@ -45,11 +45,11 @@ public class RemoteMongoDevice extends AbstractCGMDevice {
         if (mongoURI!=null)
             uri = new MongoClientURI(mongoURI);
         // stop infinite loops!
-        virtual = true;
+        remote = true;
     }
 
     @Override
-    public int getCGMBattery() {
+    public int getDeviceBattery() {
         return 100;
     }
 
@@ -100,7 +100,7 @@ public class RemoteMongoDevice extends AbstractCGMDevice {
             } finally {
                 cursor.close();
             }
-            Log.d(TAG, "Performing download of data from mongo for " + getName());
+            Log.d(TAG, "Performing start of data from mongo for " + getName());
             mongoClient.close();
         }catch(UnknownHostException e){
             Log.e(TAG,"Unable to connect to MongoDB URI",e);

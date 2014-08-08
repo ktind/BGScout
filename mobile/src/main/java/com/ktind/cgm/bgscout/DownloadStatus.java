@@ -4,7 +4,7 @@ package com.ktind.cgm.bgscout;
  * Created by klee24 on 8/2/14.
  */
 public enum DownloadStatus {
-    SUCCESS("Successful download of data"),
+    SUCCESS("Successful start of data"),
     NORECORDS("No records found"),
     DEVICENOTFOUND("No device found"),
     IOERROR("Read or write error"),

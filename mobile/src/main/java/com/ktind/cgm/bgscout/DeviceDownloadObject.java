@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by klee24 on 8/2/14.
  */
 public class DeviceDownloadObject {
-    private AbstractCGMDevice device;
+    private AbstractDevice device;
     private EGVRecord[] egvRecords;
     private DownloadStatus status;
     private String specialValueMessage;
@@ -28,7 +28,7 @@ public class DeviceDownloadObject {
         this.specialValueMessage = specialValueMessage;
     }
 
-    DeviceDownloadObject(AbstractCGMDevice c,EGVRecord[] e, DownloadStatus s){
+    DeviceDownloadObject(AbstractDevice c,EGVRecord[] e, DownloadStatus s){
         super();
         setDevice(c);
         setEgvRecords(e);
@@ -39,11 +39,11 @@ public class DeviceDownloadObject {
         egvRecords=new EGVRecord[0];
     }
 
-    public AbstractCGMDevice getDevice() {
+    public AbstractDevice getDevice() {
         return device;
     }
 
-    public void setDevice(AbstractCGMDevice device) {
+    public void setDevice(AbstractDevice device) {
         this.device = device;
     }
 

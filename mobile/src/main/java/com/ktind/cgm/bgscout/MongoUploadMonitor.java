@@ -67,7 +67,7 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 if (sr.isNew()) {
                     //Fixme: need to be a separate document
                     data.put("name", d.getDevice().getName());
-//                    data.put("cgmbattery", d.getDevice().getCGMBattery());
+//                    data.put("cgmbattery", d.getDevice().getDeviceBattery());
 //                    data.put("uploaderBattery", d.getDevice().getUploaderBattery());
 //                    data.put("units", d.getDevice().getUnit().getValue());
 
@@ -85,13 +85,13 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 }
             }
             Log.i(TAG,"Records processed: "+r.length+" Records Uploaded: "+uploadCount);
-            if (!d.getDevice().isVirtual()) {
+            if (!d.getDevice().isRemote()) {
                 BasicDBObject data = new BasicDBObject();
                 data.put("name", d.getDevice().getName());
                 data.put("deviceCheckinDate", new Date().getTime());
                 data.put("uploaderBattery", d.getDevice().getUploaderBattery());
                 try {
-                    data.put("cgmbattery", d.getDevice().getCGMBattery());
+                    data.put("cgmbattery", d.getDevice().getDeviceBattery());
                 }catch (IOException e){
                     // Only add the information if we can get it. We need this data to upload regardless.
                     Log.d(TAG, "Problem retreiving battery from CGM. Is it connected?");

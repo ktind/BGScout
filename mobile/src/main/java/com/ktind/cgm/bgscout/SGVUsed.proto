@@ -1,0 +1,30 @@
+package bgscout;
+
+option java_package = "com.ktind.cgm.bgscout";
+option java_outer_classname = "SGV";
+
+message Practical8601 {
+  optional string timestamp = 1;
+  optional uint32 sgv = 2;
+
+  enum Device {
+    dexcom = 1;
+  }
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 3;
+  optional Device device = 4;
+
+}
