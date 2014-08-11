@@ -44,31 +44,31 @@ public class CdcAcmSerialDriver extends CommonUsbSerialDriver {
 
     @Override
     public void open() throws IOException {
-        Log.d(TAG, "claiming interfaces, count=" + mDevice.getInterfaceCount());
+        Log.v(TAG, "claiming interfaces, count=" + mDevice.getInterfaceCount());
 
-        Log.d(TAG, "Claiming control interface.");
+        Log.v(TAG, "Claiming control interface.");
         mControlInterface = mDevice.getInterface(0);
-        Log.d(TAG, "Control iface=" + mControlInterface);
+        Log.v(TAG, "Control iface=" + mControlInterface);
         // class should be USB_CLASS_COMM
 
         if (!mConnection.claimInterface(mControlInterface, true)) {
             throw new IOException("Could not claim control interface.");
         }
         mControlEndpoint = mControlInterface.getEndpoint(0);
-        Log.d(TAG, "Control endpoint direction: " + mControlEndpoint.getDirection());
+        Log.v(TAG, "Control endpoint direction: " + mControlEndpoint.getDirection());
 
-        Log.d(TAG, "Claiming data interface.");
+        Log.v(TAG, "Claiming data interface.");
         mDataInterface = mDevice.getInterface(1);
-        Log.d(TAG, "data iface=" + mDataInterface);
+        Log.v(TAG, "data iface=" + mDataInterface);
         // class should be USB_CLASS_CDC_DATA
 
         if (!mConnection.claimInterface(mDataInterface, true)) {
             throw new IOException("Could not claim data interface.");
         }
         mReadEndpoint = mDataInterface.getEndpoint(1);
-        Log.d(TAG, "Read endpoint direction: " + mReadEndpoint.getDirection());
+        Log.v(TAG, "Read endpoint direction: " + mReadEndpoint.getDirection());
         mWriteEndpoint = mDataInterface.getEndpoint(0);
-        Log.d(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
+        Log.v(TAG, "Write endpoint direction: " + mWriteEndpoint.getDirection());
     }
 
     private int sendAcmControlMessage(int request, int value, byte[] buf) {
@@ -93,9 +93,9 @@ public class CdcAcmSerialDriver extends CommonUsbSerialDriver {
                 // We *should* use UsbRequest, except it has a bug/api oversight
                 // where there is no way to determine the number of bytes read
                 // in response :\ -- http://b.android.com/28023
-                Log.e("G4Device","possible timeout (numBytesRead): "+numBytesRead);
-                Log.d("G4Device","timeoutMillis "+timeoutMillis);
-                Log.d("G4Device","readAmt "+readAmt);
+                Log.e(TAG,"possible timeout (numBytesRead): "+numBytesRead);
+                Log.v(TAG,"timeoutMillis "+timeoutMillis);
+                Log.v(TAG,"readAmt "+readAmt);
                 return 0;
             }
 
@@ -133,7 +133,7 @@ public class CdcAcmSerialDriver extends CommonUsbSerialDriver {
                         + " bytes at offset " + offset + " length=" + src.length);
             }
 
-            Log.d(TAG, "Wrote amt=" + amtWritten + " attempted=" + writeLength);
+            Log.v(TAG, "Wrote amt=" + amtWritten + " attempted=" + writeLength);
             offset += amtWritten;
         }
         return offset;

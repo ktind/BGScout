@@ -7,6 +7,7 @@ public interface DeviceInterface {
     // FIXME this both returns a value and sets an internal variable - bad form.
     public void start();
     public void stop();
-    void fireMonitors();
-    void stopMonitors();
+    public void fireMonitors();
+    public void stopMonitors();
+//    public void download();
 }

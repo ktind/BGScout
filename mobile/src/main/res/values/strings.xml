@@ -3,7 +3,7 @@
 
     <string name="app_name">BG Scout</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="welcome_message">BG Scout!</string>
+    <string name="welcome_message">BG Scout!\n</string>
     <string name="action_settings">Settings</string>
     <string name="manage_service">Start service</string>
     <string name="cgm_service_title">CGM Monitoring service</string>
@@ -15,19 +15,24 @@
     <string name="pref_device_type_title">Type of device</string>
     <string name="pref_device_mongo_upload_title">Upload to Mongo DB</string>
     <string name="pref_default_device_mongo_uri">mongodb://{user}:{password}@{host}.mongolab.com:{11111}/{database}</string>
+    <string name="pref_remote_mongo_uri_default">mongodb://{user}:{password}@{host}.mongolab.com:{11111}/{database}</string>
     <string name="pref_device_mongo_uri_title">MongoDB URI</string>
     <string name="pref_remote_mongo_uri_dialog_title">Enter MongoDB URI</string>
     <string name="pref_remote_mongo_uri_dialog_msg">Replace example values in {}\'s with your correct values</string>
-    <string name="pref_remote_mongo_uri_default">mongodb://{user}:{password}@{host}.mongolab.com:{11111}/{database}</string>
+
     <string name="pref_device_remote_mongo_uri_title">Mongo DB for Remote devices</string>
     <string name="pref_device_high_title">High Threshold</string>
-    <string name="pref_default_device_high">180</string>
+    <integer name="pref_default_device_high">180</integer>
     <string name="pref_device_low_title">Low Threshold</string>
-    <string name="pref_default_device_low">60</string>
+    <integer name="pref_default_device_low">60</integer>
     <string name="high_ring_tone_title">High ringtone</string>
     <string name="low_ring_tone_title">Low ringtone</string>
     <string name="pref_device_remote_mongo_col_title">Collection Name</string>
     <string name="pref_remote_mongo_col_dialog_title">Enter Collection name</string>
     <string name="pref_remote_mongo_col_dialog_msg">This is the name of the collection where the CGM data will be stored</string>
+    <string name="Stop">Stop</string>
+    <string name="Start">Start</string>
+    <string name="get_data_button">Get poll</string>
+    <string name="poller_button">Poll</string>
 
 </resources>

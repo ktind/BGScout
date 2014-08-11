@@ -32,27 +32,25 @@ public class G4CGMDevice extends AbstractPollDevice {
     protected int cgmBattery=-1;
     private static final String TAG = G4CGMDevice.class.getSimpleName();
     // TODO add this as a shared preference...
-    protected Date myLastDownload=new Date(new Date().getTime()-10800000);
+//    protected Date myLastDownload=new Date(new Date().getTime()-10800000);
 
-    //    public AbstractCGMDevice(String n,int deviceID,Context appContext){
-
-    public String getSerialNum() {
-        return serialNum;
-    }
-
-    public void setSerialNum(String serialNum) {
-        this.serialNum = serialNum;
-    }
+//    public String getSerialNum() {
+//        return serialNum;
+//    }
+//
+//    public void setSerialNum(String serialNum) {
+//        this.serialNum = serialNum;
+//    }
 
     public G4CGMDevice(String name,int devID,Context appContext,Handler mH){
         super(name,devID,appContext,mH);
-//        this.appContext=context;
         remote = false;
         cgmTransport=new G4USBSerialTransport(appContext);
+        this.deviceType="Dexcom G4";
     }
 
     @Override
-    int getDeviceBattery() throws IOException {
+    int getDeviceBattery() throws IOException, DeviceNotConnected {
         if (cgmBattery==-1)
             cgmBattery=getBatteryLevel();
         return cgmBattery;
@@ -64,7 +62,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         setup();
     }
 
-    public void setup() throws IOException {
+    public void setup() throws IOException, DeviceNotConnected {
         if (isConnected()) {
             unit = getGlucoseUnit();
             serialNum = getRcvrSerial();
@@ -78,13 +76,16 @@ public class G4CGMDevice extends AbstractPollDevice {
     protected DeviceDownloadObject doDownload() {
         DeviceDownloadObject ddo=new DeviceDownloadObject();
         ddo.setDevice(this);
-//        if (lastDownloadObject==null)
-//            lastDownloadObject=ddo;
+
         try {
             cgmTransport.open();
             this.setup();
             EGVRecord[] egvArray = this.getLastEGVRecords();
-            getReadingsSince(myLastDownload, egvArray);
+            try {
+                getReadingsSince(getLastDate(), egvArray);
+            } catch (NoDownloadException e) {
+                Log.w(TAG,"Not filtering readings because there was no previously recorded last reading");
+            }
             int batteryLevel = this.getBatteryLevel();
             float myBattery= getUploaderBattery();
             Log.d(TAG, "Device battery level: " + batteryLevel);
@@ -116,37 +117,30 @@ public class G4CGMDevice extends AbstractPollDevice {
             DownloadStatus downloadStatus = DownloadStatus.SUCCESS;
             ddo = new DeviceDownloadObject(this, egvArray, downloadStatus);
             setLastDownloadObject(ddo);
-            if (getLastDownloadObject().getEgvRecords().length>0) {
-                myLastDownload = lastDownloadObject.getEgvRecords()[lastDownloadObject.getEgvRecords().length - 1].getDate();
-            }
-        } catch (DeviceNotConnected e){
-            Log.d(TAG, "Not finding device here!");
-            EGVRecord[] records=lastDownloadObject.getEgvRecords();
-//            records=lastDownloadObject.getEgvRecords();
-            ddo.setEgvRecords(records);
-            lastDownloadObject=ddo;
-            ddo.setStatus(DownloadStatus.DEVICENOTFOUND);
-        } catch (IOException e){
-            EGVRecord[] records=lastDownloadObject.getEgvRecords();
-            ddo.setEgvRecords(records);
-            lastDownloadObject=ddo;
-            ddo.setStatus(DownloadStatus.IOERROR);
-        } catch (NoDownloadException e) {
-            e.printStackTrace();
-        }
-
-        for (G4EGVSpecialValue specialValue:G4EGVSpecialValue.values()) {
-            EGVRecord[] records=lastDownloadObject.getEgvRecords();
-            if (records!=null && records.length>0) {
-                EGVRecord rec = records[records.length - 1];
-                if (rec.getEgv() == specialValue.getValue()) {
+            Log.d(TAG,"Last download: "+getLastBG()+" date=> "+getLastDate()+" trend: "+getLastTrend().toString());
+            for (G4EGVSpecialValue specialValue:G4EGVSpecialValue.values()) {
+                if (getLastBG() == specialValue.getValue()) {
                     ddo.setStatus(DownloadStatus.SPECIALVALUE);
-                    ddo.setSpecialValueMessage(G4EGVSpecialValue.getEGVSpecialValue(rec.getEgv()).toString());
+                    ddo.setSpecialValueMessage(G4EGVSpecialValue.getEGVSpecialValue(getLastBG()).toString());
                     break;
                 }
             }
+        } catch (DeviceNotConnected e){
+            Log.d(TAG, "Not finding device!",e);
+//            EGVRecord[] records=lastDownloadObject.getEgvRecords();
+//            ddo.setEgvRecords(records);
+//            lastDownloadObject=ddo;
+            ddo.setStatus(DownloadStatus.DEVICENOTFOUND);
+        } catch (IOException e){
+//            EGVRecord[] records=lastDownloadObject.getEgvRecords();
+//            ddo.setEgvRecords(records);
+//            lastDownloadObject=ddo;
+            ddo.setStatus(DownloadStatus.IOERROR);
+        } catch (NoDownloadException e) {
+            Log.d(TAG,"No download performed yet");
+            ddo.setStatus(DownloadStatus.NONE);
+            e.printStackTrace();
         }
-
         return ddo;
 //        return super.doDownload();
     }
@@ -170,14 +164,14 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     // Retrieves the last 4 pages
-    public G4EGVRecord[] getLastEGVRecords() throws IOException {
+    public G4EGVRecord[] getLastEGVRecords() throws IOException, DeviceNotConnected {
         G4Partition partition=getDBPageRange(G4RecType.EGVDATA);
         G4EGVRecord[] results=getEGVPages(partition.lastPage - 3, 4);
         return results;
     }
 
     // TODO Possibly abstract this out and have it return a collection of parsed records?
-    public G4EGVRecord[] getEGVPages(int firstPage,int lastPage) throws IOException {
+    public G4EGVRecord[] getEGVPages(int firstPage,int lastPage) throws IOException, DeviceNotConnected {
 
         G4DBPage[] pages=getDBPages(G4RecType.EGVDATA,firstPage,lastPage);
         int totalNumRecords=0;
@@ -185,27 +179,27 @@ public class G4CGMDevice extends AbstractPollDevice {
             totalNumRecords+=page.PageHeader.NumberOfRecords;
         }
 
-        Log.d(TAG,"Record type: "+pages[0].PageHeader.RecordType.toString()+"PageCount: "+pages.length+"Total records: "+totalNumRecords);
+        Log.v(TAG,"Record type: "+pages[0].PageHeader.RecordType.toString()+"PageCount: "+pages.length+"Total records: "+totalNumRecords);
         G4EGVRecord[] egvrecords = new G4EGVRecord[totalNumRecords];
         int i=0;
         for (G4DBPage page: pages) {
             G4EGVRecord[] tmprecs = new G4EGVRecord[page.PageHeader.NumberOfRecords];
             tmprecs=parsePage(page);
             System.arraycopy(tmprecs,0,egvrecords,i,page.PageHeader.NumberOfRecords);
-            Log.d(TAG,"Start index: "+i+" Record count: "+page.PageHeader.NumberOfRecords+" End: "+(page.PageHeader.NumberOfRecords*i+page.PageHeader.NumberOfRecords));
+            Log.v(TAG,"Start index: "+i+" Record count: "+page.PageHeader.NumberOfRecords+" End: "+(page.PageHeader.NumberOfRecords*i+page.PageHeader.NumberOfRecords));
             i+=page.PageHeader.NumberOfRecords;
         }
         return egvrecords;
     }
 
-    public G4EGVRecord lastReading() throws IOException {
+    public G4EGVRecord lastReading() throws IOException, DeviceNotConnected {
         G4EGVRecord[] results=getLastEGVRecords();
         if (results==null | results.length<1)
-            return null;
+            throw new IOException("No last reading reported by getLastEGVRecords");
         return results[results.length-1];
     }
 
-    public EGVRecord[] getReadingsSince(Date d) throws IOException {
+    public EGVRecord[] getReadingsSince(Date d) throws IOException, DeviceNotConnected {
         // TODO continue to go back in time until we find the earliest record.
         G4EGVRecord[] recs=getLastEGVRecords();
         return getReadingsSince(d,recs);
@@ -226,7 +220,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return resultsArrayList.toArray(new EGVRecord[resultsArrayList.size()]);
     }
 
-    public boolean ping() throws IOException {
+    public boolean ping() throws IOException, DeviceNotConnected {
         if (!isConnected()){
             Log.e(TAG,"Ping failed - not connected to device");
             return false;
@@ -241,13 +235,12 @@ public class G4CGMDevice extends AbstractPollDevice {
         return true;
     }
 
-    public G4Partition getDBPageRange(G4RecType recordType) throws IOException {
+    public G4Partition getDBPageRange(G4RecType recordType) throws IOException, DeviceNotConnected {
         G4Partition response=new G4Partition();
         writeCmd(G4RcvrCmd.READDATABASEPAGERANGE,recordType.getValue());
         byte[] responseBuff = readResponse();
         if (responseBuff==null || responseBuff.length!=8){
             throw new IOException("Problem reading response");
-//            return null;
         }
         byte[] firstPage = {responseBuff[0],responseBuff[1],responseBuff[2],responseBuff[3]};
         byte[] lastPage = {responseBuff[4],responseBuff[5],responseBuff[6],responseBuff[7]};
@@ -265,7 +258,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         writeCmd(cmd,b);
     }
 
-    public GlucoseUnit getGlucoseUnit() throws IOException {
+    public GlucoseUnit getGlucoseUnit() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READGLUCOSEUNIT);
         byte[] res=readResponse();
         int result=0;
@@ -274,7 +267,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return GlucoseUnit.values()[result];
     }
 
-    public String getTransmitterId() throws IOException {
+    public String getTransmitterId() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READTRANSMITTERID);
         String result=null;
         try {
@@ -285,7 +278,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public String getBatteryState() throws IOException {
+    public String getBatteryState() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READBATTERYSTATE);
         String result="Unable to determine battery state";
         byte[] response=readResponse();
@@ -295,18 +288,18 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public int getBatteryLevel() throws IOException {
+    public int getBatteryLevel() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READBATTERYLEVEL);
         int result=0;
         result = BitTools.byteArraytoInt(readResponse());
         return result;
     }
 
-    public Date getDisplayTime() throws IOException {
+    public Date getDisplayTime() throws IOException, DeviceNotConnected {
         return new Date(getDisplayTimeLong());
     }
 
-    public void syncTimeToDevice() throws IOException {
+    public void syncTimeToDevice() throws IOException, DeviceNotConnected {
         Calendar mCalendar = new GregorianCalendar();
         TimeZone mTimeZone = mCalendar.getTimeZone();
         // TODO add protections against the device settings its time pre Jan 1 2009...
@@ -325,42 +318,42 @@ public class G4CGMDevice extends AbstractPollDevice {
         Log.i(TAG,"Sync'd device time with cell. Set display time offset to: "+dispTimeOffset);
     }
 
-    public long getDisplayTimeLong() throws IOException {
+    public long getDisplayTimeLong() throws IOException, DeviceNotConnected {
         Calendar mCalendar = new GregorianCalendar();
         TimeZone mTimeZone = mCalendar.getTimeZone();
         long dispTime=G4Constants.RECEIVERBASEDATE+getDisplayTimeOffsetLong()*1000L+getSystemTimeLong()*1000L;
         if (mTimeZone.inDaylightTime(new Date()))
             dispTime-=3600000L;
-        Log.d(TAG,"getDisplayTimeLong: "+dispTime);
+        Log.v(TAG,"getDisplayTimeLong: "+dispTime);
         return dispTime;
     }
 
-    public long getSystemTimeLong() throws IOException {
+    public long getSystemTimeLong() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READSYSTEMTIME);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
-        Log.d(TAG,"getSystemTimeLong=>"+result);
+        Log.v(TAG,"getSystemTimeLong=>"+result);
         return result;
     }
 
-    protected long getDisplayTimeOffsetLong() throws IOException {
+    protected long getDisplayTimeOffsetLong() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READDISPLAYTIMEOFFSET);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
-        Log.d(TAG,"getDisplayTimeOffsetLong=>"+result);
+        Log.v(TAG,"getDisplayTimeOffsetLong=>"+result);
         return result;
     }
 
-    protected long getSystemTimeOffsetLong() throws IOException {
+    protected long getSystemTimeOffsetLong() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READSYSTEMTIMEOFFSET);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
-        Log.d(TAG,"getSystemTimeOffsetLong=>"+result);
+        Log.v(TAG,"getSystemTimeOffsetLong=>"+result);
         return result;
     }
 
     //@Override
-    protected String getDatabasePartitionInfo() throws IOException {
+    protected String getDatabasePartitionInfo() throws IOException, DeviceNotConnected {
         writeCmd(G4RcvrCmd.READDATABASEPARTITIONINFO);
         String  response = new String(readResponse());
         return response;
@@ -383,7 +376,8 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     public int writeCmd(G4RcvrCmd rcvrCmd, byte [] payload) throws IOException {
-        Log.d(TAG,"Attempting to write to receiver");
+        Log.v(TAG,"Attempting to write to receiver");
+        Log.i(TAG,"Executing command "+rcvrCmd.toString()+" on receiver "+getName());
         if(!isConnected()){
             Log.e(TAG,"Write failed - not connected to device");
             return 0;
@@ -394,7 +388,7 @@ public class G4CGMDevice extends AbstractPollDevice {
 
         // Retrieve how many bytes should be sent by this command
         int bytesToWrite=rcvrCmd.getCmdSize();
-        Log.d(TAG,"Bytes to write: "+bytesToWrite);
+        Log.v(TAG, "Bytes to write: " + bytesToWrite);
         int calcBytesToWrite=6;
         if (payload!=null)
             calcBytesToWrite = 4 + payload.length + 2;
@@ -429,7 +423,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         try {
             Log.v(TAG,"Writing("+rcvrCmd.toString()+"): "+ BitTools.bytesToHex(packet));
             bytesWritten=cgmTransport.write(packet,G4Constants.defaultWriteTimeout);
-            Log.d(TAG,"Bytes written - "+bytesWritten);
+            Log.v(TAG,"Bytes written - "+bytesWritten);
         } catch (IOException e) {
             throw new IOException("Unable to write to Dexcom G4");
 //            Log.e(TAG, "Unable to write to Dexcom G4", e);
@@ -443,22 +437,18 @@ public class G4CGMDevice extends AbstractPollDevice {
         return writeCmd(rcvCmd,null);
     }
 
-    public byte[] readResponse(){
+    public byte[] readResponse() throws IOException, DeviceNotConnected {
         return this.readResponse(G4Constants.defaultReadTimeout);
     }
 
-    public byte[] readResponse(int millis) {
-        Log.d(TAG,"Attempting to read to receiver");
+    public byte[] readResponse(int millis) throws IOException, DeviceNotConnected {
+        Log.v(TAG,"Attempting to read to receiver");
         if(!isConnected()){
             Log.e(TAG,"Read failed - not connected to device");
-            return null;
+            throw new DeviceNotConnected("Read failed - not connected to device");
         }
 
         int bytesRead=0;
-        if (! isConnected()) {
-            Log.e(TAG,"Device is not connected");
-            return null;
-        }
         // Seems we can't read fewer bytes than they send..
         // but we can request more bytes than they'll send.
         // Setting max response buffer to 3072 to prevent
@@ -470,20 +460,20 @@ public class G4CGMDevice extends AbstractPollDevice {
 
         try {
             bytesRead=cgmTransport.read(responseBuffer,millis);
-            Log.d(TAG,"Bytes read - "+bytesRead);
+            Log.v(TAG,"Bytes read - "+bytesRead);
         } catch (IOException e) {
             Log.e(TAG,"Unable to read headers from Dexcom G4");
-            return null;
+            throw new IOException("Unable to read headers from Dexcom G4");
         }
         if (responseBuffer[0]!=0x01) {
             Log.e(TAG, "Unexpected response back while parsing header: "+ BitTools.bytesToHex(responseBuffer));
-            return null;
+            throw new IOException("Unexpected response back while parsing header: "+ BitTools.bytesToHex(responseBuffer));
         }
         int bytesToRead=(int)responseBuffer[2]<<8 ^ (int)responseBuffer[1];
-        Log.d(TAG,"Calculated bytes to read at "+bytesRead);
+        Log.v(TAG,"Calculated bytes to read at "+bytesRead);
         if (bytesToRead!=bytesRead) {
             Log.e(TAG, "Calculated bytes to read does not equal the bytes actually read");
-            return null;
+            throw new IOException("Calculated bytes to read does not equal the bytes actually read");
         }
 
         byte [] header = new byte[4];
@@ -494,7 +484,6 @@ public class G4CGMDevice extends AbstractPollDevice {
         System.arraycopy(responseBuffer,4+(bytesToRead-6),crc,0,2);
         System.arraycopy(responseBuffer,4,body,0,bytesRead-6);
 
-//        Log.d(TAG,"Response hex: " + BitTools.bytesToHex(header) + BitTools.bytesToHex(body) + BitTools.bytesToHex(crc));
         Log.v(TAG,"Header hex:"+ BitTools.bytesToHex(header));
         Log.v(TAG,"Body hex:"+ BitTools.bytesToHex(body));
         Log.v(TAG,"CRC hex: "+ BitTools.bytesToHex(crc));
@@ -506,15 +495,14 @@ public class G4CGMDevice extends AbstractPollDevice {
         if (calcCRC!=crcInt) {
             Log.d(TAG, "Calculated CRC: " + calcCRC+"Response CRC: " + crcInt);
             Log.e(TAG, "CRC check failed!");
-            return null;
+            throw new IOException("Calculated CRC: " + calcCRC+"Response CRC: " + crcInt+". CRC check failed!");
         }else{
-            Log.d(TAG,"Successful CRC check");
+            Log.v(TAG,"Successful CRC check");
         }
         return body;
     }
 
-    private G4DBPageHeader getPageHeader(G4RecType recType,int pageNumber) throws IOException {
-        Log.d(TAG,"getPageHeader called");
+    private G4DBPageHeader getPageHeader(G4RecType recType,int pageNumber) throws IOException, DeviceNotConnected {
         G4DBPageHeader result=new G4DBPageHeader();
         byte[] requestPayload=new byte[5];
         requestPayload[0]=recType.getValue();
@@ -555,8 +543,8 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public G4DBPage[] getDBPages(G4RecType recType,int startPage, int numPages) throws IOException {
-        Log.d(TAG,"Requesting "+numPages+" starting with "+startPage);
+    public G4DBPage[] getDBPages(G4RecType recType,int startPage, int numPages) throws IOException, DeviceNotConnected {
+        Log.v(TAG,"Requesting "+numPages+" starting with "+startPage);
         byte [] requestPayload=new byte[6];
         requestPayload[0]=recType.getValue();
         requestPayload[1]=(byte) (startPage & 0xFF);
@@ -566,7 +554,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         requestPayload[5]=(byte) numPages;
         writeCmd(G4RcvrCmd.READDATABASEPAGES, requestPayload);
         byte[] response=readResponse();
-        Log.d(TAG,"Response Length: "+response.length);
+        Log.v(TAG,"Response Length: "+response.length);
         G4DBPage[] pages=new G4DBPage[numPages];
         for (int i=0;i<numPages;i++){
             pages[i]=new G4DBPage();
@@ -576,16 +564,15 @@ public class G4CGMDevice extends AbstractPollDevice {
             Log.v(TAG, "Page (" + i + "):" + BitTools.bytesToHex(pages[i].PageData));
             Log.v(TAG,"Page length ("+i+"):"+pages[i].PageData.length);
         }
-        Log.d(TAG,"Returning "+pages.length+" pages from getDBPages");
+        Log.v(TAG,"Returning "+pages.length+" pages from getDBPages");
         return pages;
     }
 
     // TODO this doesn't make sense. If this is a generic parse method, then why am I returning EGV results?
     public G4EGVRecord[] parsePage(G4DBPage page) {
-//        Log.d(TAG,"Record type: "+page.PageHeader.RecordType.toString());
         if (page.PageHeader.RecordType==G4RecType.EGVDATA)
             return parseEGVPage(page);
-        return null;
+        throw new UnsupportedOperationException("Have not implemented the code to retrieve and parse for record type "+page.PageHeader.RecordType);
     }
 
     public G4EGVRecord[] parseEGVPage(G4DBPage page){
@@ -600,12 +587,12 @@ public class G4CGMDevice extends AbstractPollDevice {
                 byte[] dispTimeArray=new byte[4];
                 byte[] egvwflagArray=new byte[2];
                 byte[] dirnoiseArray=new byte[1];
-                byte[] crcArray=new byte[2];
+//                byte[] crcArray=new byte[2];
                 System.arraycopy(recordBuffer, 0, sysTimeArray, 0, 4);
                 System.arraycopy(recordBuffer, 4, dispTimeArray, 0, 4);
                 System.arraycopy(recordBuffer, 8, egvwflagArray, 0, 2);
                 System.arraycopy(recordBuffer, 10, dirnoiseArray, 0, 1);
-                System.arraycopy(recordBuffer, 11, crcArray, 0, 2);
+//                System.arraycopy(recordBuffer, 11, crcArray, 0, 2);
                 results[i].setSystemTime(BitTools.byteArraytoInt(sysTimeArray));
                 long dtime=(long) BitTools.byteArraytoInt(dispTimeArray)*1000;
                 Calendar mCalendar = new GregorianCalendar();
@@ -643,16 +630,16 @@ public class G4CGMDevice extends AbstractPollDevice {
                 Log.w(TAG,"Record ("+i+") appears to be truncated in page number "+page.PageHeader.PageNumber);
             }
         }
-        Log.d(TAG,"Number of Records: "+results.length);
+//        Log.d(TAG,"Number of Records: "+results.length);
         return results;
     }
 
-    public String getRcvrSerial() throws IOException {
+    public String getRcvrSerial() throws IOException, DeviceNotConnected {
         serialNum = getParam(G4RecType.MANUFACTURINGDATA, "SerialNumber");
         return serialNum;
     }
 
-    private String getParam(G4RecType recType,String param) throws IOException {
+    private String getParam(G4RecType recType,String param) throws IOException, DeviceNotConnected {
         G4Partition part=getDBPageRange(recType);
         String result="";
 //        Charset charset=
@@ -689,7 +676,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public String getRcvrID() throws IOException {
+    public String getRcvrID() throws IOException, DeviceNotConnected {
         // Only get this value once per instance of a G4Device
         if (receiverID=="") {
             receiverID = getParam(G4RecType.PCSOFTWAREPARAMETER, "ReceiverId");

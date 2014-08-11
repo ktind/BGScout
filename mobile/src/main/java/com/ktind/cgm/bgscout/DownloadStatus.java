@@ -11,6 +11,7 @@ public enum DownloadStatus {
 //    READERROR("Error reading from device"),
 //    WRITEERROR("Error writing to device"),
     APPLICATIONERROR("Encountered an unknown error in application"),
+    NONE("No download has been performed"),
     SPECIALVALUE("Has a special value");
 
     private String message;

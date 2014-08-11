@@ -37,6 +37,10 @@ public class DeviceDownloadObject {
 
     DeviceDownloadObject(){
         egvRecords=new EGVRecord[0];
+        device=null;
+        status=DownloadStatus.NONE;
+        specialValueMessage="";
+        lastDownloadDate=null;
     }
 
     public AbstractDevice getDevice() {

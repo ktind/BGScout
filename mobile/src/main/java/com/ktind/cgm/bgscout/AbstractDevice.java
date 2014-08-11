@@ -1,9 +1,11 @@
 package com.ktind.cgm.bgscout;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -11,6 +13,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by klee24 on 8/7/14.
@@ -28,6 +31,10 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected boolean remote =false;
     protected Handler mHandler;
     protected String deviceType=null;
+//    protected AsyncTask mTask;
+    protected String deviceIDStr;
+    // Set the default pollInterval to 5 minutes...
+    protected long pollInterval=300000;
 
     public AbstractDevice(String n, int deviceID, Context appContext, Handler mH){
         Log.i(TAG, "Creating "+getDeviceType()+" named " + n);
@@ -35,28 +42,30 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.setDeviceID(deviceID);
         this.setAppContext(appContext);
         this.setHandler(mH);
+        this.deviceIDStr="device_"+String.valueOf(getDeviceID());
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        // TODO Copy/paste bad .... =(. Pull these values out to some central location
-        String[] device_list={"device_1","device_2","device_3","device_4"};
-        AbstractMonitor androidMonitor;
-        AbstractMonitor mongoUpload;
-//        AbstractMonitor mqttUpload=new MqttUploader(name,getAppContext());
-//        monitors.add(mqttUpload);
-
-        // FIXME there are more efficient ways to get this...
-        for (String dev: device_list){
-            if (sharedPref.getString(dev+"_name","").equals(getName())) {
-                androidMonitor = new AndroidNotificationMonitor(getName(), deviceID, appContext);
-                monitors.add(androidMonitor);
-                // Defaulting to a remote client to be safe..
-                if (Integer.valueOf(sharedPref.getString(dev + "_type", "1")) == 0) {
-                    mongoUpload = new MongoUploadMonitor(getName(),appContext);
-                    monitors.add(mongoUpload);
-                }
-            }
+        AbstractMonitor mon;
+        // FIXME New monitor types must be added here, in the settings menu, and strings.xml in order to be used... Would be ideal if this framework could dynamically detect new monitor types and create them
+        if (sharedPref.getBoolean(deviceIDStr+"_android_monitor",false)){
+            mon=new AndroidNotificationMonitor(getName(),deviceID,getAppContext());
+            monitors.add(mon);
         }
+        if (sharedPref.getBoolean(deviceIDStr+"_mongo_upload",false)){
+            mon=new MongoUploadMonitor(getName(),deviceID,getAppContext());
+            monitors.add(mon);
+        }
+        if (sharedPref.getBoolean(deviceIDStr+"_push_upload",false)){
+            mon=new MqttUploader(getName(),deviceID,getAppContext());
+            monitors.add(mon);
+        }
+        if (sharedPref.getBoolean(deviceIDStr+"_nsapi_enable",false)){
+            mon=new NightScoutUpload(getName(),deviceID,getAppContext());
+            monitors.add(mon);
+        }
+
         monitorProxy.setMonitors(monitors);
+        Log.d(TAG,"Number of monitors created: "+monitors.size());
     }
 
     public void setHandler(Handler mH){
@@ -67,12 +76,13 @@ public abstract class AbstractDevice implements DeviceInterface {
     public float getUploaderBattery(){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = appContext.registerReceiver(null, ifilter);
+        assert batteryStatus != null;
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         return level / (float) scale;
     }
 
-    abstract int getDeviceBattery() throws IOException;
+    abstract int getDeviceBattery() throws IOException, DeviceNotConnected;
 
     public int getDeviceID() {
         return deviceID;
@@ -108,13 +118,22 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     @Override
     public void fireMonitors() {
-        // FIXME - Not sure this is healthy....?
-        MonitorProxy myProxy=new MonitorProxy(monitorProxy);
-        try {
-            myProxy.execute(getLastDownloadObject());
-        } catch (NoDownloadException e){
-            Log.e(TAG,"No start object to fire on");
+        Log.d(TAG,"Firing monitors");
+        for (AbstractMonitor monitor:monitors){
+            try {
+                monitor.doProcess(getLastDownloadObject());
+            } catch (NoDownloadException e) {
+                Log.w(TAG,"No last download for "+getName()+"("+getDeviceID()+")");
+                e.printStackTrace();
+            }
         }
+//        // FIXME - Not sure this is healthy....?
+//        MonitorProxy myProxy=new MonitorProxy(monitorProxy);
+//        try {
+//            mTask=myProxy.execute(getLastDownloadObject());
+//        } catch (NoDownloadException e){
+//            Log.e(TAG,"No process");
+//        }
     }
 
     public boolean isConnected(){
@@ -150,7 +169,7 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     public DeviceDownloadObject getLastDownloadObject() throws NoDownloadException {
         if (lastDownloadObject==null) {
-            Log.e(TAG, "No last start");
+            Log.e(TAG, "Last download object was not set");
             throw new NoDownloadException();
         }
         return lastDownloadObject;
@@ -158,10 +177,82 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     public void setLastDownloadObject(DeviceDownloadObject lastDownloadObject) {
         this.lastDownloadObject = lastDownloadObject;
+//        CGMBus.getInstance().post(lastDownloadObject);
+    }
+    public long getPollInterval() {
+        return pollInterval;
     }
 
-    @Override
+
+    public Date getNextReadingTime(){
+        long lastReading;
+        long msSinceLastReading;
+        long multiplier;
+        long timeForNextReading=getPollInterval();
+
+        try {
+            lastReading = getLastDownloadObject().getEgvRecords()[getLastDownloadObject().getEgvRecords().length - 1].getDate().getTime();
+            msSinceLastReading = System.currentTimeMillis() - lastReading;
+            multiplier = msSinceLastReading / getPollInterval();
+            timeForNextReading = (System.currentTimeMillis() - msSinceLastReading) + (multiplier * getPollInterval());
+        } catch (NoDownloadException e) {
+            e.printStackTrace();
+            Log.e(TAG,"Unable to determine next reading time because there hasn't been a previous reading");
+        }
+        if (timeForNextReading<0){
+            Log.w(TAG,"Should not see this. Something is wrong with my math");
+            timeForNextReading=getPollInterval();
+        }
+        return new Date(timeForNextReading);
+    }
+
+    public int getLastBG() throws NoDownloadException {
+        int lastIndex= 0;
+        lastIndex = getLastDownloadObject().getEgvRecords().length-1;
+        return getLastDownloadObject().getEgvRecords()[lastIndex].getEgv();
+    }
+
+    public Trend getLastTrend() throws NoDownloadException {
+        int lastIndex = 0;
+        lastIndex = getLastDownloadObject().getEgvRecords().length - 1;
+        return getLastDownloadObject().getEgvRecords()[lastIndex].getTrend();
+    }
+
+    public Date getLastDate() throws NoDownloadException {
+        int lastIndex = 0;
+        lastIndex = getLastDownloadObject().getEgvRecords().length - 1;
+        return getLastDownloadObject().getEgvRecords()[lastIndex].getDate();
+    }
+
+    public EGVRecord getLastEGV() throws NoDownloadException {
+        int lastIndex = 0;
+        lastIndex = getLastDownloadObject().getEgvRecords().length - 1;
+        return getLastDownloadObject().getEgvRecords()[lastIndex];
+    }
+
+    public void start() {
+        Log.d(TAG,"Starting "+getName()+" (device_"+getDeviceID()+"/"+getDeviceType()+")");
+    }
+
+
+    protected void onDownload(){
+        Intent uiIntent = new Intent("com.ktind.cgm.UI_READING_UPDATE");
+        uiIntent.putExtra("deviceID",deviceIDStr);
+        try {
+            uiIntent.putExtra("bgReading",String.valueOf(getLastBG())+" "+getLastTrend().toString());
+        } catch (NoDownloadException e) {
+            uiIntent.putExtra("bgReading","---");
+            e.printStackTrace();
+        }
+        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("bgReading",""));
+        appContext.sendBroadcast(uiIntent);
+    }
+
+
+        @Override
     public void stop() {
+//        if (mTask!=null)
+//            mTask.cancel(true);
         this.stopMonitors();
     }
 }

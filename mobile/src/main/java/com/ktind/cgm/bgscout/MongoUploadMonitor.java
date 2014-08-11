@@ -17,20 +17,13 @@ import java.util.Date;
  */
 public class MongoUploadMonitor extends AbstractMonitor {
     private static final String TAG = MongoUploadMonitor.class.getSimpleName();
-    Context appContext;
+//    Context appContext;
 
 
-    MongoUploadMonitor(String name) {
-        super(name);
+    MongoUploadMonitor(String name,int devID,Context c) {
+        super(name,devID,c);
         this.setAllowVirtual(false);
         this.setMonitorType("mongo uploader");
-    }
-
-    MongoUploadMonitor(String name,Context c) {
-        super(name);
-        this.setAllowVirtual(false);
-        this.setMonitorType("mongo uploader");
-        appContext=c;
     }
 
 
@@ -67,11 +60,8 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 if (sr.isNew()) {
                     //Fixme: need to be a separate document
                     data.put("name", d.getDevice().getName());
-//                    data.put("cgmbattery", d.getDevice().getDeviceBattery());
-//                    data.put("uploaderBattery", d.getDevice().getUploaderBattery());
-//                    data.put("units", d.getDevice().getUnit().getValue());
-
                     data.put("trend", sr.getTrend().getVal());
+
                     // NightScout comptability
                     data.put("device", "dexcom");
                     data.put("date", sr.getDate().getTime());
@@ -95,6 +85,8 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 }catch (IOException e){
                     // Only add the information if we can get it. We need this data to upload regardless.
                     Log.d(TAG, "Problem retreiving battery from CGM. Is it connected?");
+                } catch (DeviceNotConnected deviceNotConnected) {
+                    Log.e(TAG,"Unable to find device",deviceNotConnected);
                 }
                 data.put("units", d.getDevice().getUnit().getValue());
                 data.put("downloadStatus", d.getStatus().toString());

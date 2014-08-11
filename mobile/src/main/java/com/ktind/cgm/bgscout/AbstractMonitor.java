@@ -1,5 +1,6 @@
 package com.ktind.cgm.bgscout;
 
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -13,9 +14,15 @@ abstract public class AbstractMonitor implements MonitorInterface {
     protected String monitorType="generic";
     protected int highThreshold=180;
     protected int lowThreshold=60;
+    int deviceID;
+    String deviceIDStr;
+    Context appContext;
 
-    public AbstractMonitor(String n){
-        this.name=n;
+    public AbstractMonitor(String n,int devID,Context context){
+        this.setName(n);
+        this.deviceID=devID;
+        this.appContext=context;
+        this.deviceIDStr="device_"+String.valueOf(deviceID);
     }
 
     public String getName() {
@@ -51,7 +58,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
             Log.d(TAG, "Processing monitor "+name+" for "+monitorType);
             this.doProcess(d);
         } else {
-            Log.d(TAG, "Not processing monitor "+name+" for "+monitorType);
+            Log.w(TAG, "Not processing monitor "+name+" for "+monitorType+" because device is classified as a remote device.");
         }
     }
 
@@ -61,10 +68,12 @@ abstract public class AbstractMonitor implements MonitorInterface {
     }
 
     public void setHighThreshold(int highThreshold) {
+        Log.v(TAG,"Setting low threshold to "+lowThreshold);
         this.highThreshold = highThreshold;
     }
 
     public void setLowThreshold(int lowThreshold) {
+        Log.v(TAG,"Setting low threshold to "+lowThreshold);
         this.lowThreshold = lowThreshold;
     }
 }

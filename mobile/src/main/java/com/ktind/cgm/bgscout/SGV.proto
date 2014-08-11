@@ -1,0 +1,212 @@
+//package bgscout;
+
+option java_package = "com.ktind.cgm.bgscout";
+option java_outer_classname = "SGV";
+
+message SGVUsed {
+  required string dateString = 1;
+  required string sgv = 2;
+  required uint32 date = 3;
+  optional string direction = 4;
+  optional string device = 5;
+
+}
+
+message Practical8601 {
+  optional string timestamp = 1;
+  optional uint32 sgv = 2;
+
+  enum Device {
+    dexcom = 1;
+  }
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 3;
+  optional Device device = 4;
+
+}
+
+// in no particular order
+
+message propose_1 {
+  required string dateString = 1;
+  required string sgv = 2;
+  optional string direction = 4;
+  optional string device = 5;
+
+}
+
+message propose_2_timestamp {
+  required string timestamp = 1;
+  required uint32 sgv = 2;
+  optional string direction = 4;
+  optional string device = 5;
+
+}
+
+message propose_2_timestamp_direction {
+  required string timestamp = 1;
+  required uint32 sgv = 2;
+  optional string device = 4;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 3;
+
+}
+
+
+message SGVUsed_sgv_int {
+  required string dateString = 1;
+  required uint32 sgv = 2;
+  required uint32 date = 3;
+  optional string direction = 4;
+  optional string device = 5;
+
+}
+
+message propose_sgv_int {
+  required string dateString = 1;
+  required uint32 sgv = 2;
+  optional string direction = 4;
+  optional string device = 5;
+}
+
+
+message propose_direction_enum {
+  required string dateString = 1;
+  required string sgv = 2;
+  optional string device = 4;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 5;
+
+}
+
+message propose_direction_sgv {
+  required string dateString = 1;
+  required uint32 sgv = 2;
+  optional string device = 4;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 5;
+}
+
+message propose_direction_sgv_time_offset {
+  required uint32 timestamp = 1;
+  required uint32 sgv = 2;
+  optional string device = 4;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  optional Direction direction = 5;
+  required sint32 offset = 6;
+
+}
+
+message propose_direction_sgv_time_offset_device {
+  required uint32 timestamp = 1;
+  required uint32 sgv = 2;
+  optional fixed32 devhead = 5;
+  optional fixed32 devtail = 6;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  required sint32 offset = 3;
+  optional Direction direction = 4;
+
+}
+
+message propose_direction_sgv_time_offset_device_b {
+  required uint32 timestamp = 1;
+  required uint32 sgv = 2;
+  optional bytes device = 5;
+
+  enum Direction {
+    NONE = 0;
+    DoubleUp = 1;
+    SingleUp = 2;
+    FortyFiveUp = 3;
+    Flat = 4;
+    FortyFiveDown = 5;
+    SingleDown = 6;
+    DoubleDown = 7;
+    NOT_COMPUTABLE = 8;
+    RATE_OUT_OF_RANGE = 9;
+  }
+
+  required sint32 offset = 3;
+  optional Direction direction = 4;
+
+}
+
+//~/Desktop/protobuf-2.5.0/src/protoc -I=/Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/ --java_out=/Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/ /Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/SGVUsed.proto

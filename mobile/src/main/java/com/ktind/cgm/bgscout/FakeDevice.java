@@ -20,9 +20,11 @@ public class FakeDevice extends AbstractPollDevice {
     public FakeDevice(String n, int deviceID, Context appContext, Handler mH) {
         //    public AbstractCGMDevice(String n,int deviceID,Context appContext){
         super(n,deviceID,appContext,mH);
-        generateEGVHistory();
+//        generateEGVHistory();
         initialRun=true;
         remote =false;
+        this.pollInterval=15000;
+        this.deviceType="Fake device";
     }
 
     @Override
@@ -50,16 +52,17 @@ public class FakeDevice extends AbstractPollDevice {
 
     private DeviceDownloadObject generateDownloadObject(){
         Log.d(TAG,"Generating start object");
-        if (!initialRun)
-            this.addEGV();
+//        if (!initialRun)
+//            this.addEGV();
         DownloadStatus downloadStatus=generateStatus();
-        EGVRecord[] egvArray=egvHistory.toArray(new EGVRecord[egvHistory.size()]);
+        EGVRecord[] egvArray=new EGVRecord[1];
+        Random rand=new Random();
+        egvArray[0]=new EGVRecord(rand.nextInt(362)+39,new Date(),Trend.FLAT,true);
+        egvHistory.add(egvArray[0]);
+
         DeviceDownloadObject ddo=new DeviceDownloadObject(this,egvArray,downloadStatus);
         lastDownloadObject=ddo;
         initialRun=false;
-//        for (EGVRecord r:egvHistory){
-//            r.setNew(false);
-//        }
         return ddo;
     }
 

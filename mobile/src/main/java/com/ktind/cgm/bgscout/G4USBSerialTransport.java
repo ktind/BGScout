@@ -33,7 +33,7 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
     public boolean open() throws DeviceNotConnected {
         USBPower.PowerOn();
         if (! isOpen()){
-            Log.d(TAG, "Attempting to connect");
+            Log.v(TAG, "Attempting to connect");
             UsbManager mUsbManager;
             mUsbManager=(UsbManager) appContext.getSystemService(Context.USB_SERVICE);
             mSerialDevice = UsbSerialProber.acquire(mUsbManager);
@@ -52,12 +52,11 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
                 throw new DeviceNotConnected("Unable to acquire USB manager");
             }
         }else{
-            Log.d(TAG, "Already connected");
+            Log.w(TAG, "Already connected");
         }
 
         return false;
     }
-
 //    public void setChargeReceiver(boolean charge){
 //        chargeReceiver=charge;
 //    }
@@ -66,11 +65,11 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
     public void close() {
         if (isOpen() && mSerialDevice!=null) {
             if (!chargeDevice) {
-                Log.d(TAG,"chargeReceiver:"+chargeDevice);
+                Log.v(TAG,"chargeReceiver:"+chargeDevice);
                 Log.d(TAG,"Disabling USB power");
                 USBPower.PowerOff();
             }
-            Log.d(TAG, "Attempting to disconnect");
+            Log.v(TAG, "Attempting to disconnect");
             try {
                 mSerialDevice.close();
                 Log.d(TAG, "Successfully disconnected");
@@ -79,7 +78,7 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
                 Log.e(TAG, "Unable to close serial connection to Dexcom G4");
             }
         } else {
-            Log.d(TAG,"Already disconnected");
+            Log.w(TAG,"Already disconnected");
         }
     }
 

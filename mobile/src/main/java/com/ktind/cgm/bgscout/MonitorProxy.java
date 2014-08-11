@@ -1,6 +1,7 @@
 package com.ktind.cgm.bgscout;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.Arrays;
  * Created by klee24 on 8/3/14.
  */
 public class MonitorProxy extends AsyncTask<DeviceDownloadObject,Void,Void> {
-
+    private static final String TAG = MonitorProxy.class.getSimpleName();
     private ArrayList<AbstractMonitor> monitors;
 
     MonitorProxy(){
@@ -37,7 +38,11 @@ public class MonitorProxy extends AsyncTask<DeviceDownloadObject,Void,Void> {
     @Override
     protected Void doInBackground(DeviceDownloadObject... dl) {
         for (AbstractMonitor mon: monitors){
-            mon.process(dl[0]);
+            if (dl!=null && dl.length>0) {
+                mon.process(dl[0]);
+            } else {
+                Log.w(TAG, "No monitors defined!");
+            }
         }
         return null;
     }
