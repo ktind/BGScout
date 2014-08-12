@@ -9,14 +9,8 @@ import android.os.Handler;
  * server requests device attributes or configuration details we could pull that up here
  */
 abstract public class AbstractPushDevice extends AbstractDevice {
-    protected PushDeviceProxy deviceProxy;
     public AbstractPushDevice(String n, int deviceID, Context appContext, Handler mH) {
         super(n, deviceID, appContext, mH);
-        deviceProxy=new PushDeviceProxy(this);
-    }
-
-    public PushDeviceProxy getDeviceProxy() {
-        return deviceProxy;
     }
 
     abstract void onDataReady(DeviceDownloadObject ddo);

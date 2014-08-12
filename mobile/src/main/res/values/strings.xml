@@ -34,5 +34,6 @@
     <string name="Start">Start</string>
     <string name="get_data_button">Get poll</string>
     <string name="poller_button">Poll</string>
+    <string name="crash_toast_text">Capturing crash</string>
 
 </resources>

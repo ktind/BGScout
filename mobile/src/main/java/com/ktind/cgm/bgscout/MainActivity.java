@@ -20,9 +20,23 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.acra.*;
+import org.acra.annotation.*;
+import org.acra.sender.HttpSender;
 
 import java.util.ArrayList;
 
+
+@ReportsCrashes(formKey = "",
+        mode = ReportingInteractionMode.TOAST,
+        forceCloseDialogAfterToast = true,
+        resToastText = R.string.crash_toast_text,
+        httpMethod = HttpSender.Method.PUT,
+        reportType = HttpSender.Type.JSON,
+        formUri = "http://nightscout.iriscouch.com/acra-undefined/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "",
+        formUriBasicAuthPassword = ""
+)
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean mBounded=false;
@@ -32,92 +46,7 @@ public class MainActivity extends Activity {
 
     private ArrayList<String> deviceList=new ArrayList<String>();
     private AlarmReceiver alarmReceiver;
-//    private boolean serviceAvailable;
 
-    public class UIDevice{
-        private ProgressBar progressBar;
-        private TextView bgValue;
-        private TextView name;
-        private String deviceID;
-        private AbstractDevice device;
-
-        UIDevice(ProgressBar p,TextView b,TextView n,String d){
-            setProgressBar(p);
-            setBgValue(b);
-            setName(n);
-            setDeviceID(d);
-            progressBar.setVisibility(View.VISIBLE);
-            bgValue.setVisibility(View.VISIBLE);
-            name.setVisibility(View.VISIBLE);
-            bgValue.setText("---");
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-            name.setText(sharedPref.getString(getDeviceID()+"_name","Null"));
-        }
-
-        public void setDevice(AbstractDevice cgm){
-            device=cgm;
-            name.setText(cgm.getName());
-        }
-
-        public AbstractDevice getDevice(){
-            return device;
-        }
-
-        public String getDeviceID() {
-            return deviceID;
-        }
-
-        public void setDeviceID(String deviceID) {
-            this.deviceID = deviceID;
-        }
-
-        public ProgressBar getProgressBar() {
-            return progressBar;
-        }
-
-        public void setProgressBar(ProgressBar progressBar) {
-            this.progressBar = progressBar;
-        }
-
-        public TextView getBgValue() {
-            return bgValue;
-        }
-
-        public void setBgValue(TextView bgValue) {
-            this.bgValue = bgValue;
-        }
-
-        public TextView getName() {
-            return name;
-        }
-
-        public void setName(TextView name) {
-            Log.d(TAG,"Setting UI name to "+name);
-            this.name = name;
-        }
-
-        public void setBGDisplay(int sgv,Trend trend){
-            setBGDisplay(String.valueOf(sgv)+" "+trend.toString());
-        }
-
-        public void setBGDisplay(String text){
-            Log.d(TAG,"Setting UI bgDisplay to "+text);
-            bgValue.setText(text);
-        }
-
-        public void update(){
-            long nextReading = mServer.getDeviceNextReading(getDeviceID()) / 1000L;
-//            long pollInterval = mServer.getPollInterval(getDeviceID());
-//            String deviceName = mServer.getDeviceName(getDeviceID());
-//            Log.v(TAG,device.getName()+" has a poll interval of "+device.getPollInterval()+" ms");
-            Log.v(TAG,"Next reading: "+nextReading);
-            getProgressBar().setProgress((int) Math.abs(nextReading));
-            if (getProgressBar().getProgress() == device.getPollInterval()) {
-                getProgressBar().setProgress(0);
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +124,7 @@ public class MainActivity extends Activity {
                     uidev.update();
                 }
             }
-            mHandler.postDelayed(updateProgress,1000);
+            mHandler.postDelayed(updateProgress,5000);
         }
     };
 
@@ -330,6 +259,143 @@ public class MainActivity extends Activity {
 //
 ////                onServiceAvailable();
 //            }
+        }
+    }
+
+    public class UIDevice{
+        private ProgressBar progressBar;
+        private TextView bgValue;
+        private TextView name;
+        private String deviceID;
+        private AbstractDevice device;
+
+        UIDevice(ProgressBar p,TextView b,TextView n,String d){
+            setProgressBar(p);
+            setBgValue(b);
+            setName(n);
+            setDeviceID(d);
+            progressBar.setVisibility(View.VISIBLE);
+            bgValue.setVisibility(View.VISIBLE);
+            name.setVisibility(View.VISIBLE);
+            String bgText="---";
+            if (mBounded){
+                try {
+                    bgText=mServer.getLastBG(deviceID)+mServer.getLastTrend(deviceID).toString();
+                } catch (AbstractDevice.NoDownloadException e) {
+                    e.printStackTrace();
+                }
+            }
+            bgValue.setText(bgText);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+            name.setText(sharedPref.getString(getDeviceID()+"_name","Null"));
+        }
+
+        public void setDevice(AbstractDevice cgm){
+            device=cgm;
+            name.setText(cgm.getName());
+        }
+
+        public AbstractDevice getDevice(){
+            return device;
+        }
+
+        public String getDeviceID() {
+            return deviceID;
+        }
+
+        public void setDeviceID(String deviceID) {
+            this.deviceID = deviceID;
+        }
+
+        public ProgressBar getProgressBar() {
+            return progressBar;
+        }
+
+        public void setProgressBar(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
+        public TextView getBgValue() {
+            return bgValue;
+        }
+
+        public void setBgValue(TextView bgValue) {
+            this.bgValue = bgValue;
+        }
+
+        public TextView getName() {
+            return name;
+        }
+
+        public void setName(TextView name) {
+            Log.d(TAG,"Setting UI name to "+name);
+            this.name = name;
+        }
+
+        public void setBGDisplay(int sgv,Trend trend){
+            setBGDisplay(String.valueOf(sgv)+" "+trend.toString());
+        }
+
+        public void setBGDisplay(String text){
+            Log.d(TAG,"Setting UI bgDisplay to "+text);
+            bgValue.setText(text);
+        }
+
+        public void update(){
+            long nextReading = mServer.getDeviceNextReading(getDeviceID()) / 1000L;
+            Log.v(TAG,"Next reading: "+nextReading);
+            if (bgValue.getText().equals("---")){
+                try {
+                    bgValue.setText(device.getLastBG());
+                } catch (AbstractDevice.NoDownloadException e) {
+                    bgValue.setText("???");
+                }
+            }
+            getProgressBar().setProgress((int) Math.abs(nextReading));
+            if (getProgressBar().getProgress() == device.getPollInterval()) {
+                getProgressBar().setProgress(0);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.post(updateProgress);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        bindSvc();
+        if (mBounded) {
+            for (UIDevice uid : UIDeviceList) {
+                try {
+                    uid.setBGDisplay(String.valueOf(mServer.getLastBG(uid.deviceID)) + mServer.getLastTrend(uid.deviceID).toString());
+                } catch (AbstractDevice.NoDownloadException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Log.d(TAG,"Not updating the UI because the service is not yet bound");
+        }
+//        mHandler.post(updateProgress);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(updateProgress);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacks(updateProgress);
+        if (mBounded) {
+            unbindService(mConnection);
+            mBounded=false;
         }
     }
 }
