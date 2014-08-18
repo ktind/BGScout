@@ -1,8 +1,6 @@
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.DexcomG4;
 
 import com.ktind.cgm.bgscout.EGVRecord;
-import com.ktind.cgm.bgscout.G4EGVSpecialValue;
-import com.ktind.cgm.bgscout.G4NoiseMode;
 
 /**
  * Created by klee24 on 7/13/14.

@@ -28,86 +28,155 @@
             android:entryValues="@array/pref_device_type_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
-        <!--TODO add code to dynamically disable this-->
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_uri_title"
+        <!--TODO dynamically verify that this is a USBSerial type device before showing it-->
+        <PreferenceScreen
+            android:key="device_1_g4"
             android:dependency="device_1_enable"
-            android:key="device_1_mongo_uri"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
-            android:defaultValue="@string/pref_remote_mongo_uri_default"/>
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_col_title"
-            android:dependency="device_1_enable"
-            android:key="device_1_mongo_col"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
-        <EditTextPreference
-            android:key="device_1_high_threshold"
-            android:dependency="device_1_enable"
-            android:title="@string/pref_device_high_title"
-            android:defaultValue="@integer/pref_default_device_high"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <EditTextPreference
-            android:key="device_1_low_threshold"
-            android:dependency="device_1_enable"
-            android:title="@string/pref_device_low_title"
-            android:defaultValue="@integer/pref_default_device_low"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <CheckBoxPreference
-            android:key="device_1_android_monitor"
-            android:dependency="device_1_enable"
-            android:title="Enable Android notification"
-            android:checked="true"/>
-        <CheckBoxPreference
-            android:key="device_1_mongo_upload"
-            android:dependency="device_1_enable"
-            android:title="Enable Mongo upload"
-            android:checked="false"/>
-        <CheckBoxPreference
-            android:key="device_1_push_upload"
-            android:dependency="device_1_enable"
-            android:title="Enable Push upload"
-            android:checked="false"/>
-        <EditTextPreference
-            android:key="device_1_mqtt_endpoint"
-            android:dependency="device_1_enable"
-            android:title="MQTT endpoint"
-            android:defaultValue="tcp://host:port"
-            android:selectAllOnFocus="true"/>
-        <CheckBoxPreference
-            android:title="Nightscout API Upload"
-            android:dependency="device_1_enable"
-            android:key="device_1_nsapi_enable"
-            android:defaultValue="true"
-            android:summary="The REST API is an alternative to direct mongodb upload">
-        </CheckBoxPreference>
-        <EditTextPreference
-            android:title="API Base URL"
-            android:dependency="device_1_nsapi_enable"
-            android:key="device_1_nsapi"
-            android:dialogTitle="Enter Base API URL"
-            android:defaultValue="http://{YOUR-API-SERVER}/api"
-            android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
-        </EditTextPreference>
-        <RingtonePreference
-            android:key="device_1_high_ringtone"
-            android:dependency="device_1_enable"
-            android:title="@string/high_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
-        <RingtonePreference
-            android:key="device_1_low_ringtone"
-            android:dependency="device_1_enable"
-            android:title="@string/low_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
+            android:title="@string/device_g4"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:title="Battery balancing"
+                android:dependency="device_1_enable"
+                android:key="device_1_bat_bal"
+                android:defaultValue="true"
+                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:title="Time sync"
+                android:dependency="device_1_enable"
+                android:key="device_1_time_sync"
+                android:defaultValue="true"
+                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+            </CheckBoxPreference>
+            <ListPreference
+                android:key="device_1_units"
+                android:dependency="device_1_enable"
+                android:title="@string/pref_device_unit_title"
+                android:defaultValue="0"
+                android:entries="@array/pref_device_units"
+                android:entryValues="@array/pref_device_unit_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null" />
+        </PreferenceScreen>
+        <PreferenceCategory android:title="@string/prefs_cat_threshold"
+            android:key="pref_device_1_threshold">
+            <EditTextPreference
+                android:key="device_1_high_threshold"
+                android:dependency="device_1_enable"
+                android:title="@string/pref_device_high_title"
+                android:defaultValue="@integer/pref_default_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_1_high_ringtone"
+                android:dependency="device_1_enable"
+                android:title="@string/high_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_1_low_threshold"
+                android:dependency="device_1_enable"
+                android:title="@string/pref_device_low_title"
+                android:defaultValue="@integer/pref_default_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_1_low_ringtone"
+                android:dependency="device_1_enable"
+                android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/prefs_cat_monitors"
+            android:key="pref_device_1_monitors">
+            <CheckBoxPreference
+                android:key="device_1_android_monitor"
+                android:dependency="device_1_enable"
+                android:title="Enable Android notification"
+                android:checked="true"/>
+            <PreferenceScreen
+                android:key="device_1_ns"
+                android:title="@string/device_ns"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:title="Nightscout API Upload"
+                    android:dependency="device_1_enable"
+                    android:key="device_1_nsapi_enable"
+                    android:defaultValue="true"
+                    android:summary="The REST API is an alternative to direct mongodb upload">
+                </CheckBoxPreference>
+                <EditTextPreference
+                    android:title="API Base URL"
+                    android:dependency="device_1_nsapi_enable"
+                    android:key="device_1_nsapi"
+                    android:dialogTitle="Enter Base API URL"
+                    android:defaultValue="http://{YOUR-API-SERVER}/api"
+                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                </EditTextPreference>
+                <EditTextPreference
+                    android:title="API Secret key"
+                    android:dependency="device_1_nsapi_enable"
+                    android:key="device_1_nskey"
+                    android:dialogTitle="Enter your API key"
+                    android:password="true">
+                </EditTextPreference>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_1_push"
+                android:title="@string/device_push"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_1_push_upload"
+                    android:dependency="device_1_enable"
+                    android:title="Enable Push upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:key="device_1_mqtt_endpoint"
+                    android:dependency="device_1_push_upload"
+                    android:title="MQTT endpoint"
+                    android:defaultValue="tcp://host:port"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_1_mqtt_user"
+                    android:dependency="device_1_push_upload"
+                    android:title="MQTT user"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_1_mqtt_pass"
+                    android:dependency="device_1_push_upload"
+                    android:title="MQTT password"
+                    android:password="true"
+                    android:selectAllOnFocus="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_1_mongo"
+                android:title="@string/device_mongo"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_1_mongo_upload"
+                    android:dependency="device_1_enable"
+                    android:title="Enable direct mongo upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_uri_title"
+                    android:dependency="device_1_mongo_upload"
+                    android:key="device_1_mongo_uri"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
+                    android:defaultValue="@string/pref_remote_mongo_uri_default"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_col_title"
+                    android:dependency="device_1_mongo_upload"
+                    android:key="device_1_mongo_col"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
+            </PreferenceScreen>
+        </PreferenceCategory>
     </PreferenceScreen>
 
     <PreferenceScreen
@@ -139,85 +208,154 @@
             android:entryValues="@array/pref_device_type_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
-        <!--TODO add code to dynamically disable this-->
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_uri_title"
+        <PreferenceScreen
+            android:key="device_2_g4"
             android:dependency="device_2_enable"
-            android:key="device_2_mongo_uri"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
-            android:defaultValue="@string/pref_remote_mongo_uri_default"/>
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_col_title"
-            android:dependency="device_2_enable"
-            android:key="device_2_mongo_col"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
-        <EditTextPreference
-            android:key="device_2_high_threshold"
-            android:dependency="device_2_enable"
-            android:title="@string/pref_device_high_title"
-            android:defaultValue="@integer/pref_default_device_high"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <EditTextPreference
-            android:key="device_2_low_threshold"
-            android:dependency="device_2_enable"
-            android:title="@string/pref_device_low_title"
-            android:defaultValue="@integer/pref_default_device_low"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <CheckBoxPreference
-            android:key="device_2_android_monitor"
-            android:dependency="device_2_enable"
-            android:title="Enable Android notification"
-            android:checked="true"/>
-        <CheckBoxPreference
-            android:key="device_2_mongo_upload"
-            android:dependency="device_2_enable"
-            android:title="Enable Mongo upload"
-            android:checked="false"/>
-        <CheckBoxPreference
-            android:key="device_2_push_upload"
-            android:dependency="device_2_enable"
-            android:title="Enable Push upload"
-            android:checked="false"/>
-        <EditTextPreference
-            android:key="device_2_mqtt_endpoint"
-            android:dependency="device_2_enable"
-            android:title="MQTT endpoint"
-            android:defaultValue="tcp://host:port"
-            android:selectAllOnFocus="true"/>
-        <SwitchPreference
-            android:title="Nightscout API Upload"
-            android:dependency="device_2_enable"
-            android:key="device_2_nsapi_enable"
-            android:disableDependentsState="false"
-            android:summary="The REST API is an alternative to direct mongodb upload">
-        </SwitchPreference>
-        <EditTextPreference
-            android:dependency="device_2_nsapi_enable"
-            android:title="API Base URL"
-            android:key="device_2_nsapi"
-            android:dialogTitle="Enter Base API URL"
-            android:defaultValue="http://{YOUR-API-SERVER}/api"
-            android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
-        </EditTextPreference>
-        <RingtonePreference
-            android:key="device_2_high_ringtone"
-            android:dependency="device_2_enable"
-            android:title="@string/high_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
-        <RingtonePreference
-            android:key="device_2_low_ringtone"
-            android:title="@string/low_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
+            android:title="@string/device_g4"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:title="Battery balancing"
+                android:dependency="device_2_enable"
+                android:key="device_2_bat_bal"
+                android:defaultValue="true"
+                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:title="Time sync"
+                android:dependency="device_2_enable"
+                android:key="device_2_time_sync"
+                android:defaultValue="true"
+                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+            </CheckBoxPreference>
+            <ListPreference
+                android:key="device_2_units"
+                android:dependency="device_2_enable"
+                android:title="@string/pref_device_unit_title"
+                android:defaultValue="0"
+                android:entries="@array/pref_device_units"
+                android:entryValues="@array/pref_device_unit_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null" />
+        </PreferenceScreen>
+
+        <PreferenceCategory android:title="@string/prefs_cat_threshold"
+            android:key="pref_device_2_threshold">
+            <EditTextPreference
+                android:key="device_2_high_threshold"
+                android:dependency="device_2_enable"
+                android:title="@string/pref_device_high_title"
+                android:defaultValue="@integer/pref_default_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_2_high_ringtone"
+                android:dependency="device_2_enable"
+                android:title="@string/high_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_2_low_threshold"
+                android:dependency="device_2_enable"
+                android:title="@string/pref_device_low_title"
+                android:defaultValue="@integer/pref_default_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_2_low_ringtone"
+                android:dependency="device_2_enable"
+                android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/prefs_cat_monitors"
+            android:key="pref_device_2_monitors">
+            <CheckBoxPreference
+                android:key="device_2_android_monitor"
+                android:dependency="device_2_enable"
+                android:title="Enable Android notification"
+                android:checked="true"/>
+            <PreferenceScreen
+                android:key="device_2_ns"
+                android:title="@string/device_ns"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:title="Nightscout API Upload"
+                    android:dependency="device_2_enable"
+                    android:key="device_2_nsapi_enable"
+                    android:defaultValue="true"
+                    android:summary="The REST API is an alternative to direct mongodb upload">
+                </CheckBoxPreference>
+                <EditTextPreference
+                    android:title="API Base URL"
+                    android:dependency="device_2_nsapi_enable"
+                    android:key="device_2_nsapi"
+                    android:dialogTitle="Enter Base API URL"
+                    android:defaultValue="http://{YOUR-API-SERVER}/api"
+                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                </EditTextPreference>
+                <EditTextPreference
+                    android:title="API Secret key"
+                    android:dependency="device_2_nsapi_enable"
+                    android:key="device_2_nskey"
+                    android:dialogTitle="Enter your API key"
+                    android:password="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_2_push"
+                android:title="@string/device_push"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_2_push_upload"
+                    android:dependency="device_2_enable"
+                    android:title="Enable Push upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:key="device_2_mqtt_endpoint"
+                    android:dependency="device_2_push_upload"
+                    android:title="MQTT endpoint"
+                    android:defaultValue="tcp://host:port"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_2_mqtt_user"
+                    android:dependency="device_2_push_upload"
+                    android:title="MQTT user"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_2_mqtt_pass"
+                    android:dependency="device_2_push_upload"
+                    android:title="MQTT password"
+                    android:password="true"
+                    android:selectAllOnFocus="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_2_mongo"
+                android:title="@string/device_mongo"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_2_mongo_upload"
+                    android:dependency="device_2_enable"
+                    android:title="Enable direct mongo upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_uri_title"
+                    android:dependency="device_2_mongo_upload"
+                    android:key="device_2_mongo_uri"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
+                    android:defaultValue="@string/pref_remote_mongo_uri_default"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_col_title"
+                    android:dependency="device_2_mongo_upload"
+                    android:key="device_2_mongo_col"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
+            </PreferenceScreen>
+        </PreferenceCategory>
     </PreferenceScreen>
 
     <PreferenceScreen
@@ -249,86 +387,153 @@
             android:entryValues="@array/pref_device_type_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
-        <!--TODO add code to dynamically disable this-->
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_uri_title"
+        <PreferenceScreen
+            android:key="device_3_g4"
             android:dependency="device_3_enable"
-            android:key="device_3_mongo_uri"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
-            android:defaultValue="@string/pref_remote_mongo_uri_default"/>
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_col_title"
-            android:dependency="device_3_enable"
-            android:key="device_3_mongo_col"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
-        <EditTextPreference
-            android:key="device_3_high_threshold"
-            android:dependency="device_3_enable"
-            android:title="@string/pref_device_high_title"
-            android:defaultValue="@integer/pref_default_device_high"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <EditTextPreference
-            android:key="device_3_low_threshold"
-            android:dependency="device_3_enable"
-            android:title="@string/pref_device_low_title"
-            android:defaultValue="@integer/pref_default_device_low"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <CheckBoxPreference
-            android:key="device_3_android_monitor"
-            android:dependency="device_3_enable"
-            android:title="Enable Android notification"
-            android:checked="true"/>
-        <CheckBoxPreference
-            android:key="device_3_mongo_upload"
-            android:dependency="device_3_enable"
-            android:title="Enable Mongo upload"
-            android:checked="false"/>
-        <CheckBoxPreference
-            android:key="device_3_push_upload"
-            android:dependency="device_3_enable"
-            android:title="Enable Push upload"
-            android:checked="false"/>
-        <EditTextPreference
-            android:key="device_3_mqtt_endpoint"
-            android:dependency="device_3_enable"
-            android:title="MQTT endpoint"
-            android:defaultValue="tcp://host:port"
-            android:selectAllOnFocus="true"/>
-        <SwitchPreference
-            android:title="Nightscout API Upload"
-            android:dependency="device_3_enable"
-            android:key="device_3_nsapi_enable"
-            android:disableDependentsState="false"
-            android:summary="The REST API is an alternative to direct mongodb upload">
-        </SwitchPreference>
-        <EditTextPreference
-            android:dependency="device_2_nsapi_enable"
-            android:title="API Base URL"
-            android:key="device_3_nsapi"
-            android:dialogTitle="Enter Base API URL"
-            android:defaultValue="http://{YOUR-API-SERVER}/api"
-            android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
-        </EditTextPreference>
-        <RingtonePreference
-            android:key="device_3_high_ringtone"
-            android:dependency="device_3_enable"
-            android:title="@string/high_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
-        <RingtonePreference
-            android:key="device_3_low_ringtone"
-            android:dependency="device_3_enable"
-            android:title="@string/low_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
+            android:title="@string/device_g4"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:title="Battery balancing"
+                android:dependency="device_3_enable"
+                android:key="device_3_bat_bal"
+                android:defaultValue="true"
+                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:title="Time sync"
+                android:dependency="device_3_enable"
+                android:key="device_3_time_sync"
+                android:defaultValue="true"
+                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+            </CheckBoxPreference>
+            <ListPreference
+                android:key="device_3_units"
+                android:dependency="device_3_enable"
+                android:title="@string/pref_device_unit_title"
+                android:defaultValue="0"
+                android:entries="@array/pref_device_units"
+                android:entryValues="@array/pref_device_unit_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null" />
+        </PreferenceScreen>
+        <PreferenceCategory android:title="@string/prefs_cat_threshold"
+            android:key="pref_device_3_threshold">
+            <EditTextPreference
+                android:key="device_3_high_threshold"
+                android:dependency="device_3_enable"
+                android:title="@string/pref_device_high_title"
+                android:defaultValue="@integer/pref_default_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_3_high_ringtone"
+                android:dependency="device_3_enable"
+                android:title="@string/high_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_3_low_threshold"
+                android:dependency="device_3_enable"
+                android:title="@string/pref_device_low_title"
+                android:defaultValue="@integer/pref_default_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_3_low_ringtone"
+                android:dependency="device_3_enable"
+                android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/prefs_cat_monitors"
+            android:key="pref_device_3_monitors">
+            <CheckBoxPreference
+                android:key="device_3_android_monitor"
+                android:dependency="device_3_enable"
+                android:title="Enable Android notification"
+                android:checked="true"/>
+            <PreferenceScreen
+                android:key="device_3_ns"
+                android:title="@string/device_ns"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:title="Nightscout API Upload"
+                    android:dependency="device_3_enable"
+                    android:key="device_3_nsapi_enable"
+                    android:defaultValue="true"
+                    android:summary="The REST API is an alternative to direct mongodb upload">
+                </CheckBoxPreference>
+                <EditTextPreference
+                    android:title="API Base URL"
+                    android:dependency="device_3_nsapi_enable"
+                    android:key="device_3_nsapi"
+                    android:dialogTitle="Enter Base API URL"
+                    android:defaultValue="http://{YOUR-API-SERVER}/api"
+                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                </EditTextPreference>
+                <EditTextPreference
+                    android:title="API Secret key"
+                    android:dependency="device_3_nsapi_enable"
+                    android:key="device_3_nskey"
+                    android:dialogTitle="Enter your API key"
+                    android:password="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_3_push"
+                android:title="@string/device_push"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_3_push_upload"
+                    android:dependency="device_3_enable"
+                    android:title="Enable Push upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:key="device_3_mqtt_endpoint"
+                    android:dependency="device_3_push_upload"
+                    android:title="MQTT endpoint"
+                    android:defaultValue="tcp://host:port"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_3_mqtt_user"
+                    android:dependency="device_3_push_upload"
+                    android:title="MQTT user"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_3_mqtt_pass"
+                    android:dependency="device_3_push_upload"
+                    android:title="MQTT password"
+                    android:password="true"
+                    android:selectAllOnFocus="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_3_mongo"
+                android:title="@string/device_mongo"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_3_mongo_upload"
+                    android:dependency="device_3_enable"
+                    android:title="Enable direct mongo upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_uri_title"
+                    android:dependency="device_3_mongo_upload"
+                    android:key="device_3_mongo_uri"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
+                    android:defaultValue="@string/pref_remote_mongo_uri_default"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_col_title"
+                    android:dependency="device_3_mongo_upload"
+                    android:key="device_3_mongo_col"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
+            </PreferenceScreen>
+        </PreferenceCategory>
     </PreferenceScreen>
 
     <PreferenceScreen
@@ -360,85 +565,153 @@
             android:entryValues="@array/pref_device_type_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
-        <!--TODO add code to dynamically disable this-->
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_uri_title"
+        <PreferenceScreen
+            android:key="device_4_g4"
             android:dependency="device_4_enable"
-            android:key="device_4_mongo_uri"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
-            android:defaultValue="@string/pref_remote_mongo_uri_default"/>
-        <EditTextPreference
-            android:title="@string/pref_device_remote_mongo_col_title"
-            android:dependency="device_4_enable"
-            android:key="device_4_mongo_col"
-            android:selectAllOnFocus="true"
-            android:inputType="text"
-            android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
-            android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
-        <EditTextPreference
-            android:key="device_4_high_threshold"
-            android:dependency="device_4_enable"
-            android:title="@string/pref_device_high_title"
-            android:defaultValue="@integer/pref_default_device_high"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <EditTextPreference
-            android:key="device_4_low_threshold"
-            android:dependency="device_4_enable"
-            android:title="@string/pref_device_low_title"
-            android:defaultValue="@integer/pref_default_device_low"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
-        <CheckBoxPreference
-            android:key="device_4_android_monitor"
-            android:dependency="device_4_enable"
-            android:title="Enable Android notification"
-            android:checked="true"/>
-        <CheckBoxPreference
-            android:key="device_4_mongo_upload"
-            android:dependency="device_4_enable"
-            android:title="Enable Mongo upload"
-            android:checked="false"/>
-        <CheckBoxPreference
-            android:key="device_4_push_upload"
-            android:dependency="device_4_enable"
-            android:title="Enable Push upload"
-            android:checked="false"/>
-        <EditTextPreference
-            android:key="device_4_mqtt_endpoint"
-            android:dependency="device_4_enable"
-            android:title="MQTT endpoint"
-            android:defaultValue="tcp://host:port"
-            android:selectAllOnFocus="true"/>
-        <SwitchPreference
-            android:title="Nightscout API Upload"
-            android:dependency="device_4_enable"
-            android:key="device_4_nsapi_enable"
-            android:disableDependentsState="false"
-            android:summary="The REST API is an alternative to direct mongodb upload">
-        </SwitchPreference>
-        <EditTextPreference
-            android:dependency="device_4_nsapi_enable"
-            android:title="API Base URL"
-            android:key="device_4_nsapi"
-            android:dialogTitle="Enter Base API URL"
-            android:defaultValue="http://{YOUR-API-SERVER}/api"
-            android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
-        </EditTextPreference>
-        <RingtonePreference
-            android:key="device_4_high_ringtone"
-            android:dependency="device_4_enable"
-            android:title="@string/high_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
-        <RingtonePreference
-            android:key="device_4_low_ringtone"
-            android:dependency="device_4_enable"
-            android:title="@string/low_ring_tone_title"
-            android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound" />
+            android:title="@string/device_g4"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:title="Battery balancing"
+                android:dependency="device_4_enable"
+                android:key="device_4_bat_bal"
+                android:defaultValue="true"
+                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:title="Time sync"
+                android:dependency="device_4_enable"
+                android:key="device_4_time_sync"
+                android:defaultValue="true"
+                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+            </CheckBoxPreference>
+            <ListPreference
+                android:key="device_4_units"
+                android:dependency="device_4_enable"
+                android:title="@string/pref_device_unit_title"
+                android:defaultValue="0"
+                android:entries="@array/pref_device_units"
+                android:entryValues="@array/pref_device_unit_values"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null" />
+        </PreferenceScreen>
+        <PreferenceCategory android:title="@string/prefs_cat_threshold"
+            android:key="pref_device_4_threshold">
+            <EditTextPreference
+                android:key="device_4_high_threshold"
+                android:dependency="device_4_enable"
+                android:title="@string/pref_device_high_title"
+                android:defaultValue="@integer/pref_default_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_4_high_ringtone"
+                android:dependency="device_4_enable"
+                android:title="@string/high_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_4_low_threshold"
+                android:dependency="device_4_enable"
+                android:title="@string/pref_device_low_title"
+                android:defaultValue="@integer/pref_default_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_4_low_ringtone"
+                android:dependency="device_4_enable"
+                android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/prefs_cat_monitors"
+            android:key="pref_device_4_monitors">
+            <CheckBoxPreference
+                android:key="device_4_android_monitor"
+                android:dependency="device_4_enable"
+                android:title="Enable Android notification"
+                android:checked="true"/>
+            <PreferenceScreen
+                android:key="device_4_ns"
+                android:title="@string/device_ns"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:title="Nightscout API Upload"
+                    android:dependency="device_4_enable"
+                    android:key="device_4_nsapi_enable"
+                    android:defaultValue="true"
+                    android:summary="The REST API is an alternative to direct mongodb upload">
+                </CheckBoxPreference>
+                <EditTextPreference
+                    android:title="API Base URL"
+                    android:dependency="device_4_nsapi_enable"
+                    android:key="device_4_nsapi"
+                    android:dialogTitle="Enter Base API URL"
+                    android:defaultValue="http://{YOUR-API-SERVER}/api"
+                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                </EditTextPreference>
+                <EditTextPreference
+                    android:title="API Secret key"
+                    android:dependency="device_4_nsapi"
+                    android:key="device_4_nskey"
+                    android:dialogTitle="Enter your API key"
+                    android:password="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_4_push"
+                android:title="@string/device_push"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_4_push_upload"
+                    android:dependency="device_4_enable"
+                    android:title="Enable Push upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:key="device_4_mqtt_endpoint"
+                    android:dependency="device_4_push_upload"
+                    android:title="MQTT endpoint"
+                    android:defaultValue="tcp://host:port"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_4_mqtt_user"
+                    android:dependency="device_4_push_upload"
+                    android:title="MQTT user"
+                    android:selectAllOnFocus="true"/>
+                <EditTextPreference
+                    android:key="device_4_mqtt_pass"
+                    android:dependency="device_4_push_upload"
+                    android:title="MQTT password"
+                    android:password="true"
+                    android:selectAllOnFocus="true"/>
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="device_4_mongo"
+                android:title="@string/device_mongo"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="device_4_mongo_upload"
+                    android:dependency="device_4_enable"
+                    android:title="Enable direct mongo upload"
+                    android:checked="false"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_uri_title"
+                    android:dependency="device_4_mongo_upload"
+                    android:key="device_4_mongo_uri"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_uri_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_uri_dialog_msg"
+                    android:defaultValue="@string/pref_remote_mongo_uri_default"/>
+                <EditTextPreference
+                    android:title="@string/pref_device_remote_mongo_col_title"
+                    android:dependency="device_4_mongo_upload"
+                    android:key="device_4_mongo_col"
+                    android:selectAllOnFocus="true"
+                    android:inputType="text"
+                    android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
+                    android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
+            </PreferenceScreen>
+        </PreferenceCategory>
     </PreferenceScreen>
+
 </PreferenceScreen>

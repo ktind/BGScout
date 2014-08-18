@@ -12,7 +12,7 @@ abstract public class CGMTransportAbstract {
     protected boolean isopen=false;
     protected boolean chargeDevice=false;
 
-    abstract public boolean open() throws DeviceNotConnected;
+    abstract public boolean open() throws NoDeviceFoundException;
     abstract public void close();
     abstract public int read(byte[] responseBuffer,int timeoutMillis) throws IOException;
     abstract public int write(byte[] packet,int timeoutMillis) throws IOException;

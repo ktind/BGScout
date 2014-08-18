@@ -24,4 +24,12 @@ public enum GlucoseUnit {
     public String toString() {
         return unit;
     }
+
+    public GlucoseUnit getUnitByString(String search){
+        for (GlucoseUnit u:values()) {
+            if (u.toString().equals(search))
+                return u;
+        }
+        return NONE;
+    }
 }

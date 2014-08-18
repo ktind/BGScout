@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -28,29 +29,26 @@ public class FakeDevice extends AbstractPollDevice {
     }
 
     @Override
-    int getDeviceBattery() {
+    public int getDeviceBattery() {
         return 0;
     }
 
     @Override
-    protected DeviceDownloadObject doDownload() {
+    protected DownloadObject doDownload() {
         return generateDownloadObject();
     }
 
     @Override
-    public void connect() {
+    public void connect() throws DeviceException, IOException {
+        super.connect();
     }
 
     @Override
     public void disconnect() {
     }
 
-//    @Override
-//    public G4EGVRecord[] getReadings() {
-//        return new G4EGVRecord[0];
-//    }
 
-    private DeviceDownloadObject generateDownloadObject(){
+    private DownloadObject generateDownloadObject(){
         Log.d(TAG,"Generating start object");
 //        if (!initialRun)
 //            this.addEGV();
@@ -60,7 +58,7 @@ public class FakeDevice extends AbstractPollDevice {
         egvArray[0]=new EGVRecord(rand.nextInt(362)+39,new Date(),Trend.FLAT,true);
         egvHistory.add(egvArray[0]);
 
-        DeviceDownloadObject ddo=new DeviceDownloadObject(this,egvArray,downloadStatus);
+        DownloadObject ddo=new DownloadObject(this,egvArray,downloadStatus);
         lastDownloadObject=ddo;
         initialRun=false;
         return ddo;

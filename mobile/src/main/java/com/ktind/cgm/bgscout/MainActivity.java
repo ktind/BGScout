@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,9 +18,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import org.acra.*;
 import org.acra.annotation.*;
 import org.acra.sender.HttpSender;
@@ -46,6 +47,8 @@ public class MainActivity extends Activity {
 
     private ArrayList<String> deviceList=new ArrayList<String>();
     private AlarmReceiver alarmReceiver;
+    private boolean svcUp=false;
+    private int direction=0;
 
 
     @Override
@@ -53,96 +56,19 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        // Look into dynamically creating these?
-        ProgressBar progressBar = null;
-        TextView bg = null;
-        TextView name = null;
-        String deviceIDStr;
+        UIDevice uiDevice=new UIDevice((ImageView) findViewById(R.id.main_display),(ImageView) findViewById(R.id.direction_image), (TextView) findViewById(R.id.reading_text), (TextView) findViewById(R.id.name), (ImageView) findViewById(R.id.uploader_battery_indicator), (TextView) findViewById(R.id.uploader_battery_label) ,(ImageView) findViewById(R.id.deviceBattery), (TextView) findViewById(R.id.device_battery_label));
+        UIDeviceList.add(uiDevice);
         alarmReceiver=new AlarmReceiver();
         registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.UI_READING_UPDATE"));
-        registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.SERVICE_READY"));
-        for (int i=1;i<5;i++){
-            if (sharedPref.getBoolean("device_" + i + "_enable", false)) {
-                deviceIDStr="device_"+i;
-                deviceList.add(deviceIDStr);
-                switch (i) {
-                    case (1):
-                        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                        bg = (TextView) findViewById(R.id.textView);
-                        name = (TextView) findViewById(R.id.textView5);
-                        break;
-                    case (2):
-                        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                        bg = (TextView) findViewById(R.id.textView);
-                        name = (TextView) findViewById(R.id.textView5);
-                        break;
-                    case (3):
-                        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                        bg = (TextView) findViewById(R.id.textView);
-                        name = (TextView) findViewById(R.id.textView5);
-                        break;
-                    case(4):
-                        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                        bg = (TextView) findViewById(R.id.textView);
-                        name = (TextView) findViewById(R.id.textView5);
-                        break;
-                }
-                UIDeviceList.add(new UIDevice(progressBar, bg, name, deviceIDStr));
-            }
-        }
+//        registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.SERVICE_READY"));
     }
 
     public void startSvc(View view){
         Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
-        ProgressBar progressBar=(ProgressBar) findViewById(R.id.progressBar);
-        mHandler.postDelayed(updateProgress, 10000);
-//        progressBar.setVisibility(View.VISIBLE);
-        progressBar.setMax(300);
         startService(mIntent);
         bindSvc();
+        svcUp=true;
     }
-
-//    public void onServiceAvailable(){
-//        serviceAvailable=true;
-//        //Finish setting up our UIDevice groupings
-//        ArrayList<AbstractDevice> cgms=mServer.getDevices();
-//        for (AbstractDevice cgm:cgms) {
-//            String deviceIDStr="device_"+cgm.getDeviceID();
-//            for (UIDevice uidev : UIDeviceList) {
-//                if (uidev.getDeviceID().equals(deviceIDStr)){
-//                    uidev.setDevice(cgm);
-//                }
-//            }
-//        }
-//    }
-
-    private Runnable updateProgress = new Runnable() {
-        @Override
-        public void run() {
-            if (mBounded) {
-                for (UIDevice uidev : UIDeviceList) {
-                    uidev.update();
-                }
-            }
-            mHandler.postDelayed(updateProgress,5000);
-        }
-    };
-
-//    public void getData(View view){
-//        if (mServer!=null) {
-//            ArrayList<DeviceDownloadObject> data = mServer.getData();
-//            TextView tv = (TextView) findViewById(R.id.textView);
-//            for (DeviceDownloadObject datum : data) {
-//                int lastIndex = datum.getEgvRecords().length - 1;
-//                String msg="====================\n";
-//                msg += "BG: " + datum.getEgvRecords()[lastIndex].getEgv() + "\n"
-//                        + "Trend: " + datum.getEgvRecords()[lastIndex].getTrend().toString() + "\n"
-//                        + "Date: " + datum.getEgvRecords()[lastIndex].getDate().toString() + "\n";
-//                tv.append(msg);
-//            }
-//            tv.append("*********************\n");
-//        }
-//    }
 
     public void stopSvc(View view){
         Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
@@ -150,10 +76,8 @@ public class MainActivity extends Activity {
             unbindService(mConnection);
             mBounded=false;
         }
-//        progressBar.setProgress(0);
-//        progressBar.setVisibility(View.INVISIBLE);
-        mHandler.removeCallbacks(updateProgress);
         stopService(mIntent);
+        svcUp=false;
     }
 
     public void bindSvc(){
@@ -164,52 +88,18 @@ public class MainActivity extends Activity {
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_LONG).show();
+//            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_LONG).show();
             mBounded = false;
             mServer = null;
         }
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_LONG).show();
+//            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_LONG).show();
             mBounded = true;
             DeviceDownloadService.LocalBinder mLocalBinder = (DeviceDownloadService.LocalBinder)service;
             mServer = mLocalBinder.getServerInstance();
-            ArrayList<AbstractDevice> cgms=mServer.getDevices();
-            for (AbstractDevice cgm:cgms) {
-                String deviceIDStr="device_"+cgm.getDeviceID();
-                for (UIDevice uidev : UIDeviceList) {
-                    if (uidev.getDeviceID().equals(deviceIDStr)){
-                        uidev.setDevice(cgm);
-                    }
-                }
-            }
         }
     };
-
-
-//    public void toggleService(View view) {
-//        Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
-//        final Button button = (Button) findViewById(R.id.button);
-//        if (isServiceRunning()) {
-//            Log.d(TAG, "Stopping service");
-//            stopService(mIntent);
-//            button.setText("Start");
-//        } else {
-//            Log.d(TAG, "Starting service");
-//            startService(mIntent);
-//            button.setText("Stop");
-//        }
-//    }
-
-//    private boolean isServiceRunning() {
-//        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if (DeviceDownloadService.class.getName().equals(service.service.getClassName())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -240,121 +130,32 @@ public class MainActivity extends Activity {
         unregisterReceiver(alarmReceiver);
     }
 
+    public void dumpStats(View view){
+        BGScout.statsMgr.logStats();
+    }
+
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG,"Received broadcast: "+intent.getAction());
             if (intent.getAction().equals("com.ktind.cgm.UI_READING_UPDATE")){
                 Log.d(TAG,"Received a UI update");
-                String bgReading=intent.getExtras().getString("bgReading","---");
-                String deviceID=intent.getExtras().getString("deviceID","");
-                Log.d(TAG,"Device: "+deviceID+" bgReading: "+bgReading);
+                DownloadObject downloadObject=new DownloadObject();
+                downloadObject=downloadObject.buildFromJSON(intent.getExtras().getString("download", downloadObject.getJson().toString()));
+                String bgReading= null;
+                bgReading = String.valueOf(downloadObject.getLastReadingString());
+                float uploaderBat=downloadObject.getUploaderBattery();
+                int devBattery=downloadObject.getDeviceBattery();
+                String devID=downloadObject.getDeviceID();
+                String nm=downloadObject.getDeviceName();
+                Log.i(TAG,"Uploader battery: "+uploaderBat);
+                Log.i(TAG,"Device battery: "+devBattery);
+                Log.i(TAG,"deviceID: "+devID);
+                Log.i(TAG,"Reading: "+bgReading);
+                Log.i(TAG,"Name: "+downloadObject.getDeviceName());
                 for (UIDevice uid:UIDeviceList){
-                    if (uid.getDeviceID().equals(deviceID)){
-                        uid.setBGDisplay(bgReading);
-                    }
+                    uid.update(downloadObject);
                 }
-            }
-//            if (intent.getAction().equals("com.ktind.cgm.SERVICE_READY")){
-//
-////                onServiceAvailable();
-//            }
-        }
-    }
-
-    public class UIDevice{
-        private ProgressBar progressBar;
-        private TextView bgValue;
-        private TextView name;
-        private String deviceID;
-        private AbstractDevice device;
-
-        UIDevice(ProgressBar p,TextView b,TextView n,String d){
-            setProgressBar(p);
-            setBgValue(b);
-            setName(n);
-            setDeviceID(d);
-            progressBar.setVisibility(View.VISIBLE);
-            bgValue.setVisibility(View.VISIBLE);
-            name.setVisibility(View.VISIBLE);
-            String bgText="---";
-            if (mBounded){
-                try {
-                    bgText=mServer.getLastBG(deviceID)+mServer.getLastTrend(deviceID).toString();
-                } catch (AbstractDevice.NoDownloadException e) {
-                    e.printStackTrace();
-                }
-            }
-            bgValue.setText(bgText);
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-            name.setText(sharedPref.getString(getDeviceID()+"_name","Null"));
-        }
-
-        public void setDevice(AbstractDevice cgm){
-            device=cgm;
-            name.setText(cgm.getName());
-        }
-
-        public AbstractDevice getDevice(){
-            return device;
-        }
-
-        public String getDeviceID() {
-            return deviceID;
-        }
-
-        public void setDeviceID(String deviceID) {
-            this.deviceID = deviceID;
-        }
-
-        public ProgressBar getProgressBar() {
-            return progressBar;
-        }
-
-        public void setProgressBar(ProgressBar progressBar) {
-            this.progressBar = progressBar;
-        }
-
-        public TextView getBgValue() {
-            return bgValue;
-        }
-
-        public void setBgValue(TextView bgValue) {
-            this.bgValue = bgValue;
-        }
-
-        public TextView getName() {
-            return name;
-        }
-
-        public void setName(TextView name) {
-            Log.d(TAG,"Setting UI name to "+name);
-            this.name = name;
-        }
-
-        public void setBGDisplay(int sgv,Trend trend){
-            setBGDisplay(String.valueOf(sgv)+" "+trend.toString());
-        }
-
-        public void setBGDisplay(String text){
-            Log.d(TAG,"Setting UI bgDisplay to "+text);
-            bgValue.setText(text);
-        }
-
-        public void update(){
-            long nextReading = mServer.getDeviceNextReading(getDeviceID()) / 1000L;
-            Log.v(TAG,"Next reading: "+nextReading);
-            if (bgValue.getText().equals("---")){
-                try {
-                    bgValue.setText(device.getLastBG());
-                } catch (AbstractDevice.NoDownloadException e) {
-                    bgValue.setText("???");
-                }
-            }
-            getProgressBar().setProgress((int) Math.abs(nextReading));
-            if (getProgressBar().getProgress() == device.getPollInterval()) {
-                getProgressBar().setProgress(0);
             }
         }
     }
@@ -362,40 +163,205 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.post(updateProgress);
+//        if (svcUp)
+//            mHandler.post(updateProgress);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        bindSvc();
-        if (mBounded) {
-            for (UIDevice uid : UIDeviceList) {
-                try {
-                    uid.setBGDisplay(String.valueOf(mServer.getLastBG(uid.deviceID)) + mServer.getLastTrend(uid.deviceID).toString());
-                } catch (AbstractDevice.NoDownloadException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            Log.d(TAG,"Not updating the UI because the service is not yet bound");
+        if (svcUp) {
+            bindSvc();
         }
-//        mHandler.post(updateProgress);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mHandler.removeCallbacks(updateProgress);
+//        mHandler.removeCallbacks(updateProgress);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mHandler.removeCallbacks(updateProgress);
+//        mHandler.removeCallbacks(updateProgress);
         if (mBounded) {
             unbindService(mConnection);
             mBounded=false;
+        }
+    }
+
+    protected class UIDevice{
+        protected TextView name;
+        protected ImageView main_display;
+        protected ImageView direction;
+        protected TextView bg;
+        protected DownloadObject lastDownload;
+        protected ImageView uploaderBattery;
+        protected TextView uploaderBatteryLabel;
+        protected ImageView deviceBattery;
+        protected TextView deviceBatteryLabel;
+        int mainBGColor;
+        int currentBGColor;
+
+        public UIDevice(ImageView main, ImageView dir, TextView reading, TextView n, ImageView ubat, TextView ubatl, ImageView dbat, TextView dbatl){
+            setMain_display(main);
+//            main_display.setBackgroundColor(mainBGColor);
+            setDirection(dir);
+            setBg(reading);
+            setName(n);
+            setUploaderBattery(ubat);
+            setDeviceBattery(dbat);
+            setUploaderBatteryLabel(ubatl);
+            setDeviceBatteryLabel(dbatl);
+        }
+
+        public TextView getUploaderBatteryLabel() {
+            return uploaderBatteryLabel;
+        }
+
+        public void setUploaderBatteryLabel(TextView uploaderBatteryLabel) {
+            this.uploaderBatteryLabel = uploaderBatteryLabel;
+        }
+
+        public TextView getDeviceBatteryLabel() {
+            return deviceBatteryLabel;
+        }
+
+        public void setDeviceBatteryLabel(TextView deviceBatteryLabel) {
+            this.deviceBatteryLabel = deviceBatteryLabel;
+        }
+
+        public ImageView getUploaderBattery() {
+            return uploaderBattery;
+        }
+
+        public void setUploaderBattery(ImageView uploaderBattery) {
+            this.uploaderBattery = uploaderBattery;
+        }
+
+        public ImageView getDeviceBattery() {
+            return deviceBattery;
+        }
+
+        public void setDeviceBattery(ImageView deviceBattery) {
+            this.deviceBattery = deviceBattery;
+        }
+
+        public void update(DownloadObject dl){
+            lastDownload=dl;
+            name.setText(dl.getDeviceName());
+            try {
+                switch (dl.getLastRecord().getTrend()){
+                    case DOUBLEUP:
+                        direction.setImageResource(R.drawable.doubleup);
+                        break;
+                    case SINGLEUP:
+                        direction.setImageResource(R.drawable.up);
+                        break;
+                    case FORTYFIVEUP:
+                        direction.setImageResource(R.drawable.fortyfiveup);
+                        break;
+                    case FLAT:
+                        direction.setImageResource(R.drawable.flat);
+                        break;
+                    case FORTYFIVEDOWN:
+                        direction.setImageResource(R.drawable.fortyfivedown);
+                        break;
+                    case SINGLEDOWN:
+                        direction.setImageResource(R.drawable.down);
+                        break;
+                    case DOUBLEDOWN:
+                        direction.setImageResource(R.drawable.doubledown);
+                        break;
+                    default:
+                        direction.setImageResource(R.drawable.dash);
+                        break;
+                }
+                int r=dl.getLastReading();
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                int highThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_high_threshold", "180"));
+                int lowThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_low_threshold", "60"));
+//                int newColor=Color.WHITE;
+                if (r>highThreshold) {
+                    currentBGColor=Color.RED;
+                }else if (r<lowThreshold){
+                    currentBGColor=Color.rgb(255, 199, 0);
+                } else {
+                    currentBGColor=Color.rgb(0,170,0);
+                }
+                mainBGColor=currentBGColor;
+                main_display.setBackgroundColor(mainBGColor);
+                bg.setText(String.valueOf(r));
+
+                int dbat=dl.getDeviceBattery();
+                deviceBatteryLabel.setText(String.valueOf(dbat));
+                if (dbat > 75){
+                    deviceBattery.setImageResource(R.drawable.batteryfullhorizontal);
+                }else if (dbat <=75 && dbat > 50){
+                    deviceBattery.setImageResource(R.drawable.battery75horizontal);
+                }else if (dbat <=50 && dbat > 25){
+                    deviceBattery.setImageResource(R.drawable.battery50horizontal);
+                }else if (dbat <=25 && dbat > 15){
+                    deviceBattery.setImageResource(R.drawable.battery25horizontal);
+                }else if (dbat<=15 && dbat > 8) {
+                    deviceBattery.setImageResource(R.drawable.batterylowhorizontal);
+                } else if (dbat<8){
+                    deviceBattery.setImageResource(R.drawable.batterycriticalhorizontal);
+                }
+
+                float ubat=dl.getUploaderBattery();
+                uploaderBatteryLabel.setText(String.valueOf((int) ubat));
+                if (ubat > 75){
+                    uploaderBattery.setImageResource(R.drawable.batteryfullvertical);
+                }else if (ubat <=75 && ubat > 50){
+                    uploaderBattery.setImageResource(R.drawable.battery75vertical);
+                }else if (ubat <=50 && ubat > 25){
+                    uploaderBattery.setImageResource(R.drawable.battery50vertical);
+                }else if (ubat <=25 && ubat > 15){
+                    uploaderBattery.setImageResource(R.drawable.battery25vertical);
+                }else if (ubat<=15 && ubat > 8) {
+                    uploaderBattery.setImageResource(R.drawable.batterylowvertical);
+                } else if (ubat<8){
+                    uploaderBattery.setImageResource(R.drawable.batterycriticalvertical);
+                }
+
+
+            } catch (NoDataException e) {
+                Log.d(TAG,"No data in previous download",e);
+            }
+        }
+
+        public TextView getName() {
+            return name;
+        }
+
+        public void setName(TextView name) {
+            this.name = name;
+        }
+
+        public ImageView getMain_display() {
+            return main_display;
+        }
+
+        public void setMain_display(ImageView main_display) {
+            this.main_display = main_display;
+        }
+
+        public ImageView getDirection() {
+            return direction;
+        }
+
+        public void setDirection(ImageView direction) {
+            this.direction = direction;
+        }
+
+        public TextView getBg() {
+            return bg;
+        }
+
+        public void setBg(TextView bg) {
+            this.bg = bg;
         }
     }
 }

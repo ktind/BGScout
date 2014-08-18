@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">BG Scout</string>
+    <string name="app_name">Sugarcast</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="welcome_message">BG Scout!\n</string>
     <string name="action_settings">Settings</string>
@@ -35,5 +35,23 @@
     <string name="get_data_button">Get poll</string>
     <string name="poller_button">Poll</string>
     <string name="crash_toast_text">Capturing crash</string>
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="prefs_mqtt_header">Push notifications</string>
+    <string name="prefs_mqtt_header_summ">Settings related to push notifications</string>
+    <string name="prefs_cat_monitors">Monitors</string>
+    <string name="device_mongo">Mongo Settings</string>
+    <string name="device_push">Push Notification settings</string>
+    <string name="device_ns">Nightscout API settings</string>
+    <string name="prefs_cat_threshold">Thresholds</string>
+    <string name="last_g4_download">lastG4Download</string>
+    <string name="uploader_battery_default">-%</string>
+    <string name="device_battery_default">-%</string>
+    <string name="default_bg_text">---</string>
+    <string name="default_name_text">---</string>
+    <string name="device_g4">G4 Options</string>
+    <string name="pref_device_unit_title">Units</string>
+    <string name="dump_stats">Dump Stats</string>
+    <string name="device_battery_label">CGM</string>
+    <string name="uploader_battery_label">Uploader</string>
 
 </resources>

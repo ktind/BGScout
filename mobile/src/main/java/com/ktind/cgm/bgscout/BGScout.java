@@ -21,6 +21,8 @@ import org.acra.sender.HttpSender;
         formUriBasicAuthPassword = "set4now"
 )
 public class BGScout extends Application {
+    public static StatsMgr statsMgr=new StatsMgr();
+
     @Override
     public void onCreate() {
         super.onCreate();

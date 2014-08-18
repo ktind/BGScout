@@ -3,11 +3,8 @@ package com.ktind.cgm.bgscout;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,8 +15,9 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.ktind.cgm.bgscout.DexcomG4.G4CGMDevice;
+
 import java.util.ArrayList;
-//TODO Otto is no longer used.. remove it?
 
 public class DeviceDownloadService extends Service {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
@@ -39,7 +37,7 @@ public class DeviceDownloadService extends Service {
             boolean enabled = sharedPref.getBoolean(dev+"_enable", false);
             if (enabled){
                 String name = sharedPref.getString(dev+"_name","");
-                int type = Integer.valueOf(sharedPref.getString(dev + "_type", "0"));
+                int type = Integer.parseInt(sharedPref.getString(dev + "_type", "0"));
                 AbstractDevice cgm=null;
                 switch(type){
                     case 0:
@@ -66,7 +64,6 @@ public class DeviceDownloadService extends Service {
                 }
             }
         }
-        //FIXME devCount is really a device ID counter - should probably start with 0 to avoid confusion, no?
         Log.i(TAG,"Added "+(devCount-1)+" devices to the device list");
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), MainActivity.class), 0);
@@ -108,14 +105,14 @@ public class DeviceDownloadService extends Service {
         return cgms;
     }
 
-    public int getLastBG(String deviceID) throws AbstractDevice.NoDownloadException {
+    public int getLastBG(String deviceID) throws NoDataException {
         AbstractDevice cgm=findDevice(deviceID);
-        return cgm.getLastBG();
+        return cgm.getLastDownloadObject().getLastReading();
     }
 
-    public Trend getLastTrend(String deviceID) throws AbstractDevice.NoDownloadException {
+    public Trend getLastTrend(String deviceID) throws NoDataException {
         AbstractDevice cgm=findDevice(deviceID);
-        return cgm.getLastTrend();
+        return cgm.getLastDownloadObject().getLastTrend();
     }
 
     @Override
@@ -134,12 +131,13 @@ public class DeviceDownloadService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public ArrayList<DeviceDownloadObject> getData(){
-        ArrayList<DeviceDownloadObject> results=new ArrayList<DeviceDownloadObject>(cgms.size());
+    public ArrayList<DownloadObject> getData(){
+        ArrayList<DownloadObject> results=new ArrayList<DownloadObject>(cgms.size());
         for (AbstractDevice cgm:cgms){
             try {
                 results.add(cgm.getLastDownloadObject());
-            } catch (AbstractDevice.NoDownloadException e) {
+            } catch (NoDataException e) {
+                Log.e(TAG,"No last download");
                 e.printStackTrace();
             }
         }

@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -19,9 +18,6 @@ import java.util.Date;
 abstract public class AbstractPollDevice extends AbstractDevice {
     private static final String TAG = AbstractPollDevice.class.getSimpleName();
     protected long nextFire=45000L;
-//    protected int pollInterval=300000;
-//    // Should this be final?
-//    protected DeviceProxy deviceProxy;
     AlarmReceiver alarmReceiver;
 
 
@@ -29,59 +25,48 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         super(n,deviceID,appContext,mH);
     }
 
-//    public DeviceProxy getDeviceProxy() {
-//        return deviceProxy;
-//    }
-
-    abstract protected DeviceDownloadObject doDownload();
+    abstract protected DownloadObject doDownload();
 
     // entry point
     final public void start(){
         super.start();
         AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-//        pollDevice();
         PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DL");
         wl.acquire();
         Log.i(TAG,"Performing initial download");
         download();
         Log.i(TAG,"Initial download complete");
-        fireMonitors();
         wl.release();
         Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
         Intent intent = new Intent("com.ktind.cgm.DEVICE_POLL");
         intent.putExtra("device",deviceIDStr);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, intent, 0);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime()+3000L,alarmIntent);
-//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime()+3000L,getPollInterval(),alarmIntent);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
         alarmReceiver=new AlarmReceiver();
         appContext.registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.DEVICE_POLL"));
     }
 
-    public Date getNextReadingTime(){
+    public Date getNextReadingTime() {
         long msSinceLastReading;
         long multiplier;
-        long timeForNextReading=getPollInterval();
-
+        long timeForNextReading;
         try {
-
-            msSinceLastReading = new Date().getTime() - getLastDate().getTime();
-            if (msSinceLastReading>getPollInterval()){
-                Log.w(TAG,"Possible missed readings?");
-                Log.d(TAG,"Last Date: "+getLastDate()+" Current: "+new Date());
+            msSinceLastReading = new Date().getTime() - getLastDownloadObject().getLastReadingDate().getTime();
+            if (msSinceLastReading > getPollInterval()) {
+                Log.w(TAG, "Possible missed readings?");
+                Log.d(TAG, "Last Date: " + getLastDownloadObject().getLastReadingDate() + " Current: " + new Date());
             }
             multiplier = (msSinceLastReading / getPollInterval())+1;
-//            Log.d(TAG,"Multiplier: "+multiplier+" msSince Last reading: "+msSinceLastReading/1000L);
             timeForNextReading = ((multiplier * getPollInterval()) - msSinceLastReading)+System.currentTimeMillis();
-        } catch (NoDownloadException e) {
-            e.printStackTrace();
-            Log.e(TAG,"Unable to determine next reading time because there hasn't been a previous reading");
+            if (timeForNextReading<0){
+                Log.w(TAG,"Should not see this. Something is wrong with my math");
+                timeForNextReading=getPollInterval();
+            }
+            return new Date(timeForNextReading);
+        } catch (DeviceException e) {
+            return new Date(System.currentTimeMillis()+45000L);
         }
-        if (timeForNextReading<0){
-            Log.w(TAG,"Should not see this. Something is wrong with my math");
-            timeForNextReading=getPollInterval();
-        }
-        return new Date(timeForNextReading);
     }
 
     public void pollDevice(){
@@ -92,20 +77,16 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                     PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DL");
                     wl.acquire();
                     download();
-                    fireMonitors();
                     wl.release();
                 }
             },deviceIDStr+"-thread").start();
     }
 
-
-//    public int getPollInterval() {
-//        return pollInterval;
-//    }
-
     public void download(){
         Log.i(TAG,"Beginning download");
+        stats.startDownloadTimer();
         doDownload();
+        stats.stopDownloadTimer();
         Log.i(TAG,"Download complete");
         onDownload();
     }
@@ -137,7 +118,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                 return millis;
             }
             return diff;
-        } catch (NoDownloadException e){
+        } catch (DeviceException e) {
             Log.d(TAG,"nextFire returning "+millis+" seconds because there wasn't a lastdownloadobject set");
             return millis;
         }
@@ -155,8 +136,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                     Intent pIntent = new Intent("com.ktind.cgm.DEVICE_POLL");
                     pIntent.putExtra("device",deviceIDStr);
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime()+3000L,alarmIntent);
-
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
                 } else {
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an Device Poll operation");
                 }

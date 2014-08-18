@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -16,7 +14,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +31,7 @@ public class NightScoutUpload extends AbstractMonitor {
     private static final String TAG = NightScoutUpload.class.getSimpleName();
     private static final int SOCKET_TIMEOUT = 60 * 1000;
     private static final int CONNECTION_TIMEOUT = 30 * 1000;
+    private String apiSecret;
     private DefaultHttpClient httpclient;
     private SharedPreferences sharedPref;
 
@@ -48,7 +46,7 @@ public class NightScoutUpload extends AbstractMonitor {
         setAllowVirtual(false);
     }
     @Override
-    protected void doProcess(DeviceDownloadObject d) {
+    protected void doProcess(DownloadObject d) {
         String postURL=sharedPref.getString(deviceIDStr+"_nsapi","");
         postURL += (postURL.endsWith("/") ? "" : "/") + "entries";
         Log.i(TAG, "Posting to: " + postURL);
@@ -78,8 +76,7 @@ public class NightScoutUpload extends AbstractMonitor {
                 post.setEntity(se);
                 post.setHeader("Accept", "application/json");
                 post.setHeader("Content-type", "application/json");
-                //TODO add this as a setting?
-                String apiSecret="testing12345";
+                apiSecret = sharedPref.getString(deviceIDStr+"_nskey","");
                 MessageDigest md=MessageDigest.getInstance("SHA1");
                 String apiSecretHash=byteArrayToHexString(md.digest(apiSecret.getBytes("UTF-8")));
                 Log.d(TAG,"API Secret: "+apiSecretHash);
@@ -88,7 +85,7 @@ public class NightScoutUpload extends AbstractMonitor {
                 POST /api/v1/entries/
                 Accept: application/json
                 Content-type: application/json
-                api-secret: edd5193b6c5b7bac42c55dbebf55f25c19d99aa4
+                api-secret: XXXXXX
 
                 {"device":"dexcom","date":"1407695516000","sgv":"101","direction":"FortyFiveUp"}
                  */

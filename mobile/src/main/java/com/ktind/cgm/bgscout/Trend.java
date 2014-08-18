@@ -36,4 +36,12 @@ public enum Trend {
     public String getNsString(){
         return nsString;
     }
+
+    public Trend getTrendByNsString(String search){
+        for (Trend t:values()){
+            if (t.getNsString().equals(search))
+                return t;
+        }
+        return Trend.NONE;
+    }
 }

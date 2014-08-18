@@ -9,10 +9,21 @@
         <item>Remote (Push)</item>
         <item>Fake</item>
     </string-array>
+    <!--TODO preferences are scattered all about. -->
     <string-array name="pref_device_type_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+    </string-array>
+    <string-array name="pref_device_units">
+        <item>Auto</item>
+        <item>mg/dL</item>
+        <item>mmoL</item>
+    </string-array>
+    <string-array name="pref_device_unit_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 </resources>

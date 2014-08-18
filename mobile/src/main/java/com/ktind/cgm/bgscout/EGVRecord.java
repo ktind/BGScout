@@ -1,6 +1,6 @@
 package com.ktind.cgm.bgscout;
 
-import android.util.Log;
+//import android.util.Log;
 
 import java.util.Date;
 
@@ -11,8 +11,9 @@ public class EGVRecord {
     private static final String TAG = EGVRecord.class.getSimpleName();
     protected int egv;
     protected Date date;
-    protected Trend trend;
-    protected boolean isNew;
+    protected Trend trend=Trend.NONE;
+    protected GlucoseUnit unit=GlucoseUnit.MGDL;
+    protected boolean isNew=true;
 
     EGVRecord(int egv,Date date,Trend trend,boolean isNew){
         super();
@@ -22,8 +23,18 @@ public class EGVRecord {
         this.setNew(isNew);
     }
 
-    EGVRecord(){
+
+
+    public EGVRecord(){
         super();
+    }
+
+    public GlucoseUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(GlucoseUnit unit) {
+        this.unit = unit;
     }
 
     public int getEgv() {

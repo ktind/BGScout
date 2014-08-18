@@ -1,4 +1,4 @@
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.DexcomG4;
 
 /**
  * Created by klee24 on 8/2/14.

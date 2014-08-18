@@ -1,8 +1,11 @@
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.DexcomG4;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
+
+import com.ktind.cgm.bgscout.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,16 +35,6 @@ public class G4CGMDevice extends AbstractPollDevice {
     protected String receiverID;
     protected int cgmBattery=-1;
     private static final String TAG = G4CGMDevice.class.getSimpleName();
-    // TODO add this as a shared preference...
-//    protected Date myLastDownload=new Date(new Date().getTime()-10800000);
-
-//    public String getSerialNum() {
-//        return serialNum;
-//    }
-//
-//    public void setSerialNum(String serialNum) {
-//        this.serialNum = serialNum;
-//    }
 
     public G4CGMDevice(String name,int devID,Context appContext,Handler mH){
         super(name,devID,appContext,mH);
@@ -49,22 +43,24 @@ public class G4CGMDevice extends AbstractPollDevice {
         this.deviceType="Dexcom G4";
     }
 
+    // Seems redundant for this method..
     @Override
-    int getDeviceBattery() throws IOException, DeviceNotConnected {
+    public int getDeviceBattery() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         if (cgmBattery==-1)
             cgmBattery=getBatteryLevel();
         return cgmBattery;
     }
 
     @Override
-    public void connect() throws DeviceNotConnected, IOException {
+    public void connect() throws IOException, DeviceException {
+        super.connect();
         cgmTransport.open();
         setup();
     }
 
-    public void setup() throws IOException, DeviceNotConnected {
+    public void setup() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         if (isConnected()) {
-            unit = getGlucoseUnit();
+            unit = getUnit();
             serialNum = getRcvrSerial();
             cgmBattery=getBatteryLevel();
         }else{
@@ -72,79 +68,127 @@ public class G4CGMDevice extends AbstractPollDevice {
         }
     }
 
-    @Override
-    protected DeviceDownloadObject doDownload() {
-        DeviceDownloadObject ddo=new DeviceDownloadObject();
-        ddo.setDevice(this);
 
+    //FIXME - getting too long and cumbersome..
+    @Override
+    protected DownloadObject doDownload() {
+        String specialMessage="";
+        int deviceBattery=-1;
+        float uploaderBattery=getUploaderBattery()*100.0f;
+        DownloadStatus status;
+        EGVRecord[] egvArray=new EGVRecord[0];
+        GlucoseUnit g_unit=GlucoseUnit.NONE;
+        ArrayList<HashMap<AlertLevels,String>> alerts=new ArrayList<HashMap<AlertLevels,String>>();
+        int unitID=Integer.parseInt(sharedPref.getString(deviceIDStr+"_units","0"));
+        g_unit=GlucoseUnit.values()[unitID];
+        if (g_unit==GlucoseUnit.NONE)
+            g_unit=GlucoseUnit.MGDL;
         try {
             cgmTransport.open();
             this.setup();
-            EGVRecord[] egvArray = this.getLastEGVRecords();
-            try {
-                getReadingsSince(getLastDate(), egvArray);
-            } catch (NoDownloadException e) {
-                Log.w(TAG,"Not filtering readings because there was no previously recorded last reading");
-            }
-            int batteryLevel = this.getBatteryLevel();
-            float myBattery= getUploaderBattery();
-            Log.d(TAG, "Device battery level: " + batteryLevel);
-            Log.d(TAG, "Phone battery level: " + myBattery);
-            if (batteryLevel < 40) {
-                if (myBattery > 0.40) {
-                    Log.d(TAG, "Setting phone to charge device");
-                    this.setChargeDevice(true);
-                } else {
-                    Log.d(TAG, "G4 battery low but this device is too low to charge it");
-                    this.setChargeDevice(false);
+            egvArray = this.getLastEGVRecords();
+            if (sharedPref.getBoolean(deviceIDStr+"_time_sync",true))
+                syncTime();
+            if (g_unit==null)
+                getUnit();
+            deviceBattery = this.getDeviceBattery();
+            cgmTransport.close();
+            batteryBalance(deviceBattery,uploaderBattery);
+
+            status = DownloadStatus.SUCCESS;
+
+            if (egvArray!=null && egvArray.length>0) {
+                int lastBG = egvArray[egvArray.length-1].getEgv();
+                for (G4EGVSpecialValue specialValue : G4EGVSpecialValue.values()) {
+                    if (lastBG == specialValue.getValue()) {
+                        status = DownloadStatus.SPECIALVALUE;
+                        specialMessage=G4EGVSpecialValue.getEGVSpecialValue(lastBG).toString();
+                        break;
+                    }
                 }
             } else {
-                Log.d(TAG, "Stopping this device from charging G4");
-                this.setChargeDevice(false);
+                status=DownloadStatus.NODATA;
             }
-            try {
-                Date dispDate=getDisplayTime();
-                Long jitter=dispDate.getTime()-new Date().getTime();
-                if (Math.abs(jitter) > 30000 ) {
-                    Log.w(TAG,"Device time off by "+jitter+" ms");
-                    this.syncTimeToDevice();
-                }
-            }catch (IOException e){
-                Log.e(TAG,"Unable to syncTime to device");
-            }
-            cgmTransport.close();
-            // FIXME reflect actual status
-            DownloadStatus downloadStatus = DownloadStatus.SUCCESS;
-            ddo = new DeviceDownloadObject(this, egvArray, downloadStatus);
-            setLastDownloadObject(ddo);
-            Log.d(TAG,"Last download: "+getLastBG()+" date=> "+getLastDate()+" trend: "+getLastTrend().toString());
-            for (G4EGVSpecialValue specialValue:G4EGVSpecialValue.values()) {
-                if (getLastBG() == specialValue.getValue()) {
-                    ddo.setStatus(DownloadStatus.SPECIALVALUE);
-                    ddo.setSpecialValueMessage(G4EGVSpecialValue.getEGVSpecialValue(getLastBG()).toString());
-                    break;
-                }
-            }
-        } catch (DeviceNotConnected e){
-            Log.d(TAG, "Not finding device!",e);
-//            EGVRecord[] records=lastDownloadObject.getEgvRecords();
-//            ddo.setEgvRecords(records);
-//            lastDownloadObject=ddo;
-            ddo.setStatus(DownloadStatus.DEVICENOTFOUND);
-        } catch (IOException e){
-//            EGVRecord[] records=lastDownloadObject.getEgvRecords();
-//            ddo.setEgvRecords(records);
-//            lastDownloadObject=ddo;
-            ddo.setStatus(DownloadStatus.IOERROR);
-        } catch (NoDownloadException e) {
-            Log.d(TAG,"No download performed yet");
-            ddo.setStatus(DownloadStatus.NONE);
-            e.printStackTrace();
+        } catch (OperationNotSupportedException e) {
+            Log.e(TAG,"Application error",e);
+            status=DownloadStatus.APPLICATIONERROR;
+        } catch (DeviceIOException e) {
+            Log.e(TAG,"Unable to read/write to the device",e);
+            status=DownloadStatus.IOERROR;
+        } catch (NoDeviceFoundException e) {
+            status=DownloadStatus.DEVICENOTFOUND;
         }
+        HashMap<AlertLevels, String> alert=new HashMap<AlertLevels,String>();
+        if (uploaderBattery<20.0f) {
+            alert.put(AlertLevels.WARN,"Low battery on uploader");
+            alerts.add(alert);
+        } else if (uploaderBattery<10.0f) {
+            alert.put(AlertLevels.CRITICAL,"Low battery on uploader");
+            alerts.add(alert);
+        }
+        if (deviceBattery<20) {
+            alert.put(AlertLevels.WARN,"Low battery on Dexcom G4");
+            alerts.add(alert);
+        } else if (deviceBattery<10) {
+            alert.put(AlertLevels.CRITICAL,"Low battery on Dexcom G4");
+            alerts.add(alert);
+        }
+        DownloadObject ddo=new DownloadObject();
+        Long lastReadingDate=sharedPref.getLong(deviceIDStr+"_lastG4Download",new Date(new Date().getTime()-9000000L).getTime());
+        SharedPreferences.Editor editor = sharedPref.edit();
+        // Filter
+        egvArray=setNewFlags(ddo.getLastReadingDate(), egvArray);
+        // Then set the new last reading date
+        if (egvArray!=null && egvArray.length>0)
+            lastReadingDate=egvArray[egvArray.length-1].getDate().getTime();
+        // ddo => Device Download Object..
+        ddo.setDeviceBattery(deviceBattery)
+                .setLastReadingDate(new Date(lastReadingDate))
+                .setUploaderBattery(uploaderBattery)
+                .setUnit(g_unit)
+                .setStatus(status)
+                .setEgvRecords(egvArray)
+                .setSpecialValueMessage(specialMessage)
+                .addAlertMessages(alerts);
+        editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDate);
+        editor.apply();
+        setLastDownloadObject(ddo);
         return ddo;
-//        return super.doDownload();
     }
 
+    public void syncTime(){
+        if (!cgmTransport.isOpen())
+            return;
+        try {
+            Date dispDate=getDisplayTime();
+            Long jitter=dispDate.getTime()-new Date().getTime();
+            if (Math.abs(jitter) > 30000 ) {
+                Log.w(TAG,"Device time off by "+jitter+" ms");
+                this.syncTimeToDevice();
+            }
+        }catch (DeviceException e){
+            Log.e(TAG,"Unable to syncTime to device");
+        }
+    }
+
+    private void batteryBalance(int deviceBattery,float uploaderBattery){
+        if (!cgmTransport.isOpen())
+            return;
+        Log.d(TAG, "Device battery level: " + deviceBattery);
+        Log.d(TAG, "Phone battery level: " + uploaderBattery);
+        if (deviceBattery < 40) {
+            if (uploaderBattery > 0.40) {
+                Log.d(TAG, "Setting phone to charge device");
+                this.setChargeDevice(true);
+            } else {
+                Log.d(TAG, "G4 battery low but this device is too low to charge it");
+                this.setChargeDevice(false);
+            }
+        } else {
+            Log.d(TAG, "Preventing this device from charging G4");
+            this.setChargeDevice(false);
+        }
+    }
     @Override
     public void disconnect() {
         cgmTransport.close();
@@ -164,14 +208,14 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     // Retrieves the last 4 pages
-    public G4EGVRecord[] getLastEGVRecords() throws IOException, DeviceNotConnected {
+    public G4EGVRecord[] getLastEGVRecords() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         G4Partition partition=getDBPageRange(G4RecType.EGVDATA);
         G4EGVRecord[] results=getEGVPages(partition.lastPage - 3, 4);
         return results;
     }
 
     // TODO Possibly abstract this out and have it return a collection of parsed records?
-    public G4EGVRecord[] getEGVPages(int firstPage,int lastPage) throws IOException, DeviceNotConnected {
+    public G4EGVRecord[] getEGVPages(int firstPage,int lastPage) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
 
         G4DBPage[] pages=getDBPages(G4RecType.EGVDATA,firstPage,lastPage);
         int totalNumRecords=0;
@@ -192,23 +236,22 @@ public class G4CGMDevice extends AbstractPollDevice {
         return egvrecords;
     }
 
-    public G4EGVRecord lastReading() throws IOException, DeviceNotConnected {
+    public G4EGVRecord lastReading() throws DeviceIOException, NoDeviceFoundException, OperationNotSupportedException {
         G4EGVRecord[] results=getLastEGVRecords();
-        if (results==null | results.length<1)
-            throw new IOException("No last reading reported by getLastEGVRecords");
+        if (results==null || results.length<1)
+            throw new DeviceIOException("No last reading reported by getLastEGVRecords");
         return results[results.length-1];
     }
 
-    public EGVRecord[] getReadingsSince(Date d) throws IOException, DeviceNotConnected {
+    public EGVRecord[] setNewFlags(Date d) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         // TODO continue to go back in time until we find the earliest record.
         G4EGVRecord[] recs=getLastEGVRecords();
-        return getReadingsSince(d,recs);
+        return setNewFlags(d, recs);
     }
 
-    //FIXME: clean this up. There shouldn't be a separate method to set this value should there? Violates SRP
-    public EGVRecord[] getReadingsSince(Date d,EGVRecord[] recs){
+    public EGVRecord[] setNewFlags(Date d, EGVRecord[] recs){
         ArrayList<EGVRecord> resultsArrayList=new ArrayList<EGVRecord>();
-        Log.d(TAG,"getReadingsSince date=> "+d);
+        Log.d(TAG,"setNewFlags date=> "+d);
         for (EGVRecord record:recs){
             if (record.getDate().after(d)) {
                 record.setNew(true);
@@ -220,7 +263,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return resultsArrayList.toArray(new EGVRecord[resultsArrayList.size()]);
     }
 
-    public boolean ping() throws IOException, DeviceNotConnected {
+    public boolean ping() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         if (!isConnected()){
             Log.e(TAG,"Ping failed - not connected to device");
             return false;
@@ -235,12 +278,12 @@ public class G4CGMDevice extends AbstractPollDevice {
         return true;
     }
 
-    public G4Partition getDBPageRange(G4RecType recordType) throws IOException, DeviceNotConnected {
+    public G4Partition getDBPageRange(G4RecType recordType) throws DeviceIOException, NoDeviceFoundException, OperationNotSupportedException {
         G4Partition response=new G4Partition();
         writeCmd(G4RcvrCmd.READDATABASEPAGERANGE,recordType.getValue());
         byte[] responseBuff = readResponse();
         if (responseBuff==null || responseBuff.length!=8){
-            throw new IOException("Problem reading response");
+            throw new DeviceIOException("Problem reading response");
         }
         byte[] firstPage = {responseBuff[0],responseBuff[1],responseBuff[2],responseBuff[3]};
         byte[] lastPage = {responseBuff[4],responseBuff[5],responseBuff[6],responseBuff[7]};
@@ -252,22 +295,30 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     // There has to be a better way to do this?
-    private void writeCmd(G4RcvrCmd cmd, byte value) throws IOException {
+    private void writeCmd(G4RcvrCmd cmd, byte value) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         byte[] b=new byte[1];
         b[0]=value;
         writeCmd(cmd,b);
     }
 
-    public GlucoseUnit getGlucoseUnit() throws IOException, DeviceNotConnected {
+    public GlucoseUnit getUnit() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
+        if (unit!=GlucoseUnit.NONE){
+            return unit;
+        }
         writeCmd(G4RcvrCmd.READGLUCOSEUNIT);
         byte[] res=readResponse();
         int result=0;
+        if (res!=null && res.length==0)
+            throw new DeviceIOException("Null or 0 byte response from device while trying to read units");
         if (res.length>0)
             result=(int) res[0];
-        return GlucoseUnit.values()[result];
+        if (res.length > GlucoseUnit.values().length)
+            throw new DeviceIOException("Unexpected response from device while trying to determine units. Response was: "+result);
+        setUnit(GlucoseUnit.values()[result]);
+        return unit;
     }
 
-    public String getTransmitterId() throws IOException, DeviceNotConnected {
+    public String getTransmitterId() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READTRANSMITTERID);
         String result=null;
         try {
@@ -278,7 +329,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public String getBatteryState() throws IOException, DeviceNotConnected {
+    public String getBatteryState() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READBATTERYSTATE);
         String result="Unable to determine battery state";
         byte[] response=readResponse();
@@ -288,37 +339,34 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public int getBatteryLevel() throws IOException, DeviceNotConnected {
+    public int getBatteryLevel() throws NoDeviceFoundException, DeviceIOException, OperationNotSupportedException {
         writeCmd(G4RcvrCmd.READBATTERYLEVEL);
         int result=0;
         result = BitTools.byteArraytoInt(readResponse());
         return result;
     }
 
-    public Date getDisplayTime() throws IOException, DeviceNotConnected {
+    public Date getDisplayTime() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         return new Date(getDisplayTimeLong());
     }
 
-    public void syncTimeToDevice() throws IOException, DeviceNotConnected {
+    public void syncTimeToDevice() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         Calendar mCalendar = new GregorianCalendar();
         TimeZone mTimeZone = mCalendar.getTimeZone();
-        // TODO add protections against the device settings its time pre Jan 1 2009...
         long dispTimeOffset=new Date().getTime()/1000-G4Constants.RECEIVERBASEDATE/1000-getSystemTimeLong();
-        // TODO Test daylight time change.
-        // TODO Also test daylight time change and time zones that don't observe daylight time
+        if (dispTimeOffset > G4Constants.RECEIVERBASEDATE)
+            throw new OperationNotSupportedException("Uploader time is pre-Jan 1 2009");
         if (mTimeZone.inDaylightTime(new Date())){
             dispTimeOffset+=3600L; // 1 hour for daylight time if it is observed
         }
         // TODO switch everything to ByteBuffers - all the things.
         byte[] byteArray=ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt((int) dispTimeOffset).array();
-//        Log.d(TAG,"Hex sync time(Little): "+ BitTools.bytesToHex(byteArray));
         writeCmd(G4RcvrCmd.WRITEDISPLAYTIMEOFFSET, byteArray);
-        // TODO add verification that device did receive the command?
         byte[] resp=readResponse();
         Log.i(TAG,"Sync'd device time with cell. Set display time offset to: "+dispTimeOffset);
     }
 
-    public long getDisplayTimeLong() throws IOException, DeviceNotConnected {
+    public long getDisplayTimeLong() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         Calendar mCalendar = new GregorianCalendar();
         TimeZone mTimeZone = mCalendar.getTimeZone();
         long dispTime=G4Constants.RECEIVERBASEDATE+getDisplayTimeOffsetLong()*1000L+getSystemTimeLong()*1000L;
@@ -328,7 +376,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return dispTime;
     }
 
-    public long getSystemTimeLong() throws IOException, DeviceNotConnected {
+    public long getSystemTimeLong() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READSYSTEMTIME);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
@@ -336,7 +384,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    protected long getDisplayTimeOffsetLong() throws IOException, DeviceNotConnected {
+    protected long getDisplayTimeOffsetLong() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READDISPLAYTIMEOFFSET);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
@@ -344,7 +392,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    protected long getSystemTimeOffsetLong() throws IOException, DeviceNotConnected {
+    protected long getSystemTimeOffsetLong() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READSYSTEMTIMEOFFSET);
         long result=0;
         result = BitTools.byteArraytoInt(readResponse());
@@ -352,8 +400,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    //@Override
-    protected String getDatabasePartitionInfo() throws IOException, DeviceNotConnected {
+    protected String getDatabasePartitionInfo() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         writeCmd(G4RcvrCmd.READDATABASEPARTITIONINFO);
         String  response = new String(readResponse());
         return response;
@@ -375,12 +422,12 @@ public class G4CGMDevice extends AbstractPollDevice {
         return crc;
     }
 
-    public int writeCmd(G4RcvrCmd rcvrCmd, byte [] payload) throws IOException {
+    public int writeCmd(G4RcvrCmd rcvrCmd, byte [] payload) throws NoDeviceFoundException, OperationNotSupportedException, DeviceIOException {
         Log.v(TAG,"Attempting to write to receiver");
         Log.i(TAG,"Executing command "+rcvrCmd.toString()+" on receiver "+getName());
         if(!isConnected()){
             Log.e(TAG,"Write failed - not connected to device");
-            return 0;
+            throw new NoDeviceFoundException("Not connected to device");
         }
         int bytesWritten=0;
         if (! cgmTransport.isOpen())
@@ -392,15 +439,12 @@ public class G4CGMDevice extends AbstractPollDevice {
         int calcBytesToWrite=6;
         if (payload!=null)
             calcBytesToWrite = 4 + payload.length + 2;
-//        Log.d(TAG,"Calculated bytes to write: "+calcBytesToWrite);
         if (bytesToWrite != calcBytesToWrite){
             Log.e(TAG,"Insufficient data for command");
             return 0;
         }
-        //TODO throw an exception?
         if (bytesToWrite==-1){
-            Log.e(TAG,"Command "+rcvrCmd.toString()+" has not been implemented");
-            return bytesToWrite;
+            throw new OperationNotSupportedException("Command "+rcvrCmd.toString()+" has not been implemented");
         }
         byte[] packet = new byte[bytesToWrite];
 
@@ -425,7 +469,7 @@ public class G4CGMDevice extends AbstractPollDevice {
             bytesWritten=cgmTransport.write(packet,G4Constants.defaultWriteTimeout);
             Log.v(TAG,"Bytes written - "+bytesWritten);
         } catch (IOException e) {
-            throw new IOException("Unable to write to Dexcom G4");
+            throw new DeviceIOException("Unable to write to Dexcom G4");
 //            Log.e(TAG, "Unable to write to Dexcom G4", e);
 
         }
@@ -433,19 +477,19 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
 
-    public int writeCmd(G4RcvrCmd rcvCmd) throws IOException {
+    public int writeCmd(G4RcvrCmd rcvCmd) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         return writeCmd(rcvCmd,null);
     }
 
-    public byte[] readResponse() throws IOException, DeviceNotConnected {
+    public byte[] readResponse() throws DeviceIOException, NoDeviceFoundException {
         return this.readResponse(G4Constants.defaultReadTimeout);
     }
 
-    public byte[] readResponse(int millis) throws IOException, DeviceNotConnected {
+    public byte[] readResponse(int millis) throws NoDeviceFoundException, DeviceIOException {
         Log.v(TAG,"Attempting to read to receiver");
         if(!isConnected()){
             Log.e(TAG,"Read failed - not connected to device");
-            throw new DeviceNotConnected("Read failed - not connected to device");
+            throw new NoDeviceFoundException("Read failed - not connected to device");
         }
 
         int bytesRead=0;
@@ -463,17 +507,17 @@ public class G4CGMDevice extends AbstractPollDevice {
             Log.v(TAG,"Bytes read - "+bytesRead);
         } catch (IOException e) {
             Log.e(TAG,"Unable to read headers from Dexcom G4");
-            throw new IOException("Unable to read headers from Dexcom G4");
+            throw new DeviceIOException("Unable to read headers from Dexcom G4");
         }
         if (responseBuffer[0]!=0x01) {
             Log.e(TAG, "Unexpected response back while parsing header: "+ BitTools.bytesToHex(responseBuffer));
-            throw new IOException("Unexpected response back while parsing header: "+ BitTools.bytesToHex(responseBuffer));
+            throw new DeviceIOException("Unexpected response back while parsing header: "+ BitTools.bytesToHex(responseBuffer));
         }
         int bytesToRead=(int)responseBuffer[2]<<8 ^ (int)responseBuffer[1];
         Log.v(TAG,"Calculated bytes to read at "+bytesRead);
         if (bytesToRead!=bytesRead) {
             Log.e(TAG, "Calculated bytes to read does not equal the bytes actually read");
-            throw new IOException("Calculated bytes to read does not equal the bytes actually read");
+            throw new DeviceIOException("Calculated bytes to read does not equal the bytes actually read");
         }
 
         byte [] header = new byte[4];
@@ -495,14 +539,14 @@ public class G4CGMDevice extends AbstractPollDevice {
         if (calcCRC!=crcInt) {
             Log.d(TAG, "Calculated CRC: " + calcCRC+"Response CRC: " + crcInt);
             Log.e(TAG, "CRC check failed!");
-            throw new IOException("Calculated CRC: " + calcCRC+"Response CRC: " + crcInt+". CRC check failed!");
+            throw new DeviceIOException("Calculated CRC: " + calcCRC+"Response CRC: " + crcInt+". CRC check failed!");
         }else{
             Log.v(TAG,"Successful CRC check");
         }
         return body;
     }
 
-    private G4DBPageHeader getPageHeader(G4RecType recType,int pageNumber) throws IOException, DeviceNotConnected {
+    private G4DBPageHeader getPageHeader(G4RecType recType,int pageNumber) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         G4DBPageHeader result=new G4DBPageHeader();
         byte[] requestPayload=new byte[5];
         requestPayload[0]=recType.getValue();
@@ -543,7 +587,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         return result;
     }
 
-    public G4DBPage[] getDBPages(G4RecType recType,int startPage, int numPages) throws IOException, DeviceNotConnected {
+    public G4DBPage[] getDBPages(G4RecType recType,int startPage, int numPages) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         Log.v(TAG,"Requesting "+numPages+" starting with "+startPage);
         byte [] requestPayload=new byte[6];
         requestPayload[0]=recType.getValue();
@@ -569,13 +613,13 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     // TODO this doesn't make sense. If this is a generic parse method, then why am I returning EGV results?
-    public G4EGVRecord[] parsePage(G4DBPage page) {
+    public G4EGVRecord[] parsePage(G4DBPage page) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         if (page.PageHeader.RecordType==G4RecType.EGVDATA)
             return parseEGVPage(page);
         throw new UnsupportedOperationException("Have not implemented the code to retrieve and parse for record type "+page.PageHeader.RecordType);
     }
 
-    public G4EGVRecord[] parseEGVPage(G4DBPage page){
+    public G4EGVRecord[] parseEGVPage(G4DBPage page) throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         G4EGVRecord[] results=new G4EGVRecord[page.PageHeader.NumberOfRecords];
         Log.d(TAG,"Processing "+page.PageHeader.NumberOfRecords+" records from page #"+page.PageHeader.PageNumber);
         for (int i=0;i<page.PageHeader.NumberOfRecords;i++){
@@ -597,8 +641,7 @@ public class G4CGMDevice extends AbstractPollDevice {
                 long dtime=(long) BitTools.byteArraytoInt(dispTimeArray)*1000;
                 Calendar mCalendar = new GregorianCalendar();
                 TimeZone mTimeZone = mCalendar.getTimeZone();
-//                long mGMTOffset = mTimeZone.getRawOffset();
-//                long displayTimeLong=rcvrBaseDatems+dtime+mGMTOffset;
+
                 long displayTimeLong=G4Constants.RECEIVERBASEDATE+dtime;
                 if (mTimeZone.inDaylightTime(new Date())){
                     displayTimeLong-=3600000L;
@@ -614,6 +657,7 @@ public class G4CGMDevice extends AbstractPollDevice {
                 }
                 results[i].setEgv(bgValue);
                 results[i].setSpecialValue(null);
+//                results[i].setUnit(getUnit());
 //                results[i].s(deviceUnits);
                 for (G4EGVSpecialValue e: G4EGVSpecialValue.values()) {
                     if (e.getValue()==bgValue) {
@@ -634,12 +678,12 @@ public class G4CGMDevice extends AbstractPollDevice {
         return results;
     }
 
-    public String getRcvrSerial() throws IOException, DeviceNotConnected {
+    public String getRcvrSerial() throws OperationNotSupportedException, DeviceIOException, NoDeviceFoundException {
         serialNum = getParam(G4RecType.MANUFACTURINGDATA, "SerialNumber");
         return serialNum;
     }
 
-    private String getParam(G4RecType recType,String param) throws IOException, DeviceNotConnected {
+    private String getParam(G4RecType recType,String param) throws DeviceIOException, NoDeviceFoundException, OperationNotSupportedException {
         G4Partition part=getDBPageRange(recType);
         String result="";
 //        Charset charset=
@@ -665,18 +709,16 @@ public class G4CGMDevice extends AbstractPollDevice {
             } else {
                 return "";
             }
-            // TODO Need to add checking for null pointers...
             Element elem = (Element) dom.getElementsByTagName(elemName).item(0);
             result=elem.getAttribute(param);
         }catch (Exception e) {
-            // TODO specific error handling
             Log.e(TAG,"Problem parsing XML from "+recType.toString()+" partition in getParam",e);
         }
         Log.d(TAG,recType.toString()+" data:"+data+"Result: "+result);
         return result;
     }
 
-    public String getRcvrID() throws IOException, DeviceNotConnected {
+    public String getRcvrID() throws OperationNotSupportedException, DeviceIOException, NoDeviceFoundException {
         // Only get this value once per instance of a G4Device
         if (receiverID=="") {
             receiverID = getParam(G4RecType.PCSOFTWAREPARAMETER, "ReceiverId");

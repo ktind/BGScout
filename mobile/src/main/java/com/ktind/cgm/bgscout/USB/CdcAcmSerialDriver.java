@@ -172,17 +172,17 @@ public class CdcAcmSerialDriver extends CommonUsbSerialDriver {
 
     @Override
     public boolean getCD() throws IOException {
-        return false;  // TODO
+        return false;
     }
 
     @Override
     public boolean getCTS() throws IOException {
-        return false;  // TODO
+        return false;
     }
 
     @Override
     public boolean getDSR() throws IOException {
-        return false;  // TODO
+        return false;
     }
 
     @Override
@@ -198,7 +198,7 @@ public class CdcAcmSerialDriver extends CommonUsbSerialDriver {
 
     @Override
     public boolean getRI() throws IOException {
-        return false;  // TODO
+        return false;
     }
 
     @Override

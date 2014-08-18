@@ -1,11 +1,11 @@
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.DexcomG4;
 
 import android.content.Context;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
 
-//import com.ktind.cgm.bgscout.CGMTransportAbstract;
-
+import com.ktind.cgm.bgscout.CGMTransportAbstract;
+import com.ktind.cgm.bgscout.NoDeviceFoundException;
 import com.ktind.cgm.bgscout.USB.USBPower;
 import com.ktind.cgm.bgscout.USB.UsbSerialDriver;
 import com.ktind.cgm.bgscout.USB.UsbSerialProber;
@@ -30,7 +30,7 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
     }
 
     @Override
-    public boolean open() throws DeviceNotConnected {
+    public boolean open() throws NoDeviceFoundException {
         USBPower.PowerOn();
         if (! isOpen()){
             Log.v(TAG, "Attempting to connect");
@@ -45,11 +45,11 @@ public class G4USBSerialTransport extends CGMTransportAbstract {
                 } catch (IOException e) {
 //                    Log.e(TAG, "Unable to establish a serial connection to Dexcom G4");
                     isopen = false;
-                    throw new DeviceNotConnected("Unable to establish a serial connection to Dexcom G4");
+                    throw new NoDeviceFoundException("Unable to establish a serial connection to Dexcom G4");
                 }
             }else{
 //                Log.e(TAG,"Unable to acquire USB Manager");
-                throw new DeviceNotConnected("Unable to acquire USB manager");
+                throw new NoDeviceFoundException("Unable to acquire USB manager");
             }
         }else{
             Log.w(TAG, "Already connected");

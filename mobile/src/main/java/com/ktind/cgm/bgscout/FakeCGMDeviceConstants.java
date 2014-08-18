@@ -3,7 +3,7 @@ package com.ktind.cgm.bgscout;
 /**
  * Created by klee24 on 8/2/14.
  */
-public class FakeCGMDeviceConstants {
+public class FakeCGMDeviceConstants extends Constants {
     public static final int MAXRECORDS=36;
     public static final float FAILRATE=0.08f;
     public static final int READINGINTERVALSECONDS=300;

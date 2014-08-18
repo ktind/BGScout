@@ -9,7 +9,6 @@ public class BitTools {
     private static final String TAG = BitTools.class.getSimpleName();
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    // TODO Need to do some more checking but in theory this could be larger than an int.
     public static int byteArraytoInt(byte[] b){
 //        if (b == null || b.length<4)
         if (b == null )

@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.mongodb.*;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,10 +25,8 @@ public class MongoUploadMonitor extends AbstractMonitor {
         this.setMonitorType("mongo uploader");
     }
 
-
     @Override
-    protected void doProcess(DeviceDownloadObject d) {
-        //FIXME add these as user configurable options
+    protected void doProcess(DownloadObject d) {
         String mongoURI = null;
         String collectionName=null;
 
@@ -58,8 +55,7 @@ public class MongoUploadMonitor extends AbstractMonitor {
             for (EGVRecord sr:r) {
                 BasicDBObject data = new BasicDBObject();
                 if (sr.isNew()) {
-                    //Fixme: need to be a separate document
-                    data.put("name", d.getDevice().getName());
+                    data.put("name", d.getDeviceName());
                     data.put("trend", sr.getTrend().getVal());
 
                     // NightScout comptability
@@ -75,20 +71,13 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 }
             }
             Log.i(TAG,"Records processed: "+r.length+" Records Uploaded: "+uploadCount);
-            if (!d.getDevice().isRemote()) {
+            if (!d.isRemoteDevice()) {
                 BasicDBObject data = new BasicDBObject();
-                data.put("name", d.getDevice().getName());
+                data.put("name", d.getDeviceName());
                 data.put("deviceCheckinDate", new Date().getTime());
-                data.put("uploaderBattery", d.getDevice().getUploaderBattery());
-                try {
-                    data.put("cgmbattery", d.getDevice().getDeviceBattery());
-                }catch (IOException e){
-                    // Only add the information if we can get it. We need this data to upload regardless.
-                    Log.d(TAG, "Problem retreiving battery from CGM. Is it connected?");
-                } catch (DeviceNotConnected deviceNotConnected) {
-                    Log.e(TAG,"Unable to find device",deviceNotConnected);
-                }
-                data.put("units", d.getDevice().getUnit().getValue());
+                data.put("uploaderBattery", d.getUploaderBattery());
+                data.put("cgmbattery", d.getDeviceBattery());
+                data.put("units", d.getUnit().getValue());
                 data.put("downloadStatus", d.getStatus().toString());
                 deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
             }

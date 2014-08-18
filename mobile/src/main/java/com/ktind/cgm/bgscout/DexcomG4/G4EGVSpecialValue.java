@@ -1,9 +1,10 @@
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.DexcomG4;
 
 /**
  * Created by klee24 on 7/20/14.
  */
 public enum G4EGVSpecialValue {
+
 
     NONE("None",0),
     SENSORNOTACTIVE("Sensor not active",1),

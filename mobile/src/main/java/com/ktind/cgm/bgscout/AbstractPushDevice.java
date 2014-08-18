@@ -13,7 +13,17 @@ abstract public class AbstractPushDevice extends AbstractDevice {
         super(n, deviceID, appContext, mH);
     }
 
-    abstract void onDataReady(DeviceDownloadObject ddo);
+    abstract void onDataReady(DownloadObject ddo);
+
+    @Override
+    public void onDownload(){
+        stats.addDownload();
+        super.onDownload();
+    }
+    @Override
+    public void start() {
+        super.start();
+    }
 
     @Override
     public void stop() {

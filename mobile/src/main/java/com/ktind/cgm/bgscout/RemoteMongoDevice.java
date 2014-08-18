@@ -54,13 +54,14 @@ public class RemoteMongoDevice extends AbstractPollDevice {
     }
 
     @Override
-    public void connect() throws DeviceNotConnected {
+    public void connect() throws DeviceException {
     }
 
     @Override
-    protected DeviceDownloadObject doDownload() {
-        DeviceDownloadObject ddo=new DeviceDownloadObject();
-        ddo.setDevice(this);
+    protected DownloadObject doDownload() {
+        DownloadObject ddo=new DownloadObject();
+        ddo.setDeviceID(getDeviceIDStr());
+//        ddo.setDevice(this);
         ddo.setStatus(DownloadStatus.APPLICATIONERROR);
         ArrayList<EGVRecord> egvRecords=new ArrayList<EGVRecord>();
         ddo.setEgvRecords(new EGVRecord[0]);
@@ -93,7 +94,7 @@ public class RemoteMongoDevice extends AbstractPollDevice {
                 ddo.setStatus(DownloadStatus.SUCCESS);
                 //FIXME there has to be a more efficient way
                 if (lastRecord!=null && ddo.getEgvRecords().length==0){
-                    ddo.setStatus(DownloadStatus.NORECORDS);
+                    ddo.setStatus(DownloadStatus.NODATA);
                     ddo.setEgvRecords(lastRecord);
                 }
 
@@ -107,8 +108,6 @@ public class RemoteMongoDevice extends AbstractPollDevice {
             ddo.setStatus(DownloadStatus.DEVICENOTFOUND);
             ddo.setEgvRecords(new EGVRecord[0]);
         }
-        // FIXME potential cause for a race condition
-        // Should be resolved by device proxy
         lastDownloadObject=ddo;
         return ddo;
     }

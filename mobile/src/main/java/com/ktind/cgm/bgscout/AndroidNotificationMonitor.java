@@ -12,12 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
-import android.net.Uri;
 
-import java.security.spec.RSAKeyGenParameterSpec;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,6 +29,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected boolean isSilenced=false;
     protected Date timeSilenced;
     protected AlarmReceiver alarmReceiver;
+    protected DownloadObject lastDownload;
 
     public void setNotifBuilder(Notification.Builder notifBuilder) {
         this.notifBuilder = notifBuilder;
@@ -64,109 +62,108 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     }
 
     @Override
-    public void doProcess(DeviceDownloadObject dl) {
-        PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
-        Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
-        // maybe it will help get rid of the action if we build a new notification object?
-        this.setNotifBuilder(new Notification.Builder(appContext)
-                .setContentTitle(name)
-                .setContentText("Monitor started. No data yet")
-                .setContentIntent(contentIntent)
-                .setOngoing(true)
-                .setSmallIcon(R.drawable.sandclock)
-                .setLargeIcon(bm));
-        EGVRecord[] recs = dl.getEgvRecords();
-        EGVRecord lastRec = null;
-        if (recs != null && recs.length > 0)
-            lastRec = recs[recs.length - 1];
-        String msg="";
-        if (isSilenced){
-            long duration=new Date().getTime()-timeSilenced.getTime();
-            // Snooze for 30 minutes at a time
-            if (duration>1800000) {
-                Log.v(TAG,"Resetting snooze timer for "+deviceIDStr);
-                isSilenced = false;
-            }
-            Log.v(TAG,"Alarm "+getName()+"("+deviceIDStr+"/"+monitorType+") is snoozed");
-        }
-
-
-        Notification notification;
-        int icon = R.drawable.questionmarkicon;
-        notifBuilder.setSound(Uri.EMPTY);
-        Log.v(TAG,"Status: "+dl.getStatus().toString());
-        if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-            msg = dl.getStatus().toString()+"\n";
-            notifBuilder.setTicker(msg);
-        }
-        if (dl.getStatus() == DownloadStatus.SPECIALVALUE){
-            msg = dl.getSpecialValueMessage()+"\n";
-            notifBuilder.setTicker(msg);
-            icon=R.drawable.exclamationmarkicon;
-//                    .setSmallIcon(R.drawable.exclamationmarkicon);
-        }
-
-        if (dl.getStatus()== DownloadStatus.NORECORDS){
-            icon=R.drawable.sandclock;
-//            notifBuilder.setSmallIcon(R.drawable.sandclock);
-//            msg+=dl.getStatus().toString();
-//            notifBuilder.setTicker(msg);
-        }
-        int lastIndex=dl.getEgvRecords().length-1;
-        EGVRecord lastEGVRec=dl.getEgvRecords()[lastIndex];
-        if (new Date().getTime()-lastEGVRec.getDate().getTime()>300000){
-//            notifBuilder.setSmallIcon(R.drawable.exclamationmarkicon);
-            icon=R.drawable.exclamationmarkicon;
-        }
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        Log.d(TAG,"Default Notification sound: "+Settings.System.DEFAULT_NOTIFICATION_URI);
-        if (lastEGVRec.getEgv() >= highThreshold) {
-            String ringtoneURI = sharedPref.getString(deviceIDStr + "_high_ringtone", "DEFAULT_SOUND");
-            Uri uri = Uri.parse(ringtoneURI);
-            Log.d(TAG,"Notification sound: "+uri);
-            long[] vibe={2000,1000,2000,1000};
-            if (!isSilenced) {
-                Intent snoozeIntent =new Intent("com.ktind.cgm.SNOOZE_ALARM");
-                snoozeIntent.putExtra("device",deviceIDStr);
-                PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext,deviceID,snoozeIntent,0);
-                notifBuilder.setSound(uri);
-                notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
-                //.setVibrate(vibe)
-            } else {
-                Log.v(TAG,"Alarm "+getName()+" ("+getMonitorType()+") - "+deviceIDStr+" snoozed");
+    public void doProcess(DownloadObject dl) {
+        try {
+            // TODO implement an actual equals/hashcode method for devicedownloadobject and device.
+    //        if (lastDownload!=null && lastDownload.getLastReadingDate()==dl.getLastReadingDate()) {
+    //            Log.i(TAG, "Received a duplicate reading. Ignoring it");
+    //            return;
+    //        }
+            lastDownload=dl;
+            PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
+            Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
+            // maybe it will help get rid of the action if we build a new notification object?
+            this.setNotifBuilder(new Notification.Builder(appContext)
+                    .setContentTitle(name)
+                    .setContentText("Monitor started. No data yet")
+                    .setContentIntent(contentIntent)
+                    .setOngoing(true)
+                    .setSmallIcon(R.drawable.sandclock)
+                    .setLargeIcon(bm));
+            String msg="";
+            if (isSilenced){
+                long duration=new Date().getTime()-timeSilenced.getTime();
+                // Snooze for 30 minutes at a time
+                if (duration>1800000) {
+                    Log.v(TAG,"Resetting snooze timer for "+deviceIDStr);
+                    isSilenced = false;
+                }
+                Log.v(TAG,"Alarm "+getName()+"("+deviceIDStr+"/"+monitorType+") is snoozed");
             }
 
-        }
-        if (lastEGVRec.getEgv() <= lowThreshold) {
-            String ringtoneURI = sharedPref.getString(deviceIDStr + "_low_ringtone", "DEFAULT_SOUND");
-            Uri uri = Uri.parse(ringtoneURI);
-            Log.d(TAG,"Notification sound: "+uri);
-            long[] vibe={4000,1000,4000,1000};
-            if (!isSilenced){
-                Intent snoozeIntent =new Intent("com.ktind.cgm.SNOOZE_ALARM");
-                snoozeIntent.putExtra("device",deviceIDStr);
-                PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext,deviceID,snoozeIntent,0);
-                notifBuilder.setSound(uri);
-                notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
-                //.setVibrate(vibe)
-            } else {
-                Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
-            }
-        }
 
-        if (lastRec != null && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-            icon = getIcon(lastRec.getEgv(), lastRec.getTrend());
-            msg+= "BG: " + lastRec.getEgv() + " " + dl.getDevice().getUnit().toString() + " and " + lastRec.getTrend().toString()+"\n";
-            msg+="Last reading: "+new SimpleDateFormat("HH:mm:ss MM/dd").format(lastRec.getDate());
+            Notification notification;
+            int icon = R.drawable.questionmarkicon;
+            notifBuilder.setSound(Uri.EMPTY);
+            Log.v(TAG,"Status: "+dl.getStatus().toString());
+            if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+                msg = dl.getStatus().toString()+"\n";
+                notifBuilder.setTicker(msg);
+            }
+            if (dl.getStatus() == DownloadStatus.SPECIALVALUE){
+                msg = dl.getSpecialValueMessage()+"\n";
+                notifBuilder.setTicker(msg);
+                icon=R.drawable.exclamationmarkicon;
+    //                    .setSmallIcon(R.drawable.exclamationmarkicon);
+            }
+
+            if (dl.getStatus()== DownloadStatus.NODATA){
+                icon=R.drawable.sandclock;
+            }
+
+            if (new Date().getTime() - dl.getLastReadingDate().getTime() > 300000) {
+                icon = R.drawable.exclamationmarkicon;
+            }
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+            Log.d(TAG, "Default Notification sound: " + Settings.System.DEFAULT_NOTIFICATION_URI);
+            if (dl.getLastReading() >= highThreshold) {
+                String ringtoneURI = sharedPref.getString(deviceIDStr + "_high_ringtone", "DEFAULT_SOUND");
+                Uri uri = Uri.parse(ringtoneURI);
+                Log.d(TAG, "Notification sound: " + uri);
+//                long[] vibe = {2000, 1000, 2000, 1000};
+                if (!isSilenced) {
+                    Intent snoozeIntent = new Intent("com.ktind.cgm.SNOOZE_ALARM");
+                    snoozeIntent.putExtra("device", deviceIDStr);
+                    PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext, deviceID, snoozeIntent, 0);
+                    notifBuilder.setSound(uri);
+                    notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
+                    //.setVibrate(vibe)
+                } else {
+                    Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
+                }
+
+            }
+            if (dl.getLastReading() <= lowThreshold) {
+                String ringtoneURI = sharedPref.getString(deviceIDStr + "_low_ringtone", "DEFAULT_SOUND");
+                Uri uri = Uri.parse(ringtoneURI);
+                Log.d(TAG, "Notification sound: " + uri);
+//                long[] vibe = {4000, 1000, 4000, 1000};
+                if (!isSilenced) {
+                    Intent snoozeIntent = new Intent("com.ktind.cgm.SNOOZE_ALARM");
+                    snoozeIntent.putExtra("device", deviceIDStr);
+                    PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext, deviceID, snoozeIntent, 0);
+                    notifBuilder.setSound(uri);
+                    notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
+                    //.setVibrate(vibe)
+                } else {
+                    Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
+                }
+            }
+
+            if (dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+                icon = getIcon(dl.getLastReading(), dl.getLastTrend());
+                msg += dl.getLastReading() + " " + dl.getUnit() + " and " + dl.getLastTrend().toString() + "\n";
+                msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(dl.getLastReadingDate());
+            }
+            notification = notifBuilder
+                    .setSmallIcon(icon)
+                    .setStyle(new Notification.BigTextStyle().bigText(msg))
+                    .setContentText(msg)
+                    .build();
+            mNotifyMgr.notify(deviceID, notification);
+        } catch (NoDataException e) {
+            Log.e(TAG,e.getMessage());
         }
-        notification = notifBuilder
-                .setSmallIcon(icon)
-                .setStyle(new Notification.BigTextStyle().bigText(msg))
-                .setContentText(msg)
-//                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .build();
-//        notification.sound = Uri.withAppendedPath(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, ringtoneURI);
-        mNotifyMgr.notify(deviceID, notification);
     }
 
 
@@ -249,6 +246,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                         isSilenced = true;
                         timeSilenced = new Date();
                     }
+                    if (lastDownload!=null)
+                        doProcess(lastDownload);
                 }else{
                     Log.d(TAG,deviceIDStr+": Ignored a request to snooze alarm on "+intent.getExtras().get("device"));
                 }

@@ -9,7 +9,6 @@ import android.util.Log;
 abstract public class AbstractMonitor implements MonitorInterface {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
     protected String name;
-    //FIXME find a better way to manage this?
     protected boolean allowVirtual=false;
     protected String monitorType="generic";
     protected int highThreshold=180;
@@ -23,6 +22,18 @@ abstract public class AbstractMonitor implements MonitorInterface {
         this.deviceID=devID;
         this.appContext=context;
         this.deviceIDStr="device_"+String.valueOf(deviceID);
+    }
+
+    public int getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(int deviceID) {
+        this.deviceID = deviceID;
+    }
+
+    public String getDeviceIDStr() {
+        return deviceIDStr;
     }
 
     public String getName() {
@@ -41,7 +52,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
         this.monitorType = monitorType;
     }
 
-    abstract protected void doProcess(DeviceDownloadObject d);
+    abstract protected void doProcess(DownloadObject d);
 
     public boolean isAllowVirtual() {
         return allowVirtual;
@@ -52,9 +63,9 @@ abstract public class AbstractMonitor implements MonitorInterface {
     }
 
     @Override
-    final public void process(DeviceDownloadObject d) {
+    final public void process(DownloadObject d) {
         Log.d(TAG,"Monitor "+name+" has fired for "+monitorType);
-        if (isAllowVirtual() || ! d.getDevice().isRemote()){
+        if (isAllowVirtual() || ! d.isRemoteDevice()){
             Log.d(TAG, "Processing monitor "+name+" for "+monitorType);
             this.doProcess(d);
         } else {
@@ -68,7 +79,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
     }
 
     public void setHighThreshold(int highThreshold) {
-        Log.v(TAG,"Setting low threshold to "+lowThreshold);
+        Log.v(TAG,"Setting high threshold to "+highThreshold);
         this.highThreshold = highThreshold;
     }
 
