@@ -2,6 +2,7 @@ package com.ktind.cgm.bgscout;
 
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,35 +10,28 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
-import org.acra.*;
-import org.acra.annotation.*;
-import org.acra.sender.HttpSender;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-@ReportsCrashes(formKey = "",
-        mode = ReportingInteractionMode.TOAST,
-        forceCloseDialogAfterToast = true,
-        resToastText = R.string.crash_toast_text,
-        httpMethod = HttpSender.Method.PUT,
-        reportType = HttpSender.Type.JSON,
-        formUri = "http://nightscout.iriscouch.com/acra-undefined/_design/acra-storage/_update/report",
-        formUriBasicAuthLogin = "",
-        formUriBasicAuthPassword = ""
-)
 public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean mBounded=false;
@@ -49,18 +43,123 @@ public class MainActivity extends Activity {
     private AlarmReceiver alarmReceiver;
     private boolean svcUp=false;
     private int direction=0;
+    private DownloadObject ld;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private String[] mDrawerMenuItems;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private int numItemsInMenu;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        UIDevice uiDevice=new UIDevice((ImageView) findViewById(R.id.main_display),(ImageView) findViewById(R.id.direction_image), (TextView) findViewById(R.id.reading_text), (TextView) findViewById(R.id.name), (ImageView) findViewById(R.id.uploader_battery_indicator), (TextView) findViewById(R.id.uploader_battery_label) ,(ImageView) findViewById(R.id.deviceBattery), (TextView) findViewById(R.id.device_battery_label));
+        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList=(ListView) findViewById(R.id.left_drawer);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String[] devices={"device_1","device_2","device_3","device_4"};
+        ArrayList<String> mDrawerMenuItemsArrList=new ArrayList<String>();
+        for (String device:devices) {
+            if (sharedPref.getBoolean(device+"_enable",false)){
+                Log.d(TAG,device+" is enabled");
+                mDrawerMenuItemsArrList.add(sharedPref.getString(device+"_name",device));
+            }
+        }
+        mDrawerMenuItemsArrList.add("Start");
+        mDrawerMenuItemsArrList.add("Stop");
+        mDrawerMenuItemsArrList.add("Dump stats to log");
+        mDrawerMenuItemsArrList.add("Settings");
+        numItemsInMenu=mDrawerMenuItemsArrList.size();
+
+        mDrawerMenuItems=mDrawerMenuItemsArrList.toArray(new String[mDrawerMenuItemsArrList.size()]);
+//        mDrawerMenuItems=getResources().getStringArray(R.array.devices);
+//        ActionBar actionBar = getActionBar();
+//        actionBar.hide();
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item,mDrawerMenuItems));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        UIDevice uiDevice = new UIDevice((ImageView) findViewById(R.id.main_display), (ImageView) findViewById(R.id.direction_image), (TextView) findViewById(R.id.reading_text), (TextView) findViewById(R.id.app_name), (ImageView) findViewById(R.id.uploader_battery_indicator), (TextView) findViewById(R.id.uploader_battery_label), (ImageView) findViewById(R.id.deviceBattery), (TextView) findViewById(R.id.device_battery_label));
         UIDeviceList.add(uiDevice);
-        alarmReceiver=new AlarmReceiver();
-        registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.UI_READING_UPDATE"));
-//        registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.SERVICE_READY"));
+        alarmReceiver = new AlarmReceiver();
+        registerReceiver(alarmReceiver, new IntentFilter("com.ktind.cgm.UI_READING_UPDATE"));
+        if (savedInstanceState!=null){
+            ld=savedInstanceState.getParcelable("lastDownload");
+            if (ld==null){
+                Log.d(TAG,"Its null...");
+            } else {
+                for (UIDevice uid:UIDeviceList){
+                    uid.update(ld);
+                }
+            }
+//            UIDeviceList.get(0).update((DownloadObject) savedInstanceState.getSerializable("lastDownload"));
+        }
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (isServiceRunning(DeviceDownloadService.class)) {
+            bindSvc();
+        }
+
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    // FIXME breaks the rules - order here is must match the order the items were put into the string array(list)
+    private void selectItem(int position){
+        Log.d(TAG,"Position: "+position+ " number of items in menu: "+numItemsInMenu);
+        if (position==(numItemsInMenu-1)) {
+            Log.d(TAG,"Starting settings");
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
+        if (position==(numItemsInMenu-2)) {
+            Log.d(TAG,"Dumping stats");
+            BGScout.statsMgr.logStats();
+        }
+        if (position==(numItemsInMenu-3)) {
+            Log.d(TAG,"Stopping service");
+            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
+            stopService(mIntent);
+            bindSvc();
+        }
+        if (position==(numItemsInMenu-4)) {
+            Log.d(TAG,"Starting service");
+            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
+            startService(mIntent);
+            bindSvc();
+        }
+
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelable("lastDownload", ld);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     public void startSvc(View view){
@@ -82,19 +181,19 @@ public class MainActivity extends Activity {
 
     public void bindSvc(){
         Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
-        bindService(mIntent,mConnection,BIND_AUTO_CREATE);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
     }
 
     ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
-//            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_LONG).show();
             mBounded = false;
             mServer = null;
         }
 
         public void onServiceConnected(ComponentName name, IBinder service) {
-//            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_LONG).show();
             mBounded = true;
             DeviceDownloadService.LocalBinder mLocalBinder = (DeviceDownloadService.LocalBinder)service;
             mServer = mLocalBinder.getServerInstance();
@@ -109,10 +208,27 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
@@ -124,6 +240,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG,"onDestory called");
         super.onDestroy();
         if (mBounded)
             unbindService(mConnection);
@@ -137,11 +254,11 @@ public class MainActivity extends Activity {
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG,"Received broadcast: "+intent.getAction());
             if (intent.getAction().equals("com.ktind.cgm.UI_READING_UPDATE")){
                 Log.d(TAG,"Received a UI update");
                 DownloadObject downloadObject=new DownloadObject();
-                downloadObject=downloadObject.buildFromJSON(intent.getExtras().getString("download", downloadObject.getJson().toString()));
+//                downloadObject=downloadObject.buildFromJSON(intent.getExtras().getString("download", downloadObject.getJson().toString()));
+                downloadObject=intent.getParcelableExtra("download");
                 String bgReading= null;
                 bgReading = String.valueOf(downloadObject.getLastReadingString());
                 float uploaderBat=downloadObject.getUploaderBattery();
@@ -153,6 +270,7 @@ public class MainActivity extends Activity {
                 Log.i(TAG,"deviceID: "+devID);
                 Log.i(TAG,"Reading: "+bgReading);
                 Log.i(TAG,"Name: "+downloadObject.getDeviceName());
+                ld=downloadObject;
                 for (UIDevice uid:UIDeviceList){
                     uid.update(downloadObject);
                 }
@@ -163,6 +281,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Intent intent=new Intent();
+        intent.setAction(Constants.UIDO_QUERY);
+        getBaseContext().sendBroadcast(intent);
 //        if (svcUp)
 //            mHandler.post(updateProgress);
     }
@@ -191,6 +312,24 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+//        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected class UIDevice{
         protected TextView name;
         protected ImageView main_display;
@@ -214,6 +353,8 @@ public class MainActivity extends Activity {
             setDeviceBattery(dbat);
             setUploaderBatteryLabel(ubatl);
             setDeviceBatteryLabel(dbatl);
+            deviceBattery.setImageResource(R.drawable.battery);
+            uploaderBattery.setImageResource(R.drawable.battery);
         }
 
         public TextView getUploaderBatteryLabel() {
@@ -251,42 +392,19 @@ public class MainActivity extends Activity {
         public void update(DownloadObject dl){
             lastDownload=dl;
             name.setText(dl.getDeviceName());
+            direction.setImageResource(R.drawable.trendarrows);
+
             try {
-                switch (dl.getLastRecord().getTrend()){
-                    case DOUBLEUP:
-                        direction.setImageResource(R.drawable.doubleup);
-                        break;
-                    case SINGLEUP:
-                        direction.setImageResource(R.drawable.up);
-                        break;
-                    case FORTYFIVEUP:
-                        direction.setImageResource(R.drawable.fortyfiveup);
-                        break;
-                    case FLAT:
-                        direction.setImageResource(R.drawable.flat);
-                        break;
-                    case FORTYFIVEDOWN:
-                        direction.setImageResource(R.drawable.fortyfivedown);
-                        break;
-                    case SINGLEDOWN:
-                        direction.setImageResource(R.drawable.down);
-                        break;
-                    case DOUBLEDOWN:
-                        direction.setImageResource(R.drawable.doubledown);
-                        break;
-                    default:
-                        direction.setImageResource(R.drawable.dash);
-                        break;
-                }
+                direction.setImageLevel(dl.getLastTrend().getVal());
                 int r=dl.getLastReading();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 int highThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_high_threshold", "180"));
                 int lowThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_low_threshold", "60"));
 //                int newColor=Color.WHITE;
                 if (r>highThreshold) {
-                    currentBGColor=Color.RED;
-                }else if (r<lowThreshold){
                     currentBGColor=Color.rgb(255, 199, 0);
+                }else if (r<lowThreshold){
+                    currentBGColor=Color.RED;
                 } else {
                     currentBGColor=Color.rgb(0,170,0);
                 }
@@ -296,35 +414,12 @@ public class MainActivity extends Activity {
 
                 int dbat=dl.getDeviceBattery();
                 deviceBatteryLabel.setText(String.valueOf(dbat));
-                if (dbat > 75){
-                    deviceBattery.setImageResource(R.drawable.batteryfullhorizontal);
-                }else if (dbat <=75 && dbat > 50){
-                    deviceBattery.setImageResource(R.drawable.battery75horizontal);
-                }else if (dbat <=50 && dbat > 25){
-                    deviceBattery.setImageResource(R.drawable.battery50horizontal);
-                }else if (dbat <=25 && dbat > 15){
-                    deviceBattery.setImageResource(R.drawable.battery25horizontal);
-                }else if (dbat<=15 && dbat > 8) {
-                    deviceBattery.setImageResource(R.drawable.batterylowhorizontal);
-                } else if (dbat<8){
-                    deviceBattery.setImageResource(R.drawable.batterycriticalhorizontal);
-                }
+
+                deviceBattery.setImageLevel(dbat);
 
                 float ubat=dl.getUploaderBattery();
                 uploaderBatteryLabel.setText(String.valueOf((int) ubat));
-                if (ubat > 75){
-                    uploaderBattery.setImageResource(R.drawable.batteryfullvertical);
-                }else if (ubat <=75 && ubat > 50){
-                    uploaderBattery.setImageResource(R.drawable.battery75vertical);
-                }else if (ubat <=50 && ubat > 25){
-                    uploaderBattery.setImageResource(R.drawable.battery50vertical);
-                }else if (ubat <=25 && ubat > 15){
-                    uploaderBattery.setImageResource(R.drawable.battery25vertical);
-                }else if (ubat<=15 && ubat > 8) {
-                    uploaderBattery.setImageResource(R.drawable.batterylowvertical);
-                } else if (ubat<8){
-                    uploaderBattery.setImageResource(R.drawable.batterycriticalvertical);
-                }
+                uploaderBattery.setImageLevel((int) ubat);
 
 
             } catch (NoDataException e) {

@@ -15,8 +15,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.ktind.cgm.bgscout.DexcomG4.G4CGMDevice;
-
 import java.util.ArrayList;
 
 public class DeviceDownloadService extends Service {
@@ -127,11 +125,15 @@ public class DeviceDownloadService extends Service {
             },"CGM"+cgm.deviceIDStr).start();
         }
         startForeground(0,notification);
-
-        return super.onStartCommand(intent, flags, startId);
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
-    public ArrayList<DownloadObject> getData(){
+    public void helloWorld(){
+        Log.d(TAG,"Hello world");
+    }
+
+    public ArrayList<DownloadObject> getDownloadData(){
         ArrayList<DownloadObject> results=new ArrayList<DownloadObject>(cgms.size());
         for (AbstractDevice cgm:cgms){
             try {
@@ -146,6 +148,7 @@ public class DeviceDownloadService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG,"onDestory called");
         stopForeground(true);
         for (AbstractDevice cgm:cgms){
             cgm.stop();
@@ -163,7 +166,4 @@ public class DeviceDownloadService extends Service {
             return DeviceDownloadService.this;
         }
     }
-
-
-
 }

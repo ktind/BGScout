@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgrObserverInterface;
 
@@ -54,10 +56,11 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
         String usr=sharedPref.getString(deviceIDStr+"_mqtt_user","");
         String pw=sharedPref.getString(deviceIDStr+"_mqtt_pass","");
         mqttMgr=new MQTTMgr(appContext,usr,pw,getDeviceIDStr());
-        mqttMgr.connect(url);
+        mqttMgr.initConnect(url);
         mqttMgr.registerObserver(this);
         Log.d(TAG, "Subscribe start");
-        mqttMgr.subscribe("/entries/sgv", "/uploader");
+//        mqttMgr.subscribe("/entries/sgv", "/uploader");
+        mqttMgr.subscribe("/entries/sgv");
         Log.d(TAG,"Connect ended");
     }
 
@@ -77,14 +80,18 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     @Override
     public void onMessage(String topic, MqttMessage msg) {
         Log.d(TAG,"Received message for topic "+topic);
-        if (topic.equals("/uploader")){
-            Log.w(TAG,"Uploader lost connectivity");
-        }
+//        if (topic.equals("/uploader")){
+//            Log.w(TAG,"Uploader lost connectivity");
+//        }
         if (topic.equals("/entries/sgv")) {
-            DownloadObject ddo = new DownloadObject();
-            ddo=ddo.buildFromJSON(new String(msg.getPayload()));
+            GsonBuilder gsonb=new GsonBuilder();
+            gsonb.registerTypeAdapter(GlucoseUnit.class, new GlucoseUnit.GlucoseUnitSerializer());
+            gsonb.registerTypeAdapter(GlucoseUnit.class, new GlucoseUnit.GlucoseUnitDeSerializer());
+            Gson gson=gsonb.create();
+            Log.d(TAG,"message: "+new String(msg.getPayload()));
+            DownloadObject ddo=gson.fromJson(new String(msg.getPayload()),DownloadObject.class);
+            Log.d(TAG,"Message from device: "+ddo.getDeviceName());
             setLastDownloadObject(ddo);
-            fireMonitors();
             onDownload();
         }
     }

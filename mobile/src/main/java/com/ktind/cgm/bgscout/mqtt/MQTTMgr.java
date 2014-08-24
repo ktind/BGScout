@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.ktind.cgm.bgscout.BGScout;
+import com.ktind.cgm.bgscout.DownloadObject;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -23,7 +24,7 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -44,8 +45,12 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     private static final boolean MQTT_CLEAN_SESSION = false;
     private static final String MQTT_URL_FORMAT = "tcp://%s:%d";
     private static final String DEVICE_ID_FORMAT = "android1_%s";
+    private static final long RECONNECT_DELAY=60000L;
+    private static final int KEEPALIVE_INTERVAL=150000;
 
+    private DownloadObject lastDownload;
     private AlarmReceiver alarmReceiver;
+    private AlarmReceiver reconnectReceiver;
     private String mDeviceId;
     //    private MqttDefaultFilePersistence mDataStore;
     private MemoryPersistence mDataStore; 		// On Fail reverts to MemoryStore
@@ -61,6 +66,16 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     private String lastWill=null;
     private String deviceIDStr =null;
     public mqttStats stats=new mqttStats();
+    public static final String RECONNECT_INTENT_FILTER="com.ktind.cgm.MQTT_RECONNECT";
+    public static final String KEEPALIVE_INTENT_FILTER="com.ktind.cgm.MQTT_KEEPALIVE";
+    private AlarmManager alarmMgr;
+    private Intent reconnectIntent;
+    private PendingIntent reconnectPendingIntent;
+    private Intent keepAliveIntent;
+    private PendingIntent keepAlivePendingIntent;
+    protected boolean connected=false;
+    protected boolean initialCallbackSetup=false;
+
 
     public MQTTMgr(Context appContext, String user, String pass, String deviceIDStr) {
         super();
@@ -71,10 +86,35 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         mDeviceId = String.format(DEVICE_ID_FORMAT,
                 Settings.Secure.getString(appContext.getContentResolver(), Settings.Secure.ANDROID_ID));
         BGScout.statsMgr.registerCollector(stats);
+        alarmMgr = (AlarmManager)appContext.getSystemService(Context.ALARM_SERVICE);
+        reconnectReceiver=new AlarmReceiver();
+
+        // Reconnect receiver setup
+        reconnectIntent = new Intent(RECONNECT_INTENT_FILTER);
+        reconnectIntent.putExtra("device",deviceIDStr);
+        reconnectPendingIntent=PendingIntent.getBroadcast(appContext, 51, reconnectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        appContext.registerReceiver(reconnectReceiver,new IntentFilter(RECONNECT_INTENT_FILTER));
+
+//        // Keepalive receiver setup
+//        keepAliveIntent = new Intent(KEEPALIVE_INTENT_FILTER);
+//        keepAliveIntent.putExtra("device",deviceIDStr);
+//        // TODO - See if FLAG_NO_CREATE will stomp on other instances
+//        keepAlivePendingIntent=PendingIntent.getBroadcast(appContext, 61, keepAliveIntent, PendingIntent.FLAG_NO_CREATE);
+//        appContext.registerReceiver(alarmReceiver,new IntentFilter(KEEPALIVE_INTENT_FILTER));
     }
 
     public void connect(String url){
         connect(url,null);
+    }
+
+    public void initConnect(String url){
+        initConnect(url,null);
+    }
+
+    public void initConnect(String url, String lwt) {
+        connect(url,lwt);
+        setupNetworkNotifications();
+        setupKeepAlives();
     }
 
     public void connect(String url, String lwt) {
@@ -82,20 +122,9 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             Log.e(TAG, "User and/or password is null. Please verify arguments to the constructor");
             return;
         }
+//        mClient=null;
         stats.addConnect();
         setupOpts(lwt);
-//        if (lwt != null)
-//            lastWill = lwt;
-//        mOpts = new MqttConnectOptions();
-//        mOpts.setUserName(user);
-//        Log.d(TAG, "Current keepalive is: " + mOpts.getKeepAliveInterval());
-//        mOpts.setPassword(pass.toCharArray());
-//        mOpts.setKeepAliveInterval(150);
-//        if (lastWill != null) {
-//            mOpts.setWill("/uploader", lastWill.getBytes(), 2, true);
-//        }
-//        mOpts.setCleanSession(MQTT_CLEAN_SESSION);
-
         // Save the URL for later re-connections
         mqttUrl = url;
         mDataStore = new MemoryPersistence();
@@ -103,11 +132,10 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             Log.d(TAG, "Connecting to URL: " + url);
             mClient = new MqttClient(url, mDeviceId, mDataStore);
             mClient.connect(mOpts);
+            connected=true;
+            setNextKeepAlive();
         } catch (MqttException e) {
             Log.e(TAG, "Error while connecting: ", e);
-        } finally {
-            setupNetworkNotifications();
-            setupKeepAlives();
         }
     }
 
@@ -116,27 +144,38 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             lastWill = lwt;
         mOpts = new MqttConnectOptions();
         mOpts.setUserName(user);
-        Log.d(TAG, "Current keepalive is: " + mOpts.getKeepAliveInterval());
         mOpts.setPassword(pass.toCharArray());
-        mOpts.setKeepAliveInterval(150);
-        if (lastWill != null) {
-            mOpts.setWill("/uploader", lastWill.getBytes(), 2, true);
-        }
+        mOpts.setKeepAliveInterval(KEEPALIVE_INTERVAL);
+        Log.d(TAG, "Current keepalive is: " + mOpts.getKeepAliveInterval());
+
+//        if (lastWill != null) {
+//            mOpts.setWill("/uploader", lastWill.getBytes(), 2, true);
+//        }
         mOpts.setCleanSession(MQTT_CLEAN_SESSION);
     }
 
     private void setupKeepAlives(){
-        Log.d(TAG,"Setting up keepalives");
-        appContext.registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.MQTT_KEEPALIVE"));
-        AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent("com.ktind.cgm.MQTT_KEEPALIVE");
-        intent.putExtra("device",deviceIDStr);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, 0, intent, 0);
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        // Set a repeating alarm to fire off an MQTT Keepalive for this device in 1 second and repeat it every 2.5 minutes
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()+1000,145000,alarmIntent);
-        Log.d(TAG,"Finished setting up keepalives");
+        Log.d(TAG, "Setting up keepalives");
+        //FIXME - do we need two instances of AlarmReceiver or will one suffice?
+        alarmReceiver=new AlarmReceiver();
+        keepAliveIntent = new Intent(KEEPALIVE_INTENT_FILTER);
+        keepAliveIntent.putExtra("device",deviceIDStr);
+        keepAlivePendingIntent=PendingIntent.getBroadcast(appContext, 61, keepAliveIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        appContext.registerReceiver(alarmReceiver,new IntentFilter(KEEPALIVE_INTENT_FILTER));
+//        appContext.registerReceiver(alarmReceiver,new IntentFilter(KEEPALIVE_INTENT_FILTER));
+
+        // TODO - See if FLAG_NO_CREATE will stomp on other instances
+        Log.d(TAG,"Setting up repeating alarm");
+//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), KEEPALIVE_INTERVAL, keepAlivePendingIntent);
+//        alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+3000L,keepAlivePendingIntent);
+
+    }
+
+    private void setupReconnect(){
+        reconnectIntent = new Intent(RECONNECT_INTENT_FILTER);
+        reconnectIntent.putExtra("device",deviceIDStr);
+        reconnectPendingIntent=PendingIntent.getBroadcast(appContext, 61, reconnectIntent, PendingIntent.FLAG_NO_CREATE);
+        appContext.registerReceiver(alarmReceiver,new IntentFilter(RECONNECT_INTENT_FILTER));
     }
 
     private void setupNetworkNotifications(){
@@ -145,24 +184,51 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             netConnReceiver = new NetworkConnectionIntentReceiver();
             appContext.registerReceiver(netConnReceiver,
                     new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
         }
     }
 
     protected class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("com.ktind.cgm.MQTT_KEEPALIVE")){
+            Log.d(TAG,"Received a broadcast: "+intent.getAction());
+
+            if (intent.getAction().equals(KEEPALIVE_INTENT_FILTER)){
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    Log.d(TAG, "Received a to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
-                sendKeepalive();
+                    Log.d(TAG, "Received a request to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
+                    Log.d(TAG,"EXTRA_ALARM_COUNT: "+intent.getStringExtra("EXTRA_ALARM_COUNT"));
+                    sendKeepalive();
+//                    alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000L,keepAlivePendingIntent);
                 }else{
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
                 }
+            } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
+                Log.d(TAG,"Received broadcast to reconnect");
+                Log.d(TAG,"EXTRA_ALARM_COUNT: "+intent.getStringExtra("EXTRA_ALARM_COUNT"));
+                reconnect();
             }
         }
     }
 
+//    protected class KeepAliveReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            Log.d(TAG,"Received a broadcast: "+intent.getAction());
+//
+//            if (intent.getAction().equals(KEEPALIVE_INTENT_FILTER)){
+//                if (intent.getExtras().get("device").equals(deviceIDStr)) {
+//                    Log.d(TAG, "Received a request to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
+//                    Log.d(TAG,"EXTRA_ALARM_COUNT: "+intent.getStringExtra("EXTRA_ALARM_COUNT"));
+//                    sendKeepalive();
+//                }else{
+//                    Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
+//                }
+//            } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
+//                Log.d(TAG,"Received broadcast to reconnect");
+//                Log.d(TAG,"EXTRA_ALARM_COUNT: "+intent.getStringExtra("EXTRA_ALARM_COUNT"));
+//                reconnect();
+//            }
+//        }
+//    }
 
     public void subscribe(String... topics){
         mqTopics=topics;
@@ -175,7 +241,14 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
                 Log.e(TAG, "Unable to subscribe to topic "+topic,e);
             }
         }
-        mClient.setCallback(MQTTMgr.this);
+        Log.d(TAG,"Verifying callback setup");
+        if (! initialCallbackSetup) {
+            Log.d(TAG,"Setting up callback");
+            mClient.setCallback(MQTTMgr.this);
+            Log.d(TAG,"Set up callback");
+            initialCallbackSetup=false;
+        }
+        Log.d(TAG,"Finished verifying callback setup");
     }
 
     public void publish(String message,String topic){
@@ -223,20 +296,24 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     protected class NetworkConnectionIntentReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context ctx, Intent intent) {
-            if (mqttUrl==null || mqTopics==null){
-                Log.e(TAG,"It appears that the connection URL and/or Topics have not been set previously and I've received a networkconnectionintention. Possibly never used the connect() and/or subscribe() methods");
-                return;
+            if (isOnline()) {
+                if (mqttUrl==null || mqTopics==null){
+                    Log.e(TAG,"It appears that the connection URL and/or Topics have not been set previously and I've received a networkconnectionintention. Possibly never used the connect() and/or subscribe() methods");
+                    return;
+                }
+                stats.addNetworkNotification();
+                if (isOnline()) {
+                    Log.i(TAG, "Network is online. Attempting to reconnect");
+                    connected=false;
+                    reconnectDelayed(5000);
+                }
+//            wl.release();
             }
-            stats.addNetworkNotification();
-            PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RemoteCGM");
-            wl.acquire();
-            if (isOnline()){
-                Log.i(TAG, "Network is online. Attempting to reconnect");
-                reconnect();
-            }
-            wl.release();
         }
+    }
+
+    protected boolean isConnected(){
+        return connected;
     }
 
     @Override
@@ -248,30 +325,45 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             return;
         }
         PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RemoteCGM");
-        wl.acquire();
-        if (isOnline())
-            reconnect();
-        wl.release();
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RemoteCGM "+deviceIDStr);
+        if (! mClient.isConnected()) {
+            wl.acquire();
+            connected=false;
+            if (isOnline())
+                reconnectDelayed();
+            wl.release();
+        } else {
+            Log.wtf(TAG, "Received connection lost but mClient is reporting we're online?!");
+        }
     }
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        Log.d(TAG,"Message arrived!");
         stats.addMessage(s);
-        Log.d(TAG,"Before message payload");
         byte[] message=mqttMessage.getPayload();
-        Log.d(TAG,"After message payload");
         Log.i(TAG,"  Topic:\t" + s +
                 "  Message:\t" + new String(message) +
                 "  QoS:\t" + mqttMessage.getQos());
-        notifyObservers(s,mqttMessage);
+        if (!mqttMessage.isDuplicate())
+            notifyObservers(s,mqttMessage);
+        else
+            Log.i(TAG, "Possible duplicate message");
+        setNextKeepAlive();
+    }
+
+    private void setNextKeepAlive() {
+        Log.d(TAG,"Canceling previous alarm");
+        alarmMgr.cancel(keepAlivePendingIntent);
+        Log.d(TAG,"Setting next keep alive to trigger in "+(KEEPALIVE_INTERVAL-3000)/1000+" seconds");
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + KEEPALIVE_INTERVAL - 3000, keepAlivePendingIntent);
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
         Log.i(TAG,"deliveryComplete called");
         stats.addDelivered();
+        setNextKeepAlive();
+//        alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000,keepAlivePendingIntent);
     }
 
     public void sendKeepalive() {
@@ -286,16 +378,38 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
                         String.format(Locale.US, MQTT_KEEP_ALIVE_TOPIC_FORMAT, mDeviceId));
             }
             mKeepAliveTopic.publish(message);
+//            setNextKeepAlive();
+//            alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000,keepAlivePendingIntent);
         } catch (MqttException e) {
-            reconnect();
+            Log.wtf(TAG,"Exception during ping",e);
+            Log.wtf(TAG,"Reason code:"+e.getReasonCode());
+            reconnectDelayed();
         }
     }
 
-    public void reconnect(){
-        stats.addReconnect();
-        connect(mqttUrl);
-        subscribe(mqTopics);
+    public void reconnectDelayed(){
+        reconnectDelayed(RECONNECT_DELAY);
     }
+
+    public void reconnectDelayed(long delay_ms){
+        Log.i(TAG, "Attempting to reconnect again in "+delay_ms/1000+" seconds");
+        alarmMgr.set(AlarmManager.RTC_WAKEUP,new Date().getTime()+delay_ms,reconnectPendingIntent);
+    }
+
+    private void reconnect(){
+        if (isOnline()) {
+            Log.d(TAG, "Reconnecting");
+            alarmMgr.cancel(reconnectPendingIntent);
+            stats.addReconnect();
+            mClient=null;
+            mKeepAliveTopic=null;
+            connect(mqttUrl);
+            subscribe(mqTopics);
+        } else {
+            Log.d(TAG, "Reconnect requested but I was not online");
+        }
+    }
+
 
     public void disconnect(){
         stats.addDisconnect();
@@ -305,7 +419,15 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         } catch (MqttException e) {
             Log.e(TAG,"Error disconnecting",e);
         }
-        appContext.unregisterReceiver(netConnReceiver);
+        if (appContext!=null && netConnReceiver !=null)
+            appContext.unregisterReceiver(netConnReceiver);
+        if (appContext!=null && alarmReceiver !=null)
+            appContext.unregisterReceiver(alarmReceiver);
+        if (appContext!=null && reconnectReceiver !=null)
+            appContext.unregisterReceiver(reconnectReceiver);
+        alarmMgr.cancel(keepAlivePendingIntent);
+        alarmMgr.cancel(reconnectPendingIntent);
+
     }
     // TODO honor disable background data setting..
 

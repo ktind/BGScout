@@ -3,19 +3,21 @@ package com.ktind.cgm.bgscout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-//import android.util.Log;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgrObserverInterface;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.JSONObject;
 
 /**
  * Created by klee24 on 8/7/14.
  */
 public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInterface {
     private static final String TAG = MqttUploader.class.getSimpleName();
+    protected DownloadObject lastDownload=null;
+    protected boolean initialUpload=true;
 
     protected MQTTMgr mqttMgr;
 
@@ -27,7 +29,7 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
         String usr=sharedPref.getString(deviceIDStr+"_mqtt_user","");
         String pw=sharedPref.getString(deviceIDStr+"_mqtt_pass","");
         mqttMgr=new MQTTMgr(appContext,usr,pw,getDeviceIDStr());
-        mqttMgr.connect(url,"crooak...");
+        mqttMgr.connect(url);
         mqttMgr.registerObserver(this);
         this.allowVirtual=false;
 //        mqttMgr.subscribe("entries/sgv");
@@ -35,9 +37,17 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
 
     @Override
     protected void doProcess(DownloadObject d) {
-        d.buildMessage();
-        JSONObject json=d.getJson();
-        mqttMgr.publish(json.toString(),"/entries/sgv");
+//        d.buildMessage();
+//        JSONObject json=d.getJson();
+//        mqttMgr.publish(json.toString(),"/entries/sgv");
+        Gson gson=new Gson();
+        if (initialUpload || (lastDownload!=null && ! lastDownload.equals(d))) {
+            mqttMgr.publish(gson.toJson(d), "/entries/sgv");
+            initialUpload=false;
+        }else {
+            Log.i(TAG,"Nothing to publish because there was no change in state" );
+        }
+        lastDownload=d;
     }
 
     @Override

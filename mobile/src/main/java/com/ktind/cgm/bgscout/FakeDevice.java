@@ -64,14 +64,14 @@ public class FakeDevice extends AbstractPollDevice {
         return ddo;
     }
 
-    @Override
-    public void fireMonitors() {
-        super.fireMonitors();
-        lastReading=egvHistory.get(egvHistory.size()-1).getDate();
-//        for (EGVRecord r:egvHistory){
-//            r.setNew(false);
-//        }
-    }
+//    @Override
+//    public void fireMonitors() {
+//        super.fireMonitors();
+//        lastReading=egvHistory.get(egvHistory.size()-1).getDate();
+////        for (EGVRecord r:egvHistory){
+////            r.setNew(false);
+////        }
+//    }
 
     private void addEGV(){
         egvHistory.remove(0);

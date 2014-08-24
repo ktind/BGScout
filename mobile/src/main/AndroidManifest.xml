@@ -46,6 +46,12 @@
             <intent-filter>
                 <action android:name="com.ktind.cgm.DEVICE_POLL" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.ktind.cgm.MQTT_KEEPALIVE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.ktind.cgm.MQTT_RECONNECT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"

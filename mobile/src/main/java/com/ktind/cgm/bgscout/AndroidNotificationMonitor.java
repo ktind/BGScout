@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -30,6 +31,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected Date timeSilenced;
     protected AlarmReceiver alarmReceiver;
     protected DownloadObject lastDownload;
+    protected ArrayList<DownloadObject> previousDownloads=new ArrayList<DownloadObject>();
+    protected final int MAXPREVIOUS=3;
 
     public void setNotifBuilder(Notification.Builder notifBuilder) {
         this.notifBuilder = notifBuilder;
@@ -63,24 +66,37 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
 
     @Override
     public void doProcess(DownloadObject dl) {
+        int state=0;
+        String msg="";
         try {
-            // TODO implement an actual equals/hashcode method for devicedownloadobject and device.
-    //        if (lastDownload!=null && lastDownload.getLastReadingDate()==dl.getLastReadingDate()) {
-    //            Log.i(TAG, "Received a duplicate reading. Ignoring it");
-    //            return;
-    //        }
-            lastDownload=dl;
+            if (previousDownloads!=null) {
+                if (previousDownloads.size() > 0 && previousDownloads.get(previousDownloads.size() - 1).equals(dl)) {
+                    Log.i(TAG, "Received a duplicate reading. Ignoring it");
+                    return;
+                } else {
+                    Log.d(TAG,"Download determined to be a new reading");
+                }
+                previousDownloads.add(dl);
+                if (previousDownloads.size()>=MAXPREVIOUS)
+                    previousDownloads.remove(0);
+                Log.d(TAG,"Previous download size: "+previousDownloads.size());
+            } else {
+                Log.w(TAG, "No previous downloads?");
+            }
+
+//            lastDownload=dl;
             PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
             Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
             // maybe it will help get rid of the action if we build a new notification object?
             this.setNotifBuilder(new Notification.Builder(appContext)
                     .setContentTitle(name)
-                    .setContentText("Monitor started. No data yet")
+                    .setContentText("Default text")
                     .setContentIntent(contentIntent)
                     .setOngoing(true)
                     .setSmallIcon(R.drawable.sandclock)
                     .setLargeIcon(bm));
-            String msg="";
+
+
             if (isSilenced){
                 long duration=new Date().getTime()-timeSilenced.getTime();
                 // Snooze for 30 minutes at a time
@@ -91,15 +107,17 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 Log.v(TAG,"Alarm "+getName()+"("+deviceIDStr+"/"+monitorType+") is snoozed");
             }
 
-
             Notification notification;
-            int icon = R.drawable.questionmarkicon;
+//            int icon = R.drawable.questionmarkicon;
+            int icon;
             notifBuilder.setSound(Uri.EMPTY);
+
             Log.v(TAG,"Status: "+dl.getStatus().toString());
             if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-                msg = dl.getStatus().toString()+"\n";
+                msg = dl.getStatus().toString();
                 notifBuilder.setTicker(msg);
             }
+
             if (dl.getStatus() == DownloadStatus.SPECIALVALUE){
                 msg = dl.getSpecialValueMessage()+"\n";
                 notifBuilder.setTicker(msg);
@@ -151,12 +169,14 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
             }
 
             if (dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-                icon = getIcon(dl.getLastReading(), dl.getLastTrend());
+//                icon = getIcon(dl.getLastReading(), dl.getLastTrend());
                 msg += dl.getLastReading() + " " + dl.getUnit() + " and " + dl.getLastTrend().toString() + "\n";
                 msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(dl.getLastReadingDate());
             }
+            icon=getIcon(dl.getLastReading(),dl.getLastTrend(),state);
             notification = notifBuilder
-                    .setSmallIcon(icon)
+//                    .setSmallIcon(icon)
+                    .setSmallIcon(R.drawable.smicons,icon)
                     .setStyle(new Notification.BigTextStyle().bigText(msg))
                     .setContentText(msg)
                     .build();
@@ -166,66 +186,77 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         }
     }
 
+    private int getIcon(int bgValue,Trend trend, int state){
+        // FIXME ENUM the state
+//        int state=0;
+        int range=0;
+        if (bgValue>=highThreshold)
+            range=1;
+        else if (bgValue<=lowThreshold)
+            range=2;
+        else
+            range=0;
 
-    private int getIcon(int bgValue,Trend trend){
+        int iconLevel=trend.getVal()+(state*10)+(range*20);
+        return iconLevel;
         // Handle "NOT COMPUTABLE", "RATE OUT OF RANGE", and anything else that crops up.
-        int icon=R.drawable.questionmarkicon;
-        if (bgValue>=highThreshold){
-            if (trend==Trend.NONE) {
-                icon=R.drawable.nonered;
-            }else if(trend==Trend.DOUBLEUP) {
-                icon=R.drawable.arrowdoubleupred;
-            }else if(trend==Trend.SINGLEUP) {
-                icon=R.drawable.arrowupred;
-            }else if(trend==Trend.FORTYFIVEUP) {
-                icon=R.drawable.arrow45upred;
-            }else if(trend==Trend.FLAT) {
-                icon=R.drawable.arrowflatred;
-            }else if(trend==Trend.DOUBLEDOWN) {
-                icon=R.drawable.arrowdoubledownred;
-            }else if(trend==Trend.SINGLEDOWN) {
-                icon=R.drawable.arrowdownred;
-            }else if(trend==Trend.FORTYFIVEDOWN) {
-                icon=R.drawable.arrow45downred;
-            }
-        }else if (bgValue<=lowThreshold){
-            if (trend==Trend.NONE) {
-                icon=R.drawable.noneyellow;
-            }else if(trend==Trend.DOUBLEUP) {
-                icon=R.drawable.arrowdoubleupyellow;
-            }else if(trend==Trend.SINGLEUP) {
-                icon=R.drawable.arrowupyellow;
-            }else if(trend==Trend.FORTYFIVEUP) {
-                icon=R.drawable.arrow45upyellow;
-            }else if(trend==Trend.FLAT) {
-                icon=R.drawable.arrowflatyellow;
-            }else if(trend==Trend.DOUBLEDOWN) {
-                icon=R.drawable.arrowdoubledownyellow;
-            }else if(trend==Trend.SINGLEDOWN) {
-                icon=R.drawable.arrowdownyellow;
-            }else if(trend==Trend.FORTYFIVEDOWN) {
-                icon=R.drawable.arrow45downyellow;
-            }
-        }else{
-            if (trend==Trend.NONE) {
-                icon=R.drawable.noneblue;
-            }else if(trend==Trend.DOUBLEUP) {
-                icon=R.drawable.arrowdoubleupblue;
-            }else if(trend==Trend.SINGLEUP) {
-                icon=R.drawable.arrowupblue;
-            }else if(trend==Trend.FORTYFIVEUP) {
-                icon=R.drawable.arrow45upblue;
-            }else if(trend==Trend.FLAT) {
-                icon=R.drawable.arrowflatblue;
-            }else if(trend==Trend.DOUBLEDOWN) {
-                icon=R.drawable.arrowdoubledownblue;
-            }else if(trend==Trend.SINGLEDOWN) {
-                icon=R.drawable.arrowdownblue;
-            }else if(trend==Trend.FORTYFIVEDOWN) {
-                icon=R.drawable.arrow45downblue;
-            }
-        }
-        return icon;
+//        int icon=R.drawable.questionmarkicon;
+//        if (bgValue<=lowThreshold){
+//            if (trend==Trend.NONE) {
+//                icon=R.drawable.nonered;
+//            }else if(trend==Trend.DOUBLEUP) {
+//                icon=R.drawable.arrowdoubleupred;
+//            }else if(trend==Trend.SINGLEUP) {
+//                icon=R.drawable.arrowupred;
+//            }else if(trend==Trend.FORTYFIVEUP) {
+//                icon=R.drawable.arrow45upred;
+//            }else if(trend==Trend.FLAT) {
+//                icon=R.drawable.arrowflatred;
+//            }else if(trend==Trend.DOUBLEDOWN) {
+//                icon=R.drawable.arrowdoubledownred;
+//            }else if(trend==Trend.SINGLEDOWN) {
+//                icon=R.drawable.arrowdownred;
+//            }else if(trend==Trend.FORTYFIVEDOWN) {
+//                icon=R.drawable.arrow45downred;
+//            }
+//        }else if (bgValue>=highThreshold){
+//            if (trend==Trend.NONE) {
+//                icon=R.drawable.noneyellow;
+//            }else if(trend==Trend.DOUBLEUP) {
+//                icon=R.drawable.arrowdoubleupyellow;
+//            }else if(trend==Trend.SINGLEUP) {
+//                icon=R.drawable.arrowupyellow;
+//            }else if(trend==Trend.FORTYFIVEUP) {
+//                icon=R.drawable.arrow45upyellow;
+//            }else if(trend==Trend.FLAT) {
+//                icon=R.drawable.arrowflatyellow;
+//            }else if(trend==Trend.DOUBLEDOWN) {
+//                icon=R.drawable.arrowdoubledownyellow;
+//            }else if(trend==Trend.SINGLEDOWN) {
+//                icon=R.drawable.arrowdownyellow;
+//            }else if(trend==Trend.FORTYFIVEDOWN) {
+//                icon=R.drawable.arrow45downyellow;
+//            }
+//        }else{
+//            if (trend==Trend.NONE) {
+//                icon=R.drawable.nonegreen;
+//            }else if(trend==Trend.DOUBLEUP) {
+//                icon=R.drawable.arrowdoubleupgreen;
+//            }else if(trend==Trend.SINGLEUP) {
+//                icon=R.drawable.arrowupgreen;
+//            }else if(trend==Trend.FORTYFIVEUP) {
+//                icon=R.drawable.arrow45upgreen;
+//            }else if(trend==Trend.FLAT) {
+//                icon=R.drawable.arrowflatgreen;
+//            }else if(trend==Trend.DOUBLEDOWN) {
+//                icon=R.drawable.arrowdoubledowngreen;
+//            }else if(trend==Trend.SINGLEDOWN) {
+//                icon=R.drawable.arrowdowngreen;
+//            }else if(trend==Trend.FORTYFIVEDOWN) {
+//                icon=R.drawable.arrow45downgreen;
+//            }
+//        }
+//        return icon;
     }
 
     @Override

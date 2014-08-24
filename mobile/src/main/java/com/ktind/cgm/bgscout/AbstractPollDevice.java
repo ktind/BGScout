@@ -17,7 +17,7 @@ import java.util.Date;
  */
 abstract public class AbstractPollDevice extends AbstractDevice {
     private static final String TAG = AbstractPollDevice.class.getSimpleName();
-    protected long nextFire=45000L;
+    protected long nextFire=Constants.DEFAULTRETRYINTERVAL;
     AlarmReceiver alarmReceiver;
 
 
@@ -63,9 +63,9 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                 Log.w(TAG,"Should not see this. Something is wrong with my math");
                 timeForNextReading=getPollInterval();
             }
-            return new Date(timeForNextReading);
+            return new Date(timeForNextReading+Constants.READINGDELAY);
         } catch (DeviceException e) {
-            return new Date(System.currentTimeMillis()+45000L);
+            return new Date(System.currentTimeMillis()+Constants.DEFAULTRETRYINTERVAL);
         }
     }
 
@@ -109,6 +109,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
 
     public long nextFire(long millis){
         try {
+            // FIXME consider using system time to determine the offset for the next reading rather than the display time to get rid of the time sync problems.
             long lastDLlong=getLastDownloadObject().getEgvRecords()[getLastDownloadObject().getEgvRecords().length-1].getDate().getTime();
             Log.d(TAG,"nextFire calculated last dl to be: "+lastDLlong + " currentMillis: "+System.currentTimeMillis());
             long diff=(millis-(System.currentTimeMillis() - lastDLlong));
@@ -136,6 +137,8 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                     Intent pIntent = new Intent("com.ktind.cgm.DEVICE_POLL");
                     pIntent.putExtra("device",deviceIDStr);
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
+                    // FIXME - this causes the default of 45 seconds to fire ~49 seconds instead..
+                    // FIXME - the jitter needs to be aligned with the G4CGMDevice class time difference tolerance. Needs a constant
                     alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
                 } else {
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an Device Poll operation");

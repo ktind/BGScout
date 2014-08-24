@@ -53,5 +53,7 @@
     <string name="dump_stats">Dump Stats</string>
     <string name="device_battery_label">CGM</string>
     <string name="uploader_battery_label">Uploader</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">closed</string>
 
 </resources>

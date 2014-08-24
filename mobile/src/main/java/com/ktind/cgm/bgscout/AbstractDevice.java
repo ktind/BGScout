@@ -1,5 +1,6 @@
 package com.ktind.cgm.bgscout;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -203,7 +204,7 @@ public abstract class AbstractDevice implements DeviceInterface {
             timeForNextReading=new Date().getTime()+45000L;
         }
         if (timeForNextReading<0){
-            Log.w(TAG,"Should not see this. Something is wrong with my math");
+            Log.wtf(TAG,"Should not see this. Something is wrong with my math");
             timeForNextReading=getPollInterval();
         }
         return new Date(timeForNextReading);
@@ -227,6 +228,38 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     protected void onDownload(){
 
+//        Intent uiIntent = new Intent("com.ktind.cgm.UI_READING_UPDATE");
+//        uiIntent.putExtra("deviceID",deviceIDStr);
+//        DownloadObject downloadObject=null;
+//        try {
+//            downloadObject=getLastDownloadObject();
+//        } catch (NoDataException e) {
+//            downloadObject=new DownloadObject();
+//            e.printStackTrace();
+//        } finally {
+//            if (downloadObject!=null) {
+//                downloadObject.setDeviceID(deviceIDStr);
+//                downloadObject.setDeviceName(getName());
+////                downloadObject.buildMessage();
+//                uiIntent.putExtra("download", downloadObject);
+//            }
+//        }
+////        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
+//        Log.d(TAG,"Name: "+downloadObject.getDeviceName());
+//        appContext.sendBroadcast(uiIntent);
+        sendToUI();
+        try {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putLong(deviceIDStr + appContext.getText(R.string.last_g4_download), getLastDownloadObject().getLastReadingDate().getTime());
+            editor.apply();
+        } catch (NoDataException e) {
+            e.printStackTrace();
+        }
+        fireMonitors();
+    }
+
+    public void sendToUI(){
         Intent uiIntent = new Intent("com.ktind.cgm.UI_READING_UPDATE");
         uiIntent.putExtra("deviceID",deviceIDStr);
         DownloadObject downloadObject=null;
@@ -239,21 +272,13 @@ public abstract class AbstractDevice implements DeviceInterface {
             if (downloadObject!=null) {
                 downloadObject.setDeviceID(deviceIDStr);
                 downloadObject.setDeviceName(getName());
-                downloadObject.buildMessage();
-                uiIntent.putExtra("download", downloadObject.getJson().toString());
+//                downloadObject.buildMessage();
+                uiIntent.putExtra("download", downloadObject);
             }
         }
-        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
+//        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
+        Log.d(TAG,"Name: "+downloadObject.getDeviceName());
         appContext.sendBroadcast(uiIntent);
-        try {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putLong(deviceIDStr + appContext.getText(R.string.last_g4_download), getLastDownloadObject().getLastReadingDate().getTime());
-            editor.apply();
-        } catch (NoDataException e) {
-            e.printStackTrace();
-        }
-        fireMonitors();
     }
 
     public void setRemote(boolean remote) {
@@ -264,4 +289,15 @@ public abstract class AbstractDevice implements DeviceInterface {
     public void stop() {
         this.stopMonitors();
     }
+
+    public class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.UIDO_QUERY)){
+                Log.d(TAG,"Received a query from the main activity for the download object");
+                sendToUI();
+            }
+        }
+    }
+
 }
