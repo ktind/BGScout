@@ -11,9 +11,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
- * Created by klee24 on 8/2/14.
+ Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright notice, this
+ list of conditions and the following disclaimer in the documentation and/or
+ other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
  */
 public class DownloadObject implements Parcelable {
     private static final String TAG = DownloadObject.class.getSimpleName();
@@ -30,7 +54,7 @@ public class DownloadObject implements Parcelable {
     private HashMap<String, String> downloadMessage=new HashMap<String, String>();
     private String deviceID;
     private Date lastReadingDate;
-    private Date downloadDate=new Date();
+//    private Date downloadDate=new Date();
 
     public DownloadObject(){
         status=DownloadStatus.NONE;
@@ -145,9 +169,13 @@ public class DownloadObject implements Parcelable {
          */
     public EGVRecord getLastRecord() throws NoDataException {
         if (egvRecords==null || egvRecords.size()==0)
-            throw new NoDataException("There are no records in the previous download");
+            throw new NoDataException("There are no records in the download");
         return egvRecords.get(egvRecords.size()-1);
 //        return egvRecords[egvRecords.length-1];
+    }
+
+    public Date getLastRecordReadingDate() throws NoDataException {
+        return getLastRecord().getDate();
     }
 
     public Date getLastReadingDate() {
@@ -168,6 +196,19 @@ public class DownloadObject implements Parcelable {
         this.lastReadingDate=date;
         return this;
     }
+
+    public void trimReadingsAfter(Long afterDateLong){
+        // Create a new copy so that we don't ruin everyone's day by stomping on each others efforts.
+        Log.d(TAG,"Size before trim: "+egvRecords.size());
+        Date afterDate=new Date(afterDateLong);
+        for (Iterator<EGVRecord> iterator = egvRecords.iterator(); iterator.hasNext(); ) {
+            EGVRecord record = iterator.next();
+            if (! record.getDate().after(afterDate))
+                iterator.remove();
+        }
+        Log.d(TAG,"Size after trim: "+egvRecords.size());
+    }
+
 
     public int getLastReading() throws NoDataException {
         return getLastRecord().getEgv();
@@ -190,95 +231,6 @@ public class DownloadObject implements Parcelable {
         return downloadMessage;
     }
 
-//    public void buildMessage(){
-//        downloadMessage.put("device","dexcom");
-//        downloadMessage.put("uploaderBattery", String.valueOf(getUploaderBattery()));
-//        downloadMessage.put("downloadStatus",String.valueOf(getStatus().getVal()));
-//        downloadMessage.put("specialMessage",getSpecialValueMessage());
-//        downloadMessage.put("name",getDeviceName());
-//        downloadMessage.put("isRemoteDevice",String.valueOf(isRemoteDevice()));
-//        downloadMessage.put("deviceID",getDeviceID());
-//        downloadMessage.put("date", String.valueOf(getLastReadingDate().getTime()));
-//        try {
-//            downloadMessage.put("sgv",String.valueOf(getLastReading()));
-//        } catch (NoDataException e) {
-//            e.printStackTrace();
-//        }
-//        downloadMessage.put("unit",String.valueOf(getUnit().getValue()));
-//        try {
-//            downloadMessage.put("direction",String.valueOf(getLastTrend().getNsString()));
-//        } catch (NoDataException e) {
-//            e.printStackTrace();
-//        }
-//        downloadMessage.put("deviceBattery",String.valueOf(getDeviceBattery()));
-//    }
-//
-//    public DownloadObject buildFromJSON(String json){
-//        JSONObject jsonObj=null;
-//        try {
-//            jsonObj=new JSONObject(json);
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Problem parsing json: "+json);
-//            e.printStackTrace();
-//        }
-//        return buildFromJSON(jsonObj);
-//    }
-//
-//    public DownloadObject buildFromJSON(JSONObject jsonObject) {
-//        DownloadObject result = new DownloadObject();
-//        Log.v(TAG,"Checking uploaderBattery");
-//        result.setUploaderBattery(jsonObject.optInt("uploaderBattery",-1));
-//        Log.v(TAG,"Checking downloadStatus");
-//        result.setStatus(DownloadStatus.values()[jsonObject.optInt("downloadStatus", DownloadStatus.NONE.getVal())]);
-//        Log.v(TAG,"Checking specialMessage");
-//        result.setSpecialValueMessage(jsonObject.optString("specialMessage", ""));
-//        Log.v(TAG,"Checking name");
-//        result.setDeviceName(jsonObject.optString("name", "???"));
-//        Log.v(TAG,"Checking unit");
-//        result.setUnit(GlucoseUnit.values()[jsonObject.optInt("unit", GlucoseUnit.MGDL.getValue())]);
-//        Log.v(TAG,"Checking deviceID");
-//        result.setDeviceID(jsonObject.optString("deviceID", "?"));
-//        Log.v(TAG,"Checking deviceBattery");
-//        result.setDeviceBattery(jsonObject.optInt("deviceBattery", -1));
-//
-//        EGVRecord[] records = new EGVRecord[1];
-//        Log.v(TAG,"Checking sgv");
-//        int bg=jsonObject.optInt("sgv",-1);
-//        if (bg!=-1) {
-//            Trend trend = Trend.NONE;
-//            GlucoseUnit u = result.getUnit();
-//            Date d=new Date(jsonObject.optLong("date",new Date().getTime()));
-//            boolean n=true;
-//            result.getUnit();
-//            trend=trend.getTrendByNsString(jsonObject.optString("direction", Trend.NONE.toString()));
-//            EGVRecord[] recs=new EGVRecord[1];
-//            recs[0]=new EGVRecord(bg,d,trend,n);
-//            result.setEgvRecords(recs);
-////            result.setEgvRecords(records);
-//        } else {
-//            Log.v(TAG,"No Readings");
-//        }
-//        return result;
-//    }
-//
-//    public JSONObject getJson(){
-//        JSONObject jsonObject=new JSONObject();
-//        for (String key:downloadMessage.keySet()){
-//            try {
-//                jsonObject.put(key,downloadMessage.get(key));
-//            } catch (JSONException e) {
-//                if (key.equals("sgv")||key.equals("deviceBattery")||key.equals("uploaderBatter")||key.equals("name"))
-//                    try {
-//                        jsonObject.put(key, "---");
-//                    } catch (JSONException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                    e.printStackTrace();
-//            }
-//        }
-//        return jsonObject;
-//    }
-//
     @Override
     public int describeContents() {
         return 0;

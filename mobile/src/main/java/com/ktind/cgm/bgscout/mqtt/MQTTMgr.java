@@ -28,7 +28,29 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by klee24 on 8/11/14.
+ Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright notice, this
+ list of conditions and the following disclaimer in the documentation and/or
+ other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
@@ -107,6 +129,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         connect(url,null);
     }
 
+    //FIXME it is possible to call connect without first calling initConnect - thereby bypassing the setupKeepAlives - which limits our ability to detect a connection loss
+    // Should be able to change the visiblity of the methods. Perhaps renaming as well?
     public void initConnect(String url){
         initConnect(url,null);
     }
@@ -165,7 +189,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 //        appContext.registerReceiver(alarmReceiver,new IntentFilter(KEEPALIVE_INTENT_FILTER));
 
         // TODO - See if FLAG_NO_CREATE will stomp on other instances
-        Log.d(TAG,"Setting up repeating alarm");
+//        Log.d(TAG,"Setting up repeating alarm");
 //        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), KEEPALIVE_INTERVAL, keepAlivePendingIntent);
 //        alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+3000L,keepAlivePendingIntent);
 
@@ -257,7 +281,9 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         try {
             mClient.publish(topic,message.getBytes(),2,true);
         } catch (MqttException e) {
-            Log.e(TAG,"Unable to publish message: "+message+" to "+topic);
+            Log.e(TAG,"Unable to publish message: "+message+" to "+topic,e);
+            // Likely due to disconnected that wasn't detected earlier? Should not happen unless connect was called without initConnect
+            reconnectDelayed();
         }
 //        mClient.publish("/entries/sgv",jsonString.getBytes(),MQTT_QOS_1,true);
     }
@@ -372,12 +398,15 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         MqttMessage message = new MqttMessage(MQTT_KEEP_ALIVE_MESSAGE);
         message.setQos(MQTT_KEEP_ALIVE_QOS);
         try {
-            if (mKeepAliveTopic == null) {
-                Log.v(TAG, "Setting topic");
-                mKeepAliveTopic = mClient.getTopic(
-                        String.format(Locale.US, MQTT_KEEP_ALIVE_TOPIC_FORMAT, mDeviceId));
-            }
-            mKeepAliveTopic.publish(message);
+            // The mKeepAliveTopic variable was hanging on to an older client handle that was stale and would trigger reconnects too frequently.
+            // See if this helps clear things up - rather than nulling the mKeepAliveTopic everytime we lose our connection.
+            mClient.publish(String.format(Locale.US, MQTT_KEEP_ALIVE_TOPIC_FORMAT, mDeviceId),message);
+//            if (mKeepAliveTopic == null) {
+//                Log.v(TAG, "Setting topic");
+//                mKeepAliveTopic = mClient.getTopic(
+//                        String.format(Locale.US, MQTT_KEEP_ALIVE_TOPIC_FORMAT, mDeviceId));
+//            }
+//            mKeepAliveTopic.publish(message);
 //            setNextKeepAlive();
 //            alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000,keepAlivePendingIntent);
         } catch (MqttException e) {

@@ -20,7 +20,32 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by klee24 on 8/2/14.
+ Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright notice, this
+ list of conditions and the following disclaimer in the documentation and/or
+ other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ * TODO This is a HORRIBLE class. Needs to be refactored majorly - Completely violates DRY
+ * FIXME most of this needs to be passed in from the device itself as a message - that way the logic stays with the device and can be easily passed to the UI
  */
 public class AndroidNotificationMonitor extends AbstractMonitor {
     private static final String TAG = AndroidNotificationMonitor.class.getSimpleName();
@@ -33,18 +58,26 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected DownloadObject lastDownload;
     protected ArrayList<DownloadObject> previousDownloads=new ArrayList<DownloadObject>();
     protected final int MAXPREVIOUS=3;
+    private PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
+    private Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
+    private final int MAXRECORDAGE=300000;
+    private final int SNOOZEDURATION=1800000;
+    private SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+    // Good is defined as one that has all data that we need to convey our message
+    private DownloadObject lastKnownGood;
+    private final int MINUPLOADERBATTERY=40;
+    private final int MINDEVICEBATTERY=20;
+
+
 
     public void setNotifBuilder(Notification.Builder notifBuilder) {
         this.notifBuilder = notifBuilder;
     }
 
     AndroidNotificationMonitor(String name,int devID,Context appContext){
-        super(name,devID,appContext);
+        super(name,devID,appContext,"android_notification");
         mNotifyMgr = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
-//        Intent snoozeIntent =new Intent("com.ktind.cgm.SNOOZE_ALARM");
-//        snoozeIntent.putExtra("device",deviceIDStr);
-//        PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext,deviceID,snoozeIntent,0);
         Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
         this.setNotifBuilder(new Notification.Builder(appContext)
                 .setContentTitle(name)
@@ -55,10 +88,10 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 .setLargeIcon(bm));
         Notification notification = notifBuilder.build();
         mNotifyMgr.notify(devID, notification);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        this.setLowThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_low_threshold", "60")));
-        this.setHighThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_high_threshold", "180")));
-        this.setMonitorType("Android notification");
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+//        this.setLowThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_low_threshold", "60")));
+//        this.setHighThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_high_threshold", "180")));
+//        this.setMonitorType("Android notification");
         this.setAllowVirtual(true);
         alarmReceiver=new AlarmReceiver();
         appContext.registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.SNOOZE_ALARM"));
@@ -66,198 +99,243 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
 
     @Override
     public void doProcess(DownloadObject dl) {
-        int state=0;
-        String msg="";
-        try {
-            if (previousDownloads!=null) {
-                if (previousDownloads.size() > 0 && previousDownloads.get(previousDownloads.size() - 1).equals(dl)) {
-                    Log.i(TAG, "Received a duplicate reading. Ignoring it");
-                    return;
-                } else {
-                    Log.d(TAG,"Download determined to be a new reading");
-                }
-                previousDownloads.add(dl);
-                if (previousDownloads.size()>=MAXPREVIOUS)
-                    previousDownloads.remove(0);
-                Log.d(TAG,"Previous download size: "+previousDownloads.size());
+//        int state=0;
+//        String msg="";
+        if (previousDownloads!=null) {
+            if (previousDownloads.size() > 0 && previousDownloads.get(previousDownloads.size() - 1).equals(dl)) {
+                Log.i(TAG, "Received a duplicate reading. Ignoring it");
+                return;
             } else {
-                Log.w(TAG, "No previous downloads?");
+                Log.d(TAG,"Download determined to be a new reading");
             }
+            previousDownloads.add(dl);
+            if (previousDownloads.size()>MAXPREVIOUS)
+                previousDownloads.remove(0);
+            Log.d(TAG,"Previous download size: "+previousDownloads.size());
+        } else {
+            Log.w(TAG, "No previous downloads?");
+        }
+        if (dl.getEgvRecords().length>0)
+            lastKnownGood = dl;
 
-//            lastDownload=dl;
-            PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, new Intent(appContext, MainActivity.class), 0);
-            Bitmap bm = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.icon);
-            // maybe it will help get rid of the action if we build a new notification object?
-            this.setNotifBuilder(new Notification.Builder(appContext)
-                    .setContentTitle(name)
-                    .setContentText("Default text")
-                    .setContentIntent(contentIntent)
-                    .setOngoing(true)
-                    .setSmallIcon(R.drawable.sandclock)
-                    .setLargeIcon(bm));
-
-
-            if (isSilenced){
-                long duration=new Date().getTime()-timeSilenced.getTime();
-                // Snooze for 30 minutes at a time
-                if (duration>1800000) {
-                    Log.v(TAG,"Resetting snooze timer for "+deviceIDStr);
-                    isSilenced = false;
-                }
-                Log.v(TAG,"Alarm "+getName()+"("+deviceIDStr+"/"+monitorType+") is snoozed");
+        if (isSilenced){
+            long duration=new Date().getTime()-timeSilenced.getTime();
+            // Snooze for 30 minutes at a time
+            if (duration>SNOOZEDURATION) {
+                Log.v(TAG,"Resetting snooze timer for "+deviceIDStr);
+                isSilenced = false;
             }
+            Log.v(TAG,"Alarm "+getName()+"("+deviceIDStr+"/"+monitorType+") is snoozed");
+        }
+        mNotifyMgr.notify(deviceID, buildNotification(dl));
+    }
 
-            Notification notification;
-//            int icon = R.drawable.questionmarkicon;
-            int icon;
-            notifBuilder.setSound(Uri.EMPTY);
-
-            Log.v(TAG,"Status: "+dl.getStatus().toString());
-            if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-                msg = dl.getStatus().toString();
-                notifBuilder.setTicker(msg);
+    private Notification buildNotification(DownloadObject dl){
+        setDefaults();
+        try {
+            if (isStale(dl)){
+                // Stale means we're over MAXRECORDAGE old
+                setSoundStale(dl);
+                setTickerStale(dl);
+                setIconStale(dl);
+                setVibrateStale(dl);
+                setContentStale(dl);
+                setActionsStale(dl);
+            } else {
+                // All is good with the freshness of the data
+                setSound(dl);
+                setTicker(dl);
+                setIcon(dl);
+                setVibrate(dl);
+                setContent(dl);
+                setActions(dl);
             }
-
-            if (dl.getStatus() == DownloadStatus.SPECIALVALUE){
-                msg = dl.getSpecialValueMessage()+"\n";
-                notifBuilder.setTicker(msg);
-                icon=R.drawable.exclamationmarkicon;
-    //                    .setSmallIcon(R.drawable.exclamationmarkicon);
-            }
-
-            if (dl.getStatus()== DownloadStatus.NODATA){
-                icon=R.drawable.sandclock;
-            }
-
-            if (new Date().getTime() - dl.getLastReadingDate().getTime() > 300000) {
-                icon = R.drawable.exclamationmarkicon;
-            }
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-            Log.d(TAG, "Default Notification sound: " + Settings.System.DEFAULT_NOTIFICATION_URI);
-            if (dl.getLastReading() >= highThreshold) {
-                String ringtoneURI = sharedPref.getString(deviceIDStr + "_high_ringtone", "DEFAULT_SOUND");
-                Uri uri = Uri.parse(ringtoneURI);
-                Log.d(TAG, "Notification sound: " + uri);
-//                long[] vibe = {2000, 1000, 2000, 1000};
-                if (!isSilenced) {
-                    Intent snoozeIntent = new Intent("com.ktind.cgm.SNOOZE_ALARM");
-                    snoozeIntent.putExtra("device", deviceIDStr);
-                    PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext, deviceID, snoozeIntent, 0);
-                    notifBuilder.setSound(uri);
-                    notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
-                    //.setVibrate(vibe)
-                } else {
-                    Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
-                }
-
-            }
-            if (dl.getLastReading() <= lowThreshold) {
-                String ringtoneURI = sharedPref.getString(deviceIDStr + "_low_ringtone", "DEFAULT_SOUND");
-                Uri uri = Uri.parse(ringtoneURI);
-                Log.d(TAG, "Notification sound: " + uri);
-//                long[] vibe = {4000, 1000, 4000, 1000};
-                if (!isSilenced) {
-                    Intent snoozeIntent = new Intent("com.ktind.cgm.SNOOZE_ALARM");
-                    snoozeIntent.putExtra("device", deviceIDStr);
-                    PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext, deviceID, snoozeIntent, 0);
-                    notifBuilder.setSound(uri);
-                    notifBuilder.addAction(android.R.drawable.ic_popup_reminder, "Snooze", snoozePendIntent);
-                    //.setVibrate(vibe)
-                } else {
-                    Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
-                }
-            }
-
-            if (dl.getStatus() != DownloadStatus.SPECIALVALUE) {
-//                icon = getIcon(dl.getLastReading(), dl.getLastTrend());
-                msg += dl.getLastReading() + " " + dl.getUnit() + " and " + dl.getLastTrend().toString() + "\n";
-                msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(dl.getLastReadingDate());
-            }
-            icon=getIcon(dl.getLastReading(),dl.getLastTrend(),state);
-            notification = notifBuilder
-//                    .setSmallIcon(icon)
-                    .setSmallIcon(R.drawable.smicons,icon)
-                    .setStyle(new Notification.BigTextStyle().bigText(msg))
-                    .setContentText(msg)
-                    .build();
-            mNotifyMgr.notify(deviceID, notification);
         } catch (NoDataException e) {
-            Log.e(TAG,e.getMessage());
+            // The received download is empty
+            // This means we can assume the uploader is active, but something went wrong while it was trying to get the data.
+            setSoundEmpty(dl);
+            setTickerEmpty(dl);
+            setIconEmpty(dl);
+            setVibrateEmpty(dl);
+            setContentEmpty(dl);
+            setActionsEmpty(dl);
+        }
+        return notifBuilder.build();
+    }
+
+    private void setSound(DownloadObject dl) {
+        int lastBG=0;
+        try {
+            lastBG = dl.getLastReading();
+            if (!isSilenced) {
+                Log.d(TAG, "Default Notification sound: " + Settings.System.DEFAULT_NOTIFICATION_URI);
+                Uri uri = Uri.EMPTY;
+                String ringtoneURI = "";
+                // EGV values should take precedence over battery alerts - the battery alerts should be discovered when the user interacts with the app if there is a conflict.
+                if (dl.getDeviceBattery()<MINDEVICEBATTERY || dl.getUploaderBattery() < MINUPLOADERBATTERY)
+                    ringtoneURI = sharedPref.getString(deviceIDStr + "_lowbattery", "DEFAULT_SOUND");
+                if (lastBG >= highThreshold)
+                    ringtoneURI = sharedPref.getString(deviceIDStr + "_high_ringtone", "DEFAULT_SOUND");
+                if (lastBG <= lowThreshold)
+                    ringtoneURI = sharedPref.getString(deviceIDStr + "_low_ringtone", "DEFAULT_SOUND");
+                if (!ringtoneURI.equals(""))
+                    uri = Uri.parse(ringtoneURI);
+
+                notifBuilder.setSound(uri);
+                Log.d(TAG, "Notification sound: " + uri);
+            } else {
+                Log.v(TAG, "Alarm " + getName() + " (" + getMonitorType() + ") - " + deviceIDStr + " snoozed");
+            }
+        } catch (NoDataException e){
+            setSoundEmpty(dl);
         }
     }
 
-    private int getIcon(int bgValue,Trend trend, int state){
-        // FIXME ENUM the state
-//        int state=0;
-        int range=0;
-        if (bgValue>=highThreshold)
-            range=1;
-        else if (bgValue<=lowThreshold)
-            range=2;
-        else
-            range=0;
+    private void setTicker(DownloadObject dl){
+        String msg="";
+        try {
+            if (dl.getStatus() == DownloadStatus.SUCCESS)
+                msg = dl.getLastReading()+" "+dl.getUnit()+" "+dl.getLastTrend().toString();
+        } catch (NoDataException e) {
+            setTickerEmpty(dl);
+        }
+        if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+            if (!msg.equals(""))
+                msg+="\n";
+            msg += dl.getStatus().toString();
+        }
+        if (dl.getStatus() == DownloadStatus.SPECIALVALUE) {
+            if (!msg.equals(""))
+                msg+="\n";
+            msg += dl.getSpecialValueMessage();
+        }
+        notifBuilder.setTicker(msg);
 
-        int iconLevel=trend.getVal()+(state*10)+(range*20);
-        return iconLevel;
-        // Handle "NOT COMPUTABLE", "RATE OUT OF RANGE", and anything else that crops up.
-//        int icon=R.drawable.questionmarkicon;
-//        if (bgValue<=lowThreshold){
-//            if (trend==Trend.NONE) {
-//                icon=R.drawable.nonered;
-//            }else if(trend==Trend.DOUBLEUP) {
-//                icon=R.drawable.arrowdoubleupred;
-//            }else if(trend==Trend.SINGLEUP) {
-//                icon=R.drawable.arrowupred;
-//            }else if(trend==Trend.FORTYFIVEUP) {
-//                icon=R.drawable.arrow45upred;
-//            }else if(trend==Trend.FLAT) {
-//                icon=R.drawable.arrowflatred;
-//            }else if(trend==Trend.DOUBLEDOWN) {
-//                icon=R.drawable.arrowdoubledownred;
-//            }else if(trend==Trend.SINGLEDOWN) {
-//                icon=R.drawable.arrowdownred;
-//            }else if(trend==Trend.FORTYFIVEDOWN) {
-//                icon=R.drawable.arrow45downred;
-//            }
-//        }else if (bgValue>=highThreshold){
-//            if (trend==Trend.NONE) {
-//                icon=R.drawable.noneyellow;
-//            }else if(trend==Trend.DOUBLEUP) {
-//                icon=R.drawable.arrowdoubleupyellow;
-//            }else if(trend==Trend.SINGLEUP) {
-//                icon=R.drawable.arrowupyellow;
-//            }else if(trend==Trend.FORTYFIVEUP) {
-//                icon=R.drawable.arrow45upyellow;
-//            }else if(trend==Trend.FLAT) {
-//                icon=R.drawable.arrowflatyellow;
-//            }else if(trend==Trend.DOUBLEDOWN) {
-//                icon=R.drawable.arrowdoubledownyellow;
-//            }else if(trend==Trend.SINGLEDOWN) {
-//                icon=R.drawable.arrowdownyellow;
-//            }else if(trend==Trend.FORTYFIVEDOWN) {
-//                icon=R.drawable.arrow45downyellow;
-//            }
-//        }else{
-//            if (trend==Trend.NONE) {
-//                icon=R.drawable.nonegreen;
-//            }else if(trend==Trend.DOUBLEUP) {
-//                icon=R.drawable.arrowdoubleupgreen;
-//            }else if(trend==Trend.SINGLEUP) {
-//                icon=R.drawable.arrowupgreen;
-//            }else if(trend==Trend.FORTYFIVEUP) {
-//                icon=R.drawable.arrow45upgreen;
-//            }else if(trend==Trend.FLAT) {
-//                icon=R.drawable.arrowflatgreen;
-//            }else if(trend==Trend.DOUBLEDOWN) {
-//                icon=R.drawable.arrowdoubledowngreen;
-//            }else if(trend==Trend.SINGLEDOWN) {
-//                icon=R.drawable.arrowdowngreen;
-//            }else if(trend==Trend.FORTYFIVEDOWN) {
-//                icon=R.drawable.arrow45downgreen;
-//            }
-//        }
-//        return icon;
+//        if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE)
+//            msg = dl.getStatus().toString();
+//        if (dl.getStatus() == DownloadStatus.SPECIALVALUE)
+//            msg = dl.getSpecialValueMessage()+"\n";
+//        if (dl.getStatus()== DownloadStatus.NODATA)
+//            msg=DownloadStatus.NODATA.toString();
+//        notifBuilder.setTicker(msg);
     }
+
+    private boolean isStale(DownloadObject dl) throws NoDataException {
+        return new Date().getTime() - dl.getLastRecordReadingDate().getTime() > MAXRECORDAGE;
+    }
+
+    private void setDefaults(){
+        this.notifBuilder=new Notification.Builder(appContext)
+                .setContentTitle(name)
+                .setContentText("Default text")
+                .setContentIntent(contentIntent)
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.sandclock)
+                .setLargeIcon(bm);
+    }
+
+    private void setActions(DownloadObject dl){
+        try {
+            if (((dl.getLastReading() >= highThreshold) || (dl.getLastReading() <= lowThreshold)) && ! isSilenced) {
+                Intent snoozeIntent = new Intent("com.ktind.cgm.SNOOZE_ALARM");
+                snoozeIntent.putExtra("device", deviceIDStr);
+                PendingIntent snoozePendIntent = PendingIntent.getBroadcast(appContext, deviceID, snoozeIntent, 0);
+                // TODO make the snooze time configurable
+                String snoozeActionText="Snooze for "+(SNOOZEDURATION/1000)/60+" minutes";
+                notifBuilder.addAction(android.R.drawable.ic_popup_reminder, snoozeActionText, snoozePendIntent);
+            }
+        } catch (NoDataException e) {
+            //TODO Determine what needs to be done when no data is present. I'm not sure anything needs to happen with actions beyond call/msg?
+            e.printStackTrace();
+            setActionsEmpty(dl);
+        }
+    }
+
+    private void setContent(DownloadObject dl){
+        String msg="";
+        if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+            msg = dl.getStatus().toString();
+        }
+        if (dl.getStatus() == DownloadStatus.SPECIALVALUE) {
+            // Logically should be the first msg but just in case we'll add it to the previous message
+            msg += dl.getSpecialValueMessage();
+        }
+
+        if (dl.getDeviceBattery()< MINDEVICEBATTERY && dl.getDeviceBattery()!=-1) {
+            if (! msg.equals(""))
+                msg+="\n";
+            msg += "Low CGM battery: " + dl.getDeviceBattery();
+        } else if (dl.getDeviceBattery()==-1 && dl.getStatus()!=DownloadStatus.DEVICENOTFOUND){
+            if (! msg.equals(""))
+                msg+="\n";
+            msg+= "Unable to get reading on CGM battery";
+        }
+
+        if (dl.getUploaderBattery()< MINUPLOADERBATTERY) {
+            if (! msg.equals(""))
+                msg+="\n";
+            msg += "Low Uploader battery: " + dl.getUploaderBattery();
+        }
+        try {
+            if (dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+                if (! msg.equals(""))
+                    msg += "\n";
+                if (dl.getLastTrend()!=Trend.RATEOUTRANGE) {
+                    msg += dl.getLastReading();
+                } else {
+                    // FIXME this tightly couples this code with the G4. Figure out a better to handle this. May need to push device Max/Min into the DL object?
+                    if (dl.getLastReading()>401) {
+                        msg += "HIGH";
+                    } else if (dl.getLastReading()<39) {
+                        msg += "LOW";
+                    }
+                }
+                msg += " " + dl.getUnit() +" "+ dl.getLastTrend().toString();
+            }
+            if (! msg.equals(""))
+                msg+="\n";
+            msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(dl.getLastRecordReadingDate());
+        } catch (NoDataException e) {
+            setContentEmpty(dl);
+            e.printStackTrace();
+        }
+        notifBuilder.setStyle(new Notification.BigTextStyle().bigText(msg))
+                .setContentText(msg);
+    }
+
+    public void setVibrate(DownloadObject dl){
+        // TODO add later
+    }
+
+      private void setIcon(DownloadObject dl) {
+          // iconLevel defaults into an error state until proven we are in a good state.
+          int iconLevel=60;
+          int state = 0;
+          int range;
+          try {
+              int bgValue = dl.getLastReading();
+              Trend trend = dl.getLastTrend();
+
+              //FIXME Pull these battery values out somewhere so that we don't have to dig through the code to reset them
+              if (dl.getDeviceBattery() < MINDEVICEBATTERY || dl.getUploaderBattery() < MINUPLOADERBATTERY)
+                  state = 1;
+              DownloadStatus status = dl.getStatus();
+              if (status != DownloadStatus.SPECIALVALUE) {
+                  if (status != DownloadStatus.SUCCESS)
+                      state = 1;
+                  if (bgValue >= highThreshold)
+                      range = 1;
+                  else if (bgValue <= lowThreshold)
+                      range = 2;
+                  else
+                      range = 0;
+                  iconLevel = trend.getVal() + (state * 10) + (range * 20);
+              }
+              notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
+          } catch (NoDataException e) {
+              setIconEmpty(dl);
+          }
+      }
 
     @Override
     public void stop() {
@@ -286,4 +364,219 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         }
     }
 
+    public void setSoundStale(DownloadObject dl){
+        // TODO determine what the default error sound is or make this configurable
+        notifBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+    }
+    
+    public void setActionsStale(DownloadObject dl){
+        
+    }
+    
+    public void setTickerStale(DownloadObject dl) throws NoDataException {
+        String msg = "Download in last reading is " + ((new Date().getTime() - dl.getLastRecord().getDate().getTime()) / 1000) / 60 + " minutes old!";
+        notifBuilder.setTicker(msg);
+    }
+    
+    public void setIconStale(DownloadObject dl){
+        notifBuilder.setSmallIcon(R.drawable.smicons ,60);
+    }
+    
+    public void setVibrateStale(DownloadObject dl){
+        // TODO add later
+    }
+    
+    public void setContentStale(DownloadObject dl) {
+        String msg="Record received is over "+((new Date().getTime()-dl.getLastReadingDate().getTime())/1000)/60+" minutes old";
+        if (lastKnownGood != null) {
+//                msg += "\nLast good reading: " + lastKnownGood.getLastReading() + " " + lastKnownGood.getUnit() + " " + lastKnownGood.getLastTrend().toString() + " @ ";
+//            msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(lastKnownGood.getLastReadingDate());
+            if (lastKnownGood.getStatus() != DownloadStatus.SUCCESS && lastKnownGood.getStatus() != DownloadStatus.SPECIALVALUE) {
+                if (! msg.equals(""))
+                    msg="\n";
+                msg += lastKnownGood.getStatus().toString();
+            }
+            if (lastKnownGood.getStatus() == DownloadStatus.SPECIALVALUE) {
+                if (! msg.equals(""))
+                    msg="\n";
+                // Logically should be the first msg but just in case we'll add it to the previous message
+                msg += lastKnownGood.getSpecialValueMessage();
+            }
+            // use the current download battery stats if since they should exist
+            if (dl.getDeviceBattery()< MINDEVICEBATTERY && dl.getDeviceBattery()!=-1) {
+                if (! msg.equals(""))
+                    msg+="\n";
+                msg += "Low CGM battery: " + dl.getDeviceBattery();
+            } else if (dl.getDeviceBattery()==-1 && dl.getStatus()!=DownloadStatus.DEVICENOTFOUND){
+                if (! msg.equals(""))
+                    msg+="\n";
+                msg+= "Unable to get reading on CGM battery";
+            }
+
+            if (dl.getUploaderBattery()< MINUPLOADERBATTERY) {
+                if (! msg.equals(""))
+                    msg+="\n";
+                msg += "Low Uploader battery: " + lastKnownGood.getUploaderBattery();
+            }
+            try {
+                if (lastKnownGood.getStatus() != DownloadStatus.SPECIALVALUE) {
+                    if (! msg.equals(""))
+                        msg+="\n";
+                    msg += "Last good reading: ";
+                    if (lastKnownGood.getLastTrend()!=Trend.RATEOUTRANGE) {
+                        msg += lastKnownGood.getLastReading();
+                    } else {
+                        // FIXME this tightly couples this code with the G4. Figure out a better to handle this. May need to push device Max/Min into the lastKnownGood object?
+                        if (lastKnownGood.getLastReading()>401) {
+                            msg += "HIGH";
+                        } else if (lastKnownGood.getLastReading()<39) {
+                            msg += "LOW";
+                        }
+                    }
+                    msg += " " + lastKnownGood.getUnit() +" "+ lastKnownGood.getLastTrend().toString();
+                }
+                if (! msg.equals(""))
+                    msg+="\n";
+                msg += "Time of last good record: "+new SimpleDateFormat("HH:mm:ss MM/dd").format(lastKnownGood.getLastRecordReadingDate());
+            } catch (NoDataException e) {
+                Log.wtf(TAG, "Should not happen. How did an empty set get moved to the last known good download?");
+                e.printStackTrace();
+            }
+            notifBuilder.setStyle(new Notification.BigTextStyle().bigText(msg))
+                    .setContentText(msg);
+
+
+        } else {
+            if (!msg.equals(""))
+                msg+="\n";
+            msg += "No previous known records";
+        }
+        notifBuilder.setStyle(new Notification.BigTextStyle().bigText(msg))
+                .setContentText(msg);
+    }
+
+    public void setSoundEmpty(DownloadObject dl){
+        // TODO determine what the default error sound is or make this configurable
+        notifBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+    }
+    
+    public void setActionsEmpty(DownloadObject dl){
+        
+    }
+
+    public void setTickerEmpty(DownloadObject dl){
+        String msg="";
+        if (dl.getStatus() == DownloadStatus.SUCCESS)
+            msg="Out of range or a missed reading";
+        if (dl.getStatus() != DownloadStatus.SUCCESS && dl.getStatus() != DownloadStatus.SPECIALVALUE) {
+            if (!msg.equals(""))
+                msg+="\n";
+            msg += dl.getStatus().toString();
+        }
+        if (dl.getStatus() == DownloadStatus.SPECIALVALUE) {
+            if (!msg.equals(""))
+                msg+="\n";
+            msg += dl.getSpecialValueMessage();
+        }
+        notifBuilder.setTicker(msg);
+    }
+
+    public void setIconEmpty(DownloadObject dl){
+        int iconLevel=60;
+        int state = 0;
+        int range;
+        if (lastKnownGood!=null) {
+            try {
+                int bgValue = lastKnownGood.getLastReading();
+                Trend trend = lastKnownGood.getLastTrend();
+
+                //FIXME Pull these battery values out somewhere so that we don't have to dig through the code to reset them
+                if (dl.getDeviceBattery() < MINDEVICEBATTERY || dl.getUploaderBattery() < MINUPLOADERBATTERY)
+                    state = 1;
+                DownloadStatus status = lastKnownGood.getStatus();
+                if (status != DownloadStatus.SPECIALVALUE) {
+                    if (status != DownloadStatus.SUCCESS)
+                        state = 1;
+                    if (bgValue >= highThreshold)
+                        range = 1;
+                    else if (bgValue <= lowThreshold)
+                        range = 2;
+                    else
+                        range = 0;
+                    iconLevel = trend.getVal() + (state * 10) + (range * 20);
+                }
+            } catch (NoDataException e) {
+                Log.wtf(TAG, "Should not happen. How did an empty set get moved to the last known good download?");
+            }
+        }
+        notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
+    }
+
+    public void setVibrateEmpty(DownloadObject dl){
+
+    }
+
+    public void setContentEmpty(DownloadObject dl){
+        String msg="";
+        if (dl.getStatus()==DownloadStatus.DEVICENOTFOUND) {
+            msg = "No device connected";
+        }else {
+            msg="Last download contained no data";
+        }
+
+        if (dl.getDeviceBattery() < MINDEVICEBATTERY && dl.getDeviceBattery() != -1) {
+            if (!msg.equals(""))
+                msg += "\n";
+            msg += "Low CGM battery: " + dl.getDeviceBattery();
+        } else if (dl.getDeviceBattery() == -1 && dl.getStatus()!=DownloadStatus.DEVICENOTFOUND) {
+            if (!msg.equals(""))
+                msg += "\n";
+            msg += "Unable to get reading on CGM battery";
+        }
+
+        if (dl.getUploaderBattery() < MINUPLOADERBATTERY) {
+            if (!msg.equals(""))
+                msg += "\n";
+            msg += "Low Uploader battery: " + lastKnownGood.getUploaderBattery();
+        }
+
+        if (lastKnownGood!=null) {
+            if (lastKnownGood.getStatus() != DownloadStatus.SUCCESS && lastKnownGood.getStatus() != DownloadStatus.SPECIALVALUE) {
+                if (! msg.equals(""))
+                    msg="\n";
+                msg += lastKnownGood.getStatus().toString();
+            }
+            if (lastKnownGood.getStatus() == DownloadStatus.SPECIALVALUE) {
+                if (! msg.equals(""))
+                    msg="\n";
+                // Logically should be the first msg but just in case we'll add it to the previous message
+                msg += lastKnownGood.getSpecialValueMessage();
+            }
+            // use the current download battery stats if since they should exist
+            try {
+                if (lastKnownGood.getStatus() != DownloadStatus.SPECIALVALUE) {
+                    msg += "\n";
+                    if (lastKnownGood.getLastTrend() != Trend.RATEOUTRANGE) {
+                        msg += lastKnownGood.getLastReading();
+                    } else {
+                        // FIXME this tightly couples this code with the G4. Figure out a better to handle this. May need to push device Max/Min into the lastKnownGood object?
+                        if (lastKnownGood.getLastReading() > 401) {
+                            msg += "HIGH";
+                        } else if (lastKnownGood.getLastReading() < 39) {
+                            msg += "LOW";
+                        }
+                    }
+                    msg += " " + lastKnownGood.getUnit() + " " + lastKnownGood.getLastTrend().toString();
+                }
+                if (!msg.equals(""))
+                    msg += "\n";
+                msg += new SimpleDateFormat("HH:mm:ss MM/dd").format(lastKnownGood.getLastRecordReadingDate());
+            } catch (NoDataException e) {
+                Log.wtf(TAG, "Should not happen. How did an empty set get moved to the last known good download?");
+                e.printStackTrace();
+            }
+        }
+        notifBuilder.setStyle(new Notification.BigTextStyle().bigText(msg))
+                .setContentText(msg);
+    }
 }

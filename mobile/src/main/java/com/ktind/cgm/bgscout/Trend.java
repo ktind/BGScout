@@ -1,19 +1,42 @@
 package com.ktind.cgm.bgscout;
 
 /**
- * Created by klee24 on 8/2/14.
+ Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright notice, this
+ list of conditions and the following disclaimer in the documentation and/or
+ other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
  */
 public enum Trend {
     NONE("None",0,"NONE"),
-    DOUBLEUP("Double up",1,"DoubleUp"),
-    SINGLEUP("Single up",2,"SingleUp"),
-    FORTYFIVEUP("Forty-five up",3,"FortyFiveUp"),
-    FLAT("Flat",4,"Flat"),
-    FORTYFIVEDOWN("Forty-five down",5,"FortyFiveDown"),
-    SINGLEDOWN("Single down",6,"SingleDown"),
-    DOUBLEDOWN("Double down",7,"DoubleDown"),
-    NOTCOMPUTE("Not computable",8,"NOT COMPUTABLE"),
-    RATEOUTRANGE("Rate out of Range",9,"RATE OUT OF RANGE");
+    DOUBLEUP("\u21C8",1,"DoubleUp"),
+    SINGLEUP("\u2191",2,"SingleUp"),
+    FORTYFIVEUP("\u2197",3,"FortyFiveUp"),
+    FLAT("\u2192",4,"Flat"),
+    FORTYFIVEDOWN("\u2198",5,"FortyFiveDown"),
+    SINGLEDOWN("\u2193",6,"SingleDown"),
+    DOUBLEDOWN("\u21CA",7,"DoubleDown"),
+    NOTCOMPUTE("\u2260",8,"NOT COMPUTABLE"),
+    RATEOUTRANGE("\u26A0",9,"RATE OUT OF RANGE");
 
     private String stringVal;
     private int intVal;
