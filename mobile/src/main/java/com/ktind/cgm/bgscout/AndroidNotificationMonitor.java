@@ -311,7 +311,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
           // iconLevel defaults into an error state until proven we are in a good state.
           int iconLevel=60;
           int state = 0;
-          int range;
+          int range=0;
           try {
               int bgValue = dl.getLastReading();
               Trend trend = dl.getLastTrend();
@@ -323,14 +323,16 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
               if (status != DownloadStatus.SPECIALVALUE) {
                   if (status != DownloadStatus.SUCCESS)
                       state = 1;
-                  if (bgValue >= highThreshold)
+                  if (bgValue > highThreshold)
                       range = 1;
-                  else if (bgValue <= lowThreshold)
+                  else if (bgValue < lowThreshold)
                       range = 2;
                   else
                       range = 0;
                   iconLevel = trend.getVal() + (state * 10) + (range * 20);
               }
+              Log.d(TAG,"bgValue=>"+bgValue+"("+trend.getVal()+")+("+state+"*10)+("+range+"* 20)");
+              Log.d(TAG,"iconLevel=>"+iconLevel);
               notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
           } catch (NoDataException e) {
               setIconEmpty(dl);
@@ -497,9 +499,9 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 if (status != DownloadStatus.SPECIALVALUE) {
                     if (status != DownloadStatus.SUCCESS)
                         state = 1;
-                    if (bgValue >= highThreshold)
+                    if (bgValue > highThreshold)
                         range = 1;
-                    else if (bgValue <= lowThreshold)
+                    else if (bgValue < lowThreshold)
                         range = 2;
                     else
                         range = 0;

@@ -55,7 +55,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         super.start();
         AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
         PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DL");
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DLInit");
         wl.acquire();
         Log.i(TAG,"Performing initial download");
         download();
