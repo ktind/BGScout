@@ -38,13 +38,14 @@ abstract public class AbstractMonitor implements MonitorInterface {
     protected String name;
     protected boolean allowVirtual=false;
     protected String monitorType="generic";
-    protected int highThreshold=180;
-    protected int lowThreshold=60;
+//    protected int highThreshold=180;
+//    protected int lowThreshold=60;
     protected int deviceID;
     protected String deviceIDStr;
     protected Context appContext;
     protected SharedPreferences sharedPref;
     protected long lastSuccessDate;
+    protected EGVLimits egvLimits;
 
     public AbstractMonitor(String n,int devID,Context context, String monitorName){
         this.setName(n);
@@ -52,9 +53,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
         this.appContext=context;
         this.deviceIDStr="device_"+String.valueOf(deviceID);
         this.monitorType=monitorName;
-        this.sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        this.setLowThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_low_threshold", "60")));
-        this.setHighThreshold(Integer.valueOf(sharedPref.getString(deviceIDStr + "_high_threshold", "180")));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         // Default to the last 2.5 hours as the "last successful download"
         this.lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
     }
@@ -125,13 +124,13 @@ abstract public class AbstractMonitor implements MonitorInterface {
         Log.i(TAG,"Stopping monitor "+monitorType+" for "+name);
     }
 
-    public void setHighThreshold(int highThreshold) {
-        Log.v(TAG,"Setting high threshold to "+highThreshold);
-        this.highThreshold = highThreshold;
-    }
-
-    public void setLowThreshold(int lowThreshold) {
-        Log.v(TAG,"Setting low threshold to "+lowThreshold);
-        this.lowThreshold = lowThreshold;
-    }
+//    public void setHighThreshold(int highThreshold) {
+//        Log.v(TAG,"Setting high threshold to "+highThreshold);
+//        this.highThreshold = highThreshold;
+//    }
+//
+//    public void setLowThreshold(int lowThreshold) {
+//        Log.v(TAG,"Setting low threshold to "+lowThreshold);
+//        this.lowThreshold = lowThreshold;
+//    }
 }

@@ -61,4 +61,12 @@ public enum G4EGVSpecialValue {
         }
         return null;
     }
+
+    public static boolean isSpecialValue(int val){
+        for (G4EGVSpecialValue e: values()){
+            if (e.getValue()==val)
+                return true;
+        }
+        return false;
+    }
 }

@@ -228,7 +228,10 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
                 Log.d(TAG,"Received broadcast to reconnect");
                 Log.d(TAG,"EXTRA_ALARM_COUNT: "+intent.getStringExtra("EXTRA_ALARM_COUNT"));
-                reconnect();
+                // Prevent a reconnect if we haven't subscribed to anything.
+                // I suspect this was a race condition where a reconnect somehow triggered before the initial connection completed
+                if (mqTopics!=null )
+                    reconnect();
             }
         }
     }
@@ -255,6 +258,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 //    }
 
     public void subscribe(String... topics){
+        if (topics==null)
+            disconnect();
         mqTopics=topics;
         Log.d(TAG,"Number of topics to subscribe to: "+mqTopics.length);
         for (String topic: mqTopics){
@@ -319,6 +324,19 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         }
     }
 
+    @Override
+    public void notifyDisconnect() {
+        for (MQTTMgrObserverInterface observer:observers){
+            Log.v(TAG,"Calling back to registered users");
+            try {
+                observer.onDisconnect();
+            } catch (Exception e){
+                // Horrible catch all but I don't want the manager to die and reconnect
+                Log.e(TAG,"Caught an exception: "+e.getMessage(),e);
+            }
+        }
+    }
+
     protected class NetworkConnectionIntentReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context ctx, Intent intent) {
@@ -345,6 +363,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     @Override
     public void connectionLost(Throwable throwable) {
         stats.addLostConnections();
+        notifyDisconnect();
         Log.w(TAG,"The connection was lost");
         if (mqttUrl==null || mqTopics==null){
             Log.e(TAG,"Somehow lost the connection and mqttUrl and/or mqTopics have not been set. Make sure to use connect() and subscribe() methods of this class");
@@ -412,6 +431,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         } catch (MqttException e) {
             Log.wtf(TAG,"Exception during ping",e);
             Log.wtf(TAG,"Reason code:"+e.getReasonCode());
+            notifyDisconnect();
             reconnectDelayed();
         }
     }
@@ -456,7 +476,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             appContext.unregisterReceiver(reconnectReceiver);
         alarmMgr.cancel(keepAlivePendingIntent);
         alarmMgr.cancel(reconnectPendingIntent);
-
+        notifyDisconnect();
     }
     // TODO honor disable background data setting..
 

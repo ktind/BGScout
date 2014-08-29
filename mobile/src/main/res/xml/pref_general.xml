@@ -9,6 +9,7 @@
             android:disableDependentsState="false"
             android:summary="Enable collection of data from this device">
         </SwitchPreference>
+
         <EditTextPreference
             android:key="device_1_name"
             android:dependency="device_1_enable"
@@ -176,6 +177,7 @@
                     android:dialogTitle="@string/pref_remote_mongo_col_dialog_title"
                     android:dialogMessage="@string/pref_remote_mongo_col_dialog_msg"/>
             </PreferenceScreen>
+
         </PreferenceCategory>
     </PreferenceScreen>
 
@@ -713,5 +715,31 @@
             </PreferenceScreen>
         </PreferenceCategory>
     </PreferenceScreen>
+    <PreferenceCategory
+        android:title="@string/privacy_title"
+        android:key="privacy_prefs"
+        android:summary="Privacy settings. No private information will be collected">
+        <CheckBoxPreference android:key="acra.disable"
+            android:title="@string/pref_disable_acra"
+            android:summaryOn="@string/pref_acra_disabled"
+            android:summaryOff="@string/pref_acra_enabled"
+            android:defaultValue="false"/>
+        <CheckBoxPreference android:key="acra.syslog.enable"
+            android:dependency="acra.disable"
+            android:summaryOn="@string/pref_acra_syslog_enabled"
+            android:summaryOff="@string/pref_acra_syslog_disabled"
+            android:title="@string/pref_acra_syslog"
+            android:defaultValue="true"/>
+        <CheckBoxPreference android:key="acra.deviceid.enable"
+            android:dependency="acra.disable"
+            android:title="@string/pref_acra_deviceid"
+            android:summaryOn="@string/pref_acra_deviceid_enabled"
+            android:summaryOff="@string/pref_acra_deviceid_disabled"
+            android:defaultValue="true"/>
+        <EditTextPreference android:key="acra.user.email"
+            android:dependency="acra.disable"
+            android:title="@string/pref_acra_user_email"
+            android:summary="@string/pref_acra_user_email_summary"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

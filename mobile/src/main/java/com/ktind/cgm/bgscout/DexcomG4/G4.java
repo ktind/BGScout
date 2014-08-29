@@ -440,26 +440,30 @@ public class G4 {
         byte[] Reserved4Array=new byte[4];
         byte[] CRCArray=new byte[2];
 
-        System.arraycopy(resultBuffer,0,FirstRecordIndexArray,0,4);
-        System.arraycopy(resultBuffer,4,NumberOfRecordsArray,0,4);
+        if (resultBuffer.length > 26) {
+            System.arraycopy(resultBuffer, 0, FirstRecordIndexArray, 0, 4);
+            System.arraycopy(resultBuffer, 4, NumberOfRecordsArray, 0, 4);
 //        System.arraycopy(resultBuffer,8,RecordTypeArray,0,1);
 //        System.arraycopy(resultBuffer,9,RevisionArray,0,1);
-        System.arraycopy(resultBuffer,10,PageNumberArray,0,4);
-        System.arraycopy(resultBuffer,14,Reserved2Array,0,4);
-        System.arraycopy(resultBuffer,18,Reserved3Array,0,4);
-        System.arraycopy(resultBuffer,22,Reserved4Array,0,4);
-        System.arraycopy(resultBuffer,26,CRCArray,0,2);
-        result.FirstRecordIndex= BitTools.byteArraytoInt(FirstRecordIndexArray);
-        result.NumberOfRecords= BitTools.byteArraytoInt(NumberOfRecordsArray);
-        result.RecordType=G4RecType.values()[(int) resultBuffer[8]];
-        result.Revision=resultBuffer[9];
-        result.PageNumber= BitTools.byteArraytoInt(PageNumberArray);
-        result.Reserved2= BitTools.byteArraytoInt(Reserved2Array);
-        result.Reserved3= BitTools.byteArraytoInt(Reserved3Array);
-        result.Reserved4= BitTools.byteArraytoInt(Reserved4Array);
-        int crcInt=(CRCArray[0] & 0xFF);
-        crcInt+=(CRCArray[1] << 8) & 0xFF00;
-        result.Crc=crcInt;
+            System.arraycopy(resultBuffer, 10, PageNumberArray, 0, 4);
+            System.arraycopy(resultBuffer, 14, Reserved2Array, 0, 4);
+            System.arraycopy(resultBuffer, 18, Reserved3Array, 0, 4);
+            System.arraycopy(resultBuffer, 22, Reserved4Array, 0, 4);
+            System.arraycopy(resultBuffer, 26, CRCArray, 0, 2);
+            result.FirstRecordIndex = BitTools.byteArraytoInt(FirstRecordIndexArray);
+            result.NumberOfRecords = BitTools.byteArraytoInt(NumberOfRecordsArray);
+            result.RecordType = G4RecType.values()[(int) resultBuffer[8]];
+            result.Revision = resultBuffer[9];
+            result.PageNumber = BitTools.byteArraytoInt(PageNumberArray);
+            result.Reserved2 = BitTools.byteArraytoInt(Reserved2Array);
+            result.Reserved3 = BitTools.byteArraytoInt(Reserved3Array);
+            result.Reserved4 = BitTools.byteArraytoInt(Reserved4Array);
+            int crcInt = (CRCArray[0] & 0xFF);
+            crcInt += (CRCArray[1] << 8) & 0xFF00;
+            result.Crc = crcInt;
+        } else {
+            throw new DeviceIOException("Response size for getPageHeader("+recType.toString()+","+pageNumber+") smaller than expected");
+        }
         Log.v(TAG,"FirstRecordIndex: "+result.FirstRecordIndex+" NumberOfRecords: "+result.NumberOfRecords+" RecordType: "+result.RecordType.toString()+" Revision: "+result.Revision+" PageNumber: "+result.PageNumber+"CRC: "+result.Crc);
         return result;
     }
@@ -481,7 +485,13 @@ public class G4 {
             pages[i]=new G4DBPage();
             pages[i].PageHeader=getPageHeader(recType,startPage+i);
             int pgBoundary=528*(i+1);
-            System.arraycopy(response,pgBoundary-500,pages[i].PageData,0,500);
+            if (response.length > pgBoundary-500) {
+                System.arraycopy(response, pgBoundary - 500, pages[i].PageData, 0, 500);
+            } else {
+                Log.wtf(TAG, "Response length is less than the calculated page boundary");
+                Log.d(TAG,"response.length: "+response.length);
+                Log.d(TAG,"pgBoundary: "+pgBoundary);
+            }
             Log.v(TAG, "Page (" + i + "):" + BitTools.bytesToHex(pages[i].PageData));
             Log.v(TAG,"Page length ("+i+"):"+pages[i].PageData.length);
         }
@@ -578,6 +588,8 @@ public class G4 {
             int i;
             // Ugly code to capture the null terminated string
             for (i = 0; i < page.PageData.length && page.PageData[i] != 0x00; i++) { }
+            if (i<8)
+                throw new DeviceIOException("Expected larger page data in getParam for "+recType.toString()+" parameter: "+param);
             // Strip the header and reduce the size of the string by the header length
             data+=new String(page.PageData,8,i-8);
         }

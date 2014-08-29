@@ -35,13 +35,13 @@ import java.util.Random;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-public class FakeDevice extends AbstractPollDevice {
+public class MockDevice extends AbstractPollDevice {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
     private ArrayList<EGVRecord> egvHistory=new ArrayList<EGVRecord>(FakeCGMDeviceConstants.MAXEGV);
     private boolean initialRun;
     private Date lastReading=new Date(new Date().getTime()-10800000L);
 
-    public FakeDevice(String n, int deviceID, Context appContext, Handler mH) {
+    public MockDevice(String n, int deviceID, Context appContext, Handler mH) {
         //    public AbstractCGMDevice(String n,int deviceID,Context appContext){
         super(n,deviceID,appContext,mH);
 //        generateEGVHistory();

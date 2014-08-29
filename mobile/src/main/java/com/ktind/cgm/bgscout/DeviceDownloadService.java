@@ -72,7 +72,7 @@ public class DeviceDownloadService extends Service {
                         cgm=new RemoteMQTTDevice(name,devCount,getBaseContext(),mHandler);
                         break;
                     case 3:
-                        cgm=new FakeDevice(name,devCount,getBaseContext(),mHandler);
+                        cgm=new MockDevice(name,devCount,getBaseContext(),mHandler);
                         break;
                     default:
                         Log.e(TAG,"Unknown CGM type: "+type);

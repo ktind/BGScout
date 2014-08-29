@@ -83,4 +83,8 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
     public void onMessage(String topic, MqttMessage message) {
 
     }
+
+    @Override
+    public void onDisconnect() {
+    }
 }

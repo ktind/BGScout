@@ -29,6 +29,6 @@ package com.ktind.cgm.bgscout;
 public interface MonitorInterface {
     public void process(DownloadObject d);
     public void stop();
-    public void setHighThreshold(int highThreshold);
-    public void setLowThreshold(int lowThreshold);
+//    public void setHighThreshold(int highThreshold);
+//    public void setLowThreshold(int lowThreshold);
 }

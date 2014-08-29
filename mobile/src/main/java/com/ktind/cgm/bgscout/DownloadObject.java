@@ -40,27 +40,40 @@ import java.util.Iterator;
 
  */
 public class DownloadObject implements Parcelable {
-    private static final String TAG = DownloadObject.class.getSimpleName();
-    private String deviceName="NOTSET";
-    private boolean isRemoteDevice;
+    protected static final String TAG = DownloadObject.class.getSimpleName();
+    protected String deviceName="NOTSET";
+    protected boolean isRemoteDevice;
 
-    private ArrayList<EGVRecord> egvRecords=new ArrayList<EGVRecord>();
-    private DownloadStatus status;
-    private String specialValueMessage=null;
-    private int deviceBattery;
-    private float uploaderBattery;
-    private GlucoseUnit unit;
-    private ArrayList<HashMap<AlertLevels,String>> alertMessages=new ArrayList<HashMap<AlertLevels, String>>();
-    private HashMap<String, String> downloadMessage=new HashMap<String, String>();
-    private String deviceID;
-    private Date lastReadingDate;
+    protected ArrayList<EGVRecord> egvRecords=new ArrayList<EGVRecord>();
+    protected DownloadStatus status;
+    protected String specialValueMessage=null;
+    protected int deviceBattery;
+    protected float uploaderBattery;
+    protected GlucoseUnit unit;
+//    protected ArrayList<HashMap<AlertLevels,String>> alertMessages=new ArrayList<HashMap<AlertLevels, String>>();
+//    protected HashMap<String, String> downloadMessage=new HashMap<String, String>();
+    protected String deviceID;
+    protected Date lastReadingDate;
+    protected String driver;
 //    private Date downloadDate=new Date();
 
     public DownloadObject(){
         status=DownloadStatus.NONE;
         specialValueMessage=G4EGVSpecialValue.NONE.toString();
     }
-
+    
+//    public DownloadObject(DownloadObject dl){
+//        deviceName=dl.getDeviceName();
+//        isRemoteDevice=dl.isRemoteDevice();
+//        egvRecords=dl.egvRecords;
+//        status=dl.getStatus();
+//        uploaderBattery=dl.getUploaderBattery();
+//        deviceBattery=dl.getDeviceBattery();
+//        unit=dl.getUnit();
+//        deviceID=dl.getDeviceID();
+//        lastReadingDate=dl.lastReadingDate;
+//        driver=dl.driver;
+//    }
 
     public DownloadObject(AbstractDevice device, EGVRecord[] egvRecords, DownloadStatus downloadStatus){
         super();
@@ -83,16 +96,18 @@ public class DownloadObject implements Parcelable {
         return deviceID;
     }
 
-    public void setDeviceID(String deviceID) {
+    public DownloadObject setDeviceID(String deviceID) {
         this.deviceID = deviceID;
+        return this;
     }
 
     public boolean isRemoteDevice() {
         return isRemoteDevice;
     }
 
-    public void setRemoteDevice(boolean isRemoteDevice) {
+    public DownloadObject setRemoteDevice(boolean isRemoteDevice) {
         this.isRemoteDevice = isRemoteDevice;
+        return this;
     }
 
     public String getDeviceName() {
@@ -113,11 +128,11 @@ public class DownloadObject implements Parcelable {
         return this;
     }
 
-    public DownloadObject addAlertMessages(ArrayList<HashMap<AlertLevels,String>> messages){
-        for (HashMap<AlertLevels,String> message:messages)
-            alertMessages.add(message);
-        return this;
-    }
+//    public DownloadObject addAlertMessages(ArrayList<HashMap<AlertLevels,String>> messages){
+//        for (HashMap<AlertLevels,String> message:messages)
+//            alertMessages.add(message);
+//        return this;
+//    }
 
     public float getUploaderBattery() {
         return uploaderBattery;
@@ -160,9 +175,9 @@ public class DownloadObject implements Parcelable {
         return this;
     }
 
-    public ArrayList<HashMap<AlertLevels, String>> getAlertMessages() {
-        return alertMessages;
-    }
+//    public ArrayList<HashMap<AlertLevels, String>> getAlertMessages() {
+//        return alertMessages;
+//    }
 
     /*
         Provides us safe access to the details of the last reading.
@@ -227,9 +242,9 @@ public class DownloadObject implements Parcelable {
         return getLastRecord().getTrend();
     }
 
-    public HashMap<String,String> getDownloadMessage(){
-        return downloadMessage;
-    }
+//    public HashMap<String,String> getDownloadMessage(){
+//        return downloadMessage;
+//    }
 
     @Override
     public int describeContents() {
@@ -260,8 +275,21 @@ public class DownloadObject implements Parcelable {
             return new DownloadObject[size];
         }
     };
+    
+    protected DownloadObject(DownloadObject dl){
+        deviceName=dl.getDeviceName();
+        isRemoteDevice=dl.isRemoteDevice();
+        egvRecords=dl.egvRecords;
+        status=dl.getStatus();
+        uploaderBattery=dl.getUploaderBattery();
+        deviceBattery=dl.getDeviceBattery();
+        unit=dl.getUnit();
+        deviceID=dl.getDeviceID();
+        lastReadingDate=dl.lastReadingDate;
+        driver=dl.driver;
+    }
 
-    private DownloadObject(Parcel in) {
+    protected DownloadObject(Parcel in) {
         deviceName=in.readString();
         isRemoteDevice=in.readByte() != 0;
         in.readTypedList(egvRecords,EGVRecord.CREATOR);
@@ -293,10 +321,10 @@ public class DownloadObject implements Parcelable {
             Log.d(TAG, "Failed comparison on uploader battery");
             return false;
         }
-        if (alertMessages != null ? !alertMessages.equals(that.alertMessages) : that.alertMessages != null) {
-            Log.d(TAG, "Failed comparison on alertMessages");
-            return false;
-        }
+//        if (alertMessages != null ? !alertMessages.equals(that.alertMessages) : that.alertMessages != null) {
+//            Log.d(TAG, "Failed comparison on alertMessages");
+//            return false;
+//        }
         if (!deviceID.equals(that.deviceID)) {
             Log.d(TAG, "Failed comparison on deviceID");
             return false;
@@ -305,10 +333,10 @@ public class DownloadObject implements Parcelable {
             Log.d(TAG, "Failed comparison on deviceName");
             return false;
         }
-        if (downloadMessage != null ? !downloadMessage.equals(that.downloadMessage) : that.downloadMessage != null) {
-            Log.d(TAG, "Failed comparison on downloadMessage");
-            return false;
-        }
+//        if (downloadMessage != null ? !downloadMessage.equals(that.downloadMessage) : that.downloadMessage != null) {
+//            Log.d(TAG, "Failed comparison on downloadMessage");
+//            return false;
+//        }
         if (egvRecords != null ? !egvRecords.equals(that.egvRecords) : that.egvRecords != null) {
             Log.d(TAG, "Failed comparison on egvRecords");
             return false;
@@ -343,10 +371,19 @@ public class DownloadObject implements Parcelable {
         result = 31 * result + deviceBattery;
         result = 31 * result + (uploaderBattery != +0.0f ? Float.floatToIntBits(uploaderBattery) : 0);
         result = 31 * result + unit.hashCode();
-        result = 31 * result + (alertMessages != null ? alertMessages.hashCode() : 0);
-        result = 31 * result + (downloadMessage != null ? downloadMessage.hashCode() : 0);
+//        result = 31 * result + (alertMessages != null ? alertMessages.hashCode() : 0);
+//        result = 31 * result + (downloadMessage != null ? downloadMessage.hashCode() : 0);
         result = 31 * result + deviceID.hashCode();
         result = 31 * result + (lastReadingDate != null ? lastReadingDate.hashCode() : 0);
         return result;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public DownloadObject setDriver(String driver) {
+        this.driver = driver;
+        return this;
     }
 }

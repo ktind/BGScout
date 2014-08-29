@@ -109,6 +109,10 @@ public class MongoUploadMonitor extends AbstractMonitor {
             }
         } catch (UnknownHostException e) {
             Log.e(TAG,"Unable to upload to mongoDB",e);
+        } catch (MongoTimeoutException e){
+            Log.w(TAG,"Mongo timeout");
+        } catch (MongoException e){
+            Log.w(TAG, "Mongo catch all exception: ",e);
         }
     }
 

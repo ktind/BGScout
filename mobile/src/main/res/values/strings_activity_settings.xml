@@ -4,17 +4,17 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">Bob</string>
     <string-array name="pref_device_type_titles">
-        <item>G4</item>
-        <item>Remote (Poll)</item>
+        <item>Dexcom G4</item>
+        <!--<item>Remote (Poll)</item>-->
         <item>Remote (Push)</item>
-        <item>Fake</item>
+        <!--<item>Fake</item>-->
     </string-array>
     <!--TODO preferences are scattered all about. -->
     <string-array name="pref_device_type_values">
         <item>0</item>
-        <item>1</item>
+        <!--<item>1</item>-->
         <item>2</item>
-        <item>3</item>
+        <!--<item>3</item>-->
     </string-array>
     <string-array name="pref_device_units">
         <item>Auto</item>

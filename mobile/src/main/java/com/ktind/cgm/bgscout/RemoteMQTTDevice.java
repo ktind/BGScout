@@ -118,4 +118,9 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
             onDownload();
         }
     }
+
+    @Override
+    public void onDisconnect() {
+
+    }
 }

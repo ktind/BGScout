@@ -7,7 +7,7 @@
     <string name="action_settings">Settings</string>
     <string name="manage_service">Start service</string>
     <string name="cgm_service_title">CGM Monitoring service</string>
-    <!--TODO possible to dynamically rename these devices?-->
+    <!-- TODO possible to dynamically rename these devices? -->
     <string name="device_1">Device 1</string>
     <string name="device_2">Device 2</string>
     <string name="device_3">Device 3</string>
@@ -19,12 +19,15 @@
     <string name="pref_device_mongo_uri_title">MongoDB URI</string>
     <string name="pref_remote_mongo_uri_dialog_title">Enter MongoDB URI</string>
     <string name="pref_remote_mongo_uri_dialog_msg">Replace example values in {}\'s with your correct values</string>
-
     <string name="pref_device_remote_mongo_uri_title">Mongo DB for Remote devices</string>
     <string name="pref_device_high_title">High Threshold</string>
+
     <integer name="pref_default_device_high">180</integer>
+
     <string name="pref_device_low_title">Low Threshold</string>
+
     <integer name="pref_default_device_low">60</integer>
+
     <string name="high_ring_tone_title">High ringtone</string>
     <string name="low_ring_tone_title">Low ringtone</string>
     <string name="pref_device_remote_mongo_col_title">Collection Name</string>
@@ -55,5 +58,23 @@
     <string name="uploader_battery_label">Uploader</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">closed</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_device">DeviceActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="privacy_title">Privacy</string>
+    <string name="pref_disable_acra">Crash Collection</string>
+    <string name="pref_acra_disabled">Enable crash reporting.</string>
+    <string name="pref_acra_enabled">Disable crash reporting</string>
+    <string name="pref_acra_syslog">Include logs</string>
+    <string name="pref_acra_syslog_enabled">Include logs in the crash reports</string>
+    <string name="pref_acra_syslog_disabled">Do not include logs in the crash reports</string>
+    <string name="pref_acra_deviceid">DeviceID reporting</string>
+    <string name="pref_acra_deviceid_enabled">Enable reporting of DeviceID</string>
+    <string name="pref_acra_deviceid_disabled">Disable reporting DeviceID</string>
+    <string name="pref_acra_user_email">Email</string>
+    <string name="pref_acra_user_email_summary">Email to include with crash reports</string>
 
 </resources>

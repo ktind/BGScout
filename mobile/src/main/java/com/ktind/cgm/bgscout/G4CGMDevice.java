@@ -46,6 +46,7 @@ public class G4CGMDevice extends AbstractPollDevice {
     protected String serialNum;
     protected String receiverID;
     protected int cgmBattery=-1;
+    protected String driver="DexcomG4";
     private static final String TAG = G4CGMDevice.class.getSimpleName();
     G4 device;
 
@@ -164,8 +165,9 @@ public class G4CGMDevice extends AbstractPollDevice {
                 .setUnit(g_unit)
                 .setStatus(status)
                 .setEgvRecords(egvList)
-                .setSpecialValueMessage(specialMessage)
-                .addAlertMessages(alerts);
+                .setDriver(driver)
+                .setSpecialValueMessage(specialMessage);
+//                .addAlertMessages(alerts);
         editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);
         editor.apply();
         setLastDownloadObject(ddo);
@@ -199,9 +201,8 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     private void batteryBalance(int deviceBattery,float uploaderBattery){
-
-//        if (!device.isConnected())
-//            return;
+        if (!device.isConnected())
+            return;
         Log.d(TAG, "Device battery level: " + deviceBattery);
         Log.d(TAG, "Phone battery level: " + uploaderBattery);
         if (deviceBattery < 40) {
