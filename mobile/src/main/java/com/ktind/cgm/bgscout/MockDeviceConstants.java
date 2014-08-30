@@ -26,7 +26,7 @@ package com.ktind.cgm.bgscout;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-public class FakeCGMDeviceConstants extends Constants {
+public class MockDeviceConstants extends Constants {
     public static final int MAXRECORDS=36;
     public static final float FAILRATE=0.08f;
     public static final int READINGINTERVALSECONDS=300;

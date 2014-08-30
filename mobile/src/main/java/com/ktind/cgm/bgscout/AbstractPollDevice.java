@@ -106,12 +106,20 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     }
 
     public void download(){
-        Log.i(TAG,"Beginning download");
-        stats.startDownloadTimer();
-        doDownload();
-        stats.stopDownloadTimer();
-        Log.i(TAG,"Download complete");
-        onDownload();
+        Log.i(TAG,"Before download thread creation");
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG,"Beginning download in download thread");
+                stats.startDownloadTimer();
+                doDownload();
+                stats.stopDownloadTimer();
+                Log.i(TAG,"Download complete in download thread");
+                onDownload();
+            }
+        },"Download_"+deviceIDStr).start();
+        Log.i(TAG,"After download thread creation");
+
     }
 
     public void setPollInterval(int pollInterval) {
@@ -122,7 +130,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     @Override
     public void stop() {
         super.stop();
-        if (alarmReceiver!=null)
+        if (alarmReceiver != null)
             appContext.unregisterReceiver(alarmReceiver);
     }
 

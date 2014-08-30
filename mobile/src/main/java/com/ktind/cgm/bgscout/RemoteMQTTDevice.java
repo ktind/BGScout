@@ -64,15 +64,11 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     @Override
     public void start() {
         super.start();
-        try {
-            connect();
-        } catch (DeviceException deviceException) {
-            deviceException.printStackTrace();
-        }
+        connect();
     }
 
     @Override
-    public void connect() throws DeviceException {
+    public void connect() {
         Log.d(TAG,"Connect started");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
         String url=sharedPref.getString(deviceIDStr+"_mqtt_endpoint","");
@@ -90,6 +86,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     @Override
     public void disconnect() {
         mqttMgr.disconnect();
+        mqttMgr.close();
         mqttMgr.unregisterObserver(this);
         mqttMgr=null;
     }
@@ -121,6 +118,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
 
     @Override
     public void onDisconnect() {
-
+        lastDownloadObject.setStatus(DownloadStatus.REMOTEDISCONNECTED);
+        fireMonitors();
     }
 }

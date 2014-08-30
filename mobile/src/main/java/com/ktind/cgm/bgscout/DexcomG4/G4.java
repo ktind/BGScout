@@ -68,7 +68,7 @@ public class G4 {
         return cgmBattery;
     }
 
-    public void connect() throws IOException, DeviceException {
+    public void connect() throws NoDeviceFoundException, DeviceIOException, OperationNotSupportedException {
         cgmTransport.open();
         setup();
     }

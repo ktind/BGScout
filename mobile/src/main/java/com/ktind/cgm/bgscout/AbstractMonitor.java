@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -42,20 +44,21 @@ abstract public class AbstractMonitor implements MonitorInterface {
 //    protected int lowThreshold=60;
     protected int deviceID;
     protected String deviceIDStr;
-    protected Context appContext;
+    protected Context context;
     protected SharedPreferences sharedPref;
     protected long lastSuccessDate;
-    protected EGVLimits egvLimits;
+//    protected EGVLimits egvLimits;
 
     public AbstractMonitor(String n,int devID,Context context, String monitorName){
         this.setName(n);
         this.deviceID=devID;
-        this.appContext=context;
+        this.context =context;
         this.deviceIDStr="device_"+String.valueOf(deviceID);
         this.monitorType=monitorName;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         // Default to the last 2.5 hours as the "last successful download"
         this.lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
+        Log.d(TAG,"Setting lastSuccessDate to: "+new Date(lastSuccessDate));
     }
 
     public int getDeviceID() {
@@ -100,9 +103,18 @@ abstract public class AbstractMonitor implements MonitorInterface {
     final public void process(DownloadObject d) {
         Log.d(TAG,"Monitor "+name+" has fired for "+monitorType);
         if (isAllowVirtual() || ! d.isRemoteDevice()){
+            lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
+            Log.d(TAG, "Trimming data for monitor "+name+"/"+monitorType);
+            final DownloadObject dl=new DownloadObject(d);
+            dl.setEgvRecords(trimReadingsAfter(getlastSuccessDate(), d.getEgvArrayListRecords()));
             Log.d(TAG, "Processing monitor "+name+" for "+monitorType);
-            d.trimReadingsAfter(getlastSuccessDate());
-            this.doProcess(d);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    doProcess(dl);
+                }
+            },"monitor_"+ monitorType + deviceIDStr).start();
+
         } else {
             Log.w(TAG, "Not processing monitor "+name+" for "+monitorType+" because device is classified as a remote device.");
         }
@@ -123,6 +135,29 @@ abstract public class AbstractMonitor implements MonitorInterface {
     public void stop(){
         Log.i(TAG,"Stopping monitor "+monitorType+" for "+name);
     }
+
+    @Override
+    public void start(){
+        Log.i(TAG,"Starting monitor "+monitorType+" for "+name);
+    }
+
+    public ArrayList<EGVRecord> trimReadingsAfter(Long afterDateLong, ArrayList<EGVRecord> egvRecords){
+        ArrayList<EGVRecord> recs=new ArrayList<EGVRecord>(egvRecords);
+        Log.d(TAG,"Size before trim: "+recs.size());
+        Date afterDate=new Date(afterDateLong);
+        for (Iterator<EGVRecord> iterator = recs.iterator(); iterator.hasNext(); ) {
+            EGVRecord record = iterator.next();
+            // trim anything after the date UNLESS that means we trim everything. Let's keep
+            // the last record in there just in case. Need to find a better solution to this
+            // the method doesn't reflect its purpose
+            if (! record.getDate().after(afterDate) && recs.size()>1)
+                iterator.remove();
+        }
+        Log.d(TAG,"Size after trim: "+recs.size()+" vs original "+egvRecords.size());
+        return recs;
+    }
+
+
 
 //    public void setHighThreshold(int highThreshold) {
 //        Log.v(TAG,"Setting high threshold to "+highThreshold);

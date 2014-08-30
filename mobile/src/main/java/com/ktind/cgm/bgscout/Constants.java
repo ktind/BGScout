@@ -29,6 +29,9 @@ package com.ktind.cgm.bgscout;
 public class Constants {
     public final static int DEFAULTRETRYINTERVAL=45000;
     public final static int TIMEDRIFTOLERANCE=3000;
-    public final static int READINGDELAY=TIMEDRIFTOLERANCE+2000;
+    public final static int READINGDELAY=TIMEDRIFTOLERANCE+5000;
     public final static String UIDO_QUERY="com.ktind.cgm.UIDO_QUERY";
+    public final static String STOP_DOWNLOAD_SVC="com.ktind.cgm.STOPSERVICE";
+    public final static String START_DOWNLOAD_SVC="com.ktind.cgm.STARTSERVICE";
+    public final static String SNOOZE_INTENT="com.ktind.cgm.SNOOZE_ALARM";
 }

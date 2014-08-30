@@ -34,7 +34,8 @@ public enum DownloadStatus {
     APPLICATIONERROR("Encountered an unknown error in application",4),
     SPECIALVALUE("Has a special value",5),
     NONE("No download has been performed",6),
-    UNKNOWN("Unknown error",7);
+    UNKNOWN("Unknown error",7),
+    REMOTEDISCONNECTED("Disconnected from device",8);
 
     private String message;
     private int value;

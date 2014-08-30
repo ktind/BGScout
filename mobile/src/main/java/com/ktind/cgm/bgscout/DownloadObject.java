@@ -39,6 +39,8 @@ import java.util.Iterator;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
+
+// FIXME this object is getting too large. A full constructor would be too unwieldy. Look into breaking into smaller classes
 public class DownloadObject implements Parcelable {
     protected static final String TAG = DownloadObject.class.getSimpleName();
     protected String deviceName="NOTSET";
@@ -60,6 +62,20 @@ public class DownloadObject implements Parcelable {
     public DownloadObject(){
         status=DownloadStatus.NONE;
         specialValueMessage=G4EGVSpecialValue.NONE.toString();
+    }
+
+    public DownloadObject(DownloadObject dl){
+        deviceName=dl.deviceName;
+        isRemoteDevice=dl.isRemoteDevice;
+        egvRecords=dl.egvRecords;
+        status=dl.status;
+        specialValueMessage=dl.specialValueMessage;
+        deviceBattery=dl.deviceBattery;
+        uploaderBattery=dl.uploaderBattery;
+        unit=dl.unit;
+        deviceID=dl.deviceID;
+        lastReadingDate=dl.lastReadingDate;
+        driver=dl.driver;
     }
     
 //    public DownloadObject(DownloadObject dl){
@@ -156,6 +172,11 @@ public class DownloadObject implements Parcelable {
         return egvRecords.toArray(new EGVRecord[egvRecords.size()]);
     }
 
+    public ArrayList<EGVRecord> getEgvArrayListRecords() {
+        return egvRecords;
+    }
+
+
     public DownloadObject setEgvRecords(ArrayList<EGVRecord> records) {
         this.egvRecords = records;
         return this;
@@ -212,17 +233,20 @@ public class DownloadObject implements Parcelable {
         return this;
     }
 
-    public void trimReadingsAfter(Long afterDateLong){
-        // Create a new copy so that we don't ruin everyone's day by stomping on each others efforts.
-        Log.d(TAG,"Size before trim: "+egvRecords.size());
-        Date afterDate=new Date(afterDateLong);
-        for (Iterator<EGVRecord> iterator = egvRecords.iterator(); iterator.hasNext(); ) {
-            EGVRecord record = iterator.next();
-            if (! record.getDate().after(afterDate))
-                iterator.remove();
-        }
-        Log.d(TAG,"Size after trim: "+egvRecords.size());
-    }
+//    public void trimReadingsAfter(Long afterDateLong){
+//        ArrayList<EGVRecord> recs=egvRecords;
+//        Log.d(TAG,"Size before trim: "+recs.size());
+//        Date afterDate=new Date(afterDateLong);
+//        for (Iterator<EGVRecord> iterator = recs.iterator(); iterator.hasNext(); ) {
+//            EGVRecord record = iterator.next();
+//            // trim anything after the date UNLESS that means we trim everything. Let's keep
+//            // the last record in there just in case. Need to find a better solution to this
+//            // the method doesn't reflect its purpose
+//            if (! record.getDate().after(afterDate) && recs.size()>1)
+//                iterator.remove();
+//        }
+//        Log.d(TAG,"Size after trim: "+recs.size()+" vs original "+egvRecords.size());
+//    }
 
 
     public int getLastReading() throws NoDataException {
@@ -276,19 +300,6 @@ public class DownloadObject implements Parcelable {
         }
     };
     
-    protected DownloadObject(DownloadObject dl){
-        deviceName=dl.getDeviceName();
-        isRemoteDevice=dl.isRemoteDevice();
-        egvRecords=dl.egvRecords;
-        status=dl.getStatus();
-        uploaderBattery=dl.getUploaderBattery();
-        deviceBattery=dl.getDeviceBattery();
-        unit=dl.getUnit();
-        deviceID=dl.getDeviceID();
-        lastReadingDate=dl.lastReadingDate;
-        driver=dl.driver;
-    }
-
     protected DownloadObject(Parcel in) {
         deviceName=in.readString();
         isRemoteDevice=in.readByte() != 0;

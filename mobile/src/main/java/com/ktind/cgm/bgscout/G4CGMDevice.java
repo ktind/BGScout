@@ -43,8 +43,8 @@ import java.util.Iterator;
 
  */
 public class G4CGMDevice extends AbstractPollDevice {
-    protected String serialNum;
-    protected String receiverID;
+//    protected String serialNum;
+//    protected String receiverID;
     protected int cgmBattery=-1;
     protected String driver="DexcomG4";
     private static final String TAG = G4CGMDevice.class.getSimpleName();
@@ -54,7 +54,7 @@ public class G4CGMDevice extends AbstractPollDevice {
         super(name,devID,appContext,mH);
         device=new G4(appContext);
         remote = false;
-//        cgmTransport=new G4USBSerialTransport(appContext);
+//        cgmTransport=new G4USBSerialTransport(context);
         this.deviceType="Dexcom G4";
     }
 
@@ -66,7 +66,7 @@ public class G4CGMDevice extends AbstractPollDevice {
     }
 
     @Override
-    public void connect() throws IOException, DeviceException {
+    public void connect() throws NoDeviceFoundException, OperationNotSupportedException, DeviceIOException {
         device.connect();
     }
 
@@ -94,9 +94,8 @@ public class G4CGMDevice extends AbstractPollDevice {
             if (g_unit==null)
                 getUnit();
             deviceBattery = this.getDeviceBattery();
-            disconnect();
             batteryBalance(deviceBattery,uploaderBattery);
-
+            disconnect();
             status = DownloadStatus.SUCCESS;
 
             if (egvList.size()>0) {
@@ -119,27 +118,7 @@ public class G4CGMDevice extends AbstractPollDevice {
             status=DownloadStatus.IOERROR;
         } catch (NoDeviceFoundException e) {
             status=DownloadStatus.DEVICENOTFOUND;
-        } catch (DeviceException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-//        HashMap<AlertLevels, String> alert=new HashMap<AlertLevels,String>();
-//        if (uploaderBattery<20.0f) {
-//            alert.put(AlertLevels.WARN,"Low battery on uploader");
-//            alerts.add(alert);
-//        } else if (uploaderBattery<10.0f) {
-//            alert.put(AlertLevels.CRITICAL,"Low battery on uploader");
-//            alerts.add(alert);
-//        }
-//
-//        if (deviceBattery<20) {
-//            alert.put(AlertLevels.WARN,"Low battery on Dexcom G4");
-//            alerts.add(alert);
-//        } else if (deviceBattery<10) {
-//            alert.put(AlertLevels.CRITICAL,"Low battery on Dexcom G4");
-//            alerts.add(alert);
-//        }
         DownloadObject ddo=new DownloadObject();
         // Default to the last 2.5 hours at max - it may be less due to the way that the library pulls the data from the
         // device. The reason for this is the way the device stores the records it depends on the timing and page boundaries
@@ -174,16 +153,16 @@ public class G4CGMDevice extends AbstractPollDevice {
         return ddo;
     }
 
-    public ArrayList<EGVRecord> filter(Long afterDateLong,ArrayList<EGVRecord> egvRecords){
-        Log.d(TAG,"in Filter egvList: "+egvRecords.size());
-        Date afterDate=new Date(afterDateLong);
-        for (Iterator<EGVRecord> iterator = egvRecords.iterator(); iterator.hasNext(); ) {
-            EGVRecord record = iterator.next();
-            if (! record.getDate().after(afterDate))
-                iterator.remove();
-        }
-        return egvRecords;
-    }
+//    public ArrayList<EGVRecord> filter(Long afterDateLong,ArrayList<EGVRecord> egvRecords){
+//        Log.d(TAG,"in Filter egvList: "+egvRecords.size());
+//        Date afterDate=new Date(afterDateLong);
+//        for (Iterator<EGVRecord> iterator = egvRecords.iterator(); iterator.hasNext(); ) {
+//            EGVRecord record = iterator.next();
+//            if (! record.getDate().after(afterDate))
+//                iterator.remove();
+//        }
+//        return egvRecords;
+//    }
 
     public void syncTime(){
         if (!device.isConnected())
@@ -218,6 +197,7 @@ public class G4CGMDevice extends AbstractPollDevice {
             device.setChargeDevice(false);
         }
     }
+
     @Override
     public void disconnect() {
         device.disconnect();

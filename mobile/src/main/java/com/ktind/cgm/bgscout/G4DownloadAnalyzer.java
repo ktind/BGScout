@@ -49,7 +49,7 @@ public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
             checkSpecialValues();
         } catch (NoDataException e) {
             downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data"),Conditions.NODATA);
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return this.downloadObject;
     }

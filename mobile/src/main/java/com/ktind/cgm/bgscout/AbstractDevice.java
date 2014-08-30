@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -45,7 +46,7 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected String name;
     protected int deviceID;
     protected GlucoseUnit unit=GlucoseUnit.NONE;
-    protected ArrayList<AbstractMonitor> monitors=new ArrayList<AbstractMonitor>();
+    protected ArrayList<AbstractMonitor> monitors;
     protected DownloadObject lastDownloadObject;
     protected Context appContext;
     protected CGMTransportAbstract cgmTransport;
@@ -57,6 +58,7 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected long pollInterval=303000;
     protected SharedPreferences sharedPref;
     protected DeviceStats stats=new DeviceStats();
+    protected boolean started=false;
 
     public AbstractDevice(String n, int deviceID, Context appContext, Handler mH) {
         Log.i(TAG, "Creating " + n);
@@ -66,6 +68,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.setHandler(mH);
         this.deviceIDStr = "device_" + String.valueOf(getDeviceID());
         sharedPref=PreferenceManager.getDefaultSharedPreferences(appContext);
+        monitors=new ArrayList<AbstractMonitor>();
     }
 
     public String getDeviceIDStr() {
@@ -76,12 +79,14 @@ public abstract class AbstractDevice implements DeviceInterface {
         BGScout.statsMgr.registerCollector(stats);
         Log.d(TAG,"Starting "+getName()+" (device_"+getDeviceID()+"/"+getDeviceType()+")");
         AbstractMonitor mon;
-        if (sharedPref.getBoolean(deviceIDStr+"_android_monitor",false)){
-            Log.i(TAG,"Adding a local android monitor");
-            mon=new AndroidNotificationMonitor(getName(),deviceID,getAppContext());
+        monitors=new ArrayList<AbstractMonitor>();
+
+        if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
+            Log.i(TAG, "Adding a local android monitor");
+            mon = new AndroidNotificationMonitor(getName(), deviceID, getAppContext());
             monitors.add(mon);
         }
-        if (! isRemote()) {
+        if (!isRemote()) {
             if (sharedPref.getBoolean(deviceIDStr + "_mongo_upload", false)) {
                 Log.i(TAG, "Adding a mongo upload monitor");
                 mon = new MongoUploadMonitor(getName(), deviceID, getAppContext());
@@ -100,9 +105,15 @@ public abstract class AbstractDevice implements DeviceInterface {
         } else {
             Log.i(TAG, "Ignoring monitors that do not allow remote devices");
         }
-        Log.d(TAG,"Number of monitors created: "+monitors.size());
+        Log.d(TAG, "Number of monitors created: " + monitors.size());
+        started=true;
     }
 
+    public void mainloop(){
+        while(started){
+
+        }
+    }
     public void setHandler(Handler mH){
         this.mHandler=mH;
     }
@@ -138,7 +149,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.name = name;
     }
 
-    public GlucoseUnit getUnit() throws DeviceException {
+    public GlucoseUnit getUnit() {
         return unit;
     }
 
@@ -250,34 +261,19 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     protected void onDownload(){
-
-//        Intent uiIntent = new Intent("com.ktind.cgm.UI_READING_UPDATE");
-//        uiIntent.putExtra("deviceID",deviceIDStr);
-//        DownloadObject downloadObject=null;
-//        try {
-//            downloadObject=getLastDownloadObject();
-//        } catch (NoDataException e) {
-//            downloadObject=new DownloadObject();
-//            e.printStackTrace();
-//        } finally {
-//            if (downloadObject!=null) {
-//                downloadObject.setDeviceID(deviceIDStr);
-//                downloadObject.setDeviceName(getName());
-////                downloadObject.buildMessage();
-//                uiIntent.putExtra("download", downloadObject);
-//            }
-//        }
-////        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
-//        Log.d(TAG,"Name: "+downloadObject.getDeviceName());
-//        appContext.sendBroadcast(uiIntent);
         sendToUI();
         try {
+            if (Looper.getMainLooper().getThread()==Thread.currentThread())
+                Log.d(TAG,"ON THE MAIN Thread!!!");
+            else
+                Log.d(TAG, "Not on the MAIN Thread ("+Thread.currentThread().getName()+"/"+Thread.currentThread().getState()+")");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putLong(deviceIDStr + appContext.getText(R.string.last_g4_download), getLastDownloadObject().getLastReadingDate().getTime());
             editor.apply();
         } catch (NoDataException e) {
-            e.printStackTrace();
+            Log.i(TAG,"No data on download");
+//            e.printStackTrace();
         }
         fireMonitors();
     }
@@ -311,6 +307,7 @@ public abstract class AbstractDevice implements DeviceInterface {
     @Override
     public void stop() {
         this.stopMonitors();
+        started=false;
     }
 
     public class AlarmReceiver extends BroadcastReceiver {

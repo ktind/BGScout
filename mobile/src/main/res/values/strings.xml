@@ -76,5 +76,9 @@
     <string name="pref_acra_deviceid_disabled">Disable reporting DeviceID</string>
     <string name="pref_acra_user_email">Email</string>
     <string name="pref_acra_user_email_summary">Email to include with crash reports</string>
+    <string name="pref_device_critical_high_title">Critical high</string>
+    <string name="critical_high_ringtone_title">Critical high ringtone</string>
+    <string name="pref_device_critical_low_title">Critical Low</string>
+    <string name="critical_low_ringtone_title">Critical low ringtone</string>
 
 </resources>

@@ -61,7 +61,7 @@ public class NightScoutUpload extends AbstractMonitor {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT );
         HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
-//        sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+//        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         httpclient = new DefaultHttpClient(params);
 //        setMonitorType("Nightscout upload API");
         setAllowVirtual(false);
@@ -122,16 +122,19 @@ public class NightScoutUpload extends AbstractMonitor {
                     Log.v(TAG,"No data in download to update last success time");
                 }
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Protocol exception during nightscout upload");
+//                e.printStackTrace();
                 // bail because the likelyhood of subsequent requests succeeding is low
                 break;
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Exception during JSON operations");
+//                e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG,"IOException during nightscout upload");
+//                e.printStackTrace();
             } catch (NoSuchAlgorithmException e) {
                 Log.d(TAG,"Unable to find SHA1 algorithm");
-                e.printStackTrace();
+//                e.printStackTrace();
                 break;
             }
         }

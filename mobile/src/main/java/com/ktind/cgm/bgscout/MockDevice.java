@@ -37,14 +37,12 @@ import java.util.Random;
  */
 public class MockDevice extends AbstractPollDevice {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
-    private ArrayList<EGVRecord> egvHistory=new ArrayList<EGVRecord>(FakeCGMDeviceConstants.MAXEGV);
+    private ArrayList<EGVRecord> egvHistory=new ArrayList<EGVRecord>(MockDeviceConstants.MAXEGV);
     private boolean initialRun;
     private Date lastReading=new Date(new Date().getTime()-10800000L);
 
     public MockDevice(String n, int deviceID, Context appContext, Handler mH) {
-        //    public AbstractCGMDevice(String n,int deviceID,Context appContext){
         super(n,deviceID,appContext,mH);
-//        generateEGVHistory();
         initialRun=true;
         remote =false;
         this.pollInterval=15000;
@@ -73,71 +71,61 @@ public class MockDevice extends AbstractPollDevice {
 
     private DownloadObject generateDownloadObject(){
         Log.d(TAG,"Generating start object");
-//        if (!initialRun)
-//            this.addEGV();
         DownloadStatus downloadStatus=generateStatus();
         EGVRecord[] egvArray=new EGVRecord[1];
         Random rand=new Random();
-        egvArray[0]=new EGVRecord(rand.nextInt(362)+39,new Date(),Trend.FLAT,true);
+        egvArray[0]=new EGVRecord(rand.nextInt(362)+39,new Date(),Trend.values()[rand.nextInt(Trend.values().length)],true);
         egvHistory.add(egvArray[0]);
 
         DownloadObject ddo=new DownloadObject(this,egvArray,downloadStatus);
+        ddo.setUnit(GlucoseUnit.MGDL).setLastReadingDate(new Date()).setUploaderBattery(rand.nextFloat()*100).setDeviceBattery(rand.nextInt(101));
         lastDownloadObject=ddo;
         initialRun=false;
         return ddo;
     }
 
-//    @Override
-//    public void fireMonitors() {
-//        super.fireMonitors();
-//        lastReading=egvHistory.get(egvHistory.size()-1).getDate();
-////        for (EGVRecord r:egvHistory){
-////            r.setNew(false);
-////        }
+//    private void addEGV(){
+//        egvHistory.remove(0);
+//        for (EGVRecord r:egvHistory){
+//            r.setNew(false);
+//        }
+//        int lastIndex=egvHistory.size()-1;
+//        int lastBG=egvHistory.get(lastIndex).getEgv();
+//        Trend lastTrend=egvHistory.get(lastIndex).getTrend();
+//        Date lastDate=egvHistory.get(lastIndex).getDate();
+//        Log.d(TAG,"Last reading. BG: "+lastBG+" Trend: "+lastTrend.toString()+" Date: "+lastDate);
+//        EGVRecord record=generateNextEGV(lastBG, lastTrend, lastDate);
+//        if (record.getDate().after(lastReading))
+//            record.setNew(true);
+//        egvHistory.add(record);
+//    }
+//
+//    // This patient doesn't seem to mind extreme highs or lows so you won't
+//    // see the normal patterns for corrections
+//    private void generateEGVHistory(){
+//        Log.d(TAG,"Generating new EGV History");
+//        Random rand=new Random();
+//        int initialBG=rand.nextInt(MockDeviceConstants.MAXEGV+1)+ MockDeviceConstants.MINEGV;
+//        Trend initialTrend=generateInitialTrend();
+//        long initialMillis=1000*(MockDeviceConstants.READINGINTERVALSECONDS* MockDeviceConstants.MAXRECORDS);
+//        Date initialDate=new Date(new Date().getTime()-initialMillis);
+//        egvHistory.add(generateEGV(initialBG, initialTrend, initialDate, true));
+////        int missedCounter=0;
+//        for (int i=1;i< MockDeviceConstants.MAXRECORDS;i++){
+//            Log.d(TAG,"Counter: "+i+" egvHistory.size(): "+egvHistory.size());
+//            if (rand.nextFloat()> MockDeviceConstants.MISSEDREADINGRATE) {
+//                int lastIndex=egvHistory.size()-1;
+//                int lastBG = egvHistory.get(lastIndex).getEgv();
+//                Trend lastTrend = egvHistory.get(lastIndex).getTrend();
+//                Date date = new Date(egvHistory.get(lastIndex).getDate().getTime() - (1000 * MockDeviceConstants.READINGINTERVALSECONDS * (MockDeviceConstants.MAXRECORDS - i)));
+//                egvHistory.add(generateNextEGV(lastBG, lastTrend, date));
+////                missedCounter+=1;
+//            }
+//        }
 //    }
 
-    private void addEGV(){
-        egvHistory.remove(0);
-        for (EGVRecord r:egvHistory){
-            r.setNew(false);
-        }
-        int lastIndex=egvHistory.size()-1;
-        int lastBG=egvHistory.get(lastIndex).getEgv();
-        Trend lastTrend=egvHistory.get(lastIndex).getTrend();
-        Date lastDate=egvHistory.get(lastIndex).getDate();
-        Log.d(TAG,"Last reading. BG: "+lastBG+" Trend: "+lastTrend.toString()+" Date: "+lastDate);
-        EGVRecord record=generateNextEGV(lastBG, lastTrend, lastDate);
-        if (record.getDate().after(lastReading))
-            record.setNew(true);
-        egvHistory.add(record);
-    }
-
-    // This patient doesn't seem to mind extreme highs or lows so you won't
-    // see the normal patterns for corrections
-    private void generateEGVHistory(){
-        Log.d(TAG,"Generating new EGV History");
-        Random rand=new Random();
-        int initialBG=rand.nextInt(FakeCGMDeviceConstants.MAXEGV+1)+ FakeCGMDeviceConstants.MINEGV;
-        Trend initialTrend=generateInitialTrend();
-        long initialMillis=1000*(FakeCGMDeviceConstants.READINGINTERVALSECONDS* FakeCGMDeviceConstants.MAXRECORDS);
-        Date initialDate=new Date(new Date().getTime()-initialMillis);
-        egvHistory.add(generateEGV(initialBG, initialTrend, initialDate, true));
-//        int missedCounter=0;
-        for (int i=1;i< FakeCGMDeviceConstants.MAXRECORDS;i++){
-            Log.d(TAG,"Counter: "+i+" egvHistory.size(): "+egvHistory.size());
-            if (rand.nextFloat()> FakeCGMDeviceConstants.MISSEDREADINGRATE) {
-                int lastIndex=egvHistory.size()-1;
-                int lastBG = egvHistory.get(lastIndex).getEgv();
-                Trend lastTrend = egvHistory.get(lastIndex).getTrend();
-                Date date = new Date(egvHistory.get(lastIndex).getDate().getTime() - (1000 * FakeCGMDeviceConstants.READINGINTERVALSECONDS * (FakeCGMDeviceConstants.MAXRECORDS - i)));
-                egvHistory.add(generateNextEGV(lastBG, lastTrend, date));
-//                missedCounter+=1;
-            }
-        }
-    }
-
     private DownloadStatus generateStatus(){
-        DownloadStatus status=generateStatus(FakeCGMDeviceConstants.FAILRATE);
+        DownloadStatus status=generateStatus(MockDeviceConstants.FAILRATE);
         return status;
     }
 
@@ -244,14 +232,14 @@ public class MockDevice extends AbstractPollDevice {
         }
         if (changeRate==0)
             changeRate=1;
-        int bgChange=rand.nextInt(changeRate*(FakeCGMDeviceConstants.READINGINTERVALSECONDS/60));
+        int bgChange=rand.nextInt(changeRate*(MockDeviceConstants.READINGINTERVALSECONDS/60));
         if (negTrend)
             bgChange=bgChange*-1;
         int newEGV=lastBG+bgChange;
-        if (newEGV< FakeCGMDeviceConstants.MINEGV)
-            newEGV= FakeCGMDeviceConstants.MINEGV;
-        if (newEGV> FakeCGMDeviceConstants.MAXEGV)
-            newEGV= FakeCGMDeviceConstants.MAXEGV;
+        if (newEGV< MockDeviceConstants.MINEGV)
+            newEGV= MockDeviceConstants.MINEGV;
+        if (newEGV> MockDeviceConstants.MAXEGV)
+            newEGV= MockDeviceConstants.MAXEGV;
         record.setEgv(newEGV);
         Log.d(TAG,"Generated EGV. BG: "+record.getEgv()+" Trend: "+record.getTrend().toString()+" Date: "+record.getDate().toString());
         return record;

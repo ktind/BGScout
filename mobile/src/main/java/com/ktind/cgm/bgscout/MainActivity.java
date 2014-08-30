@@ -168,9 +168,11 @@ public class MainActivity extends Activity {
         }
         if (position==(numItemsInMenu-3)) {
             Log.d(TAG,"Stopping service");
-            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
-            stopService(mIntent);
-            bindSvc();
+            Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
+            getBaseContext().sendBroadcast(intent);
+//            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
+//            bindSvc();
+//            stopService(mIntent);
         }
         if (position==(numItemsInMenu-4)) {
             Log.d(TAG,"Starting service");

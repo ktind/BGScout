@@ -46,4 +46,5 @@ public enum Conditions {
     DEVICEMSGS,
     UNKNOWN,
     NONE,
+    REMOTEDISCONNECTED
 }

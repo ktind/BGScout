@@ -28,7 +28,9 @@ package com.ktind.cgm.bgscout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,16 +53,20 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         EGVThresholds warnThreshold=new EGVThresholds();
         EGVThresholds criticalThreshold=new EGVThresholds();
+        Resources res=context.getResources();
 
-        warnThreshold.setLowThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_low_threshold", "60")));
-        warnThreshold.setHighThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_high_threshold", "180")));
+        warnThreshold.setLowThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_low_threshold", String.valueOf(res.getInteger(R.integer.pref_default_device_low)))));
+        warnThreshold.setHighThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_high_threshold", String.valueOf(res.getInteger(R.integer.pref_default_device_high)))));
 
-        // FIXME Are these default values set properly?
-        criticalThreshold.setLowThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_critical_low_threshold", "50")));
-        criticalThreshold.setHighThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_critical_high_threshold", "300")));
+        criticalThreshold.setLowThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_critical_low_threshold", String.valueOf(res.getInteger(R.integer.pref_default_critical_device_low)))));
+        criticalThreshold.setHighThreshold(Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_critical_high_threshold", String.valueOf(res.getInteger(R.integer.pref_default_critical_device_high)))));
 
         egvLimits.setWarnThreshold(warnThreshold);
         egvLimits.setCriticalThreshold(criticalThreshold);
+        Log.d(TAG,"Critical low threshold: "+egvLimits.getCriticalLow());
+        Log.d(TAG,"Warn low threshold: "+egvLimits.getWarnLow());
+        Log.d(TAG,"Warn high threshold: "+egvLimits.getWarnHigh());
+        Log.d(TAG,"Critical high threshold: "+egvLimits.getCriticalHigh());
     }
 
     public AnalyzedDownload analyze() {
@@ -74,7 +80,7 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
             checkLastRecordTime();
         } catch (NoDataException e) {
             downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data"),Conditions.NODATA);
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return this.downloadObject;
     }
@@ -121,6 +127,8 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
             case UNKNOWN:
                 downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown error while trying to retrieve data from CGM"),Conditions.UNKNOWN);
                 break;
+            case REMOTEDISCONNECTED:
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to connect to remote devices"),Conditions.REMOTEDISCONNECTED);
             default:
                 break;
         }

@@ -45,11 +45,11 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
     public MqttUploader(String n, int devID ,Context context) {
         super(n,devID,context,"mqtt_uploader");
 //        this.setMonitorType("MQTT uploader");
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String url=sharedPref.getString(deviceIDStr+"_mqtt_endpoint","");
         String usr=sharedPref.getString(deviceIDStr+"_mqtt_user","");
         String pw=sharedPref.getString(deviceIDStr+"_mqtt_pass","");
-        mqttMgr=new MQTTMgr(appContext,usr,pw,getDeviceIDStr());
+        mqttMgr=new MQTTMgr(this.context,usr,pw,getDeviceIDStr());
         mqttMgr.initConnect(url);
         mqttMgr.registerObserver(this);
         this.allowVirtual=false;
@@ -66,6 +66,7 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
             } catch (NoDataException e) {
                 Log.v(TAG,"No data in download to update last success time");
             }
+            Log.d(TAG,"Records processed: "+d.getEgvArrayListRecords().size());
         }else {
             Log.i(TAG,"Nothing to publish because there was no change in state" );
         }

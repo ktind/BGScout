@@ -62,6 +62,19 @@
         <PreferenceCategory android:title="@string/prefs_cat_threshold"
             android:key="pref_device_1_threshold">
             <EditTextPreference
+                android:key="device_1_critical_high_threshold"
+                android:dependency="device_1_enable"
+                android:title="@string/pref_device_critical_high_title"
+                android:defaultValue="@integer/pref_default_critical_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_1_critical_high_ringtone"
+                android:dependency="device_1_enable"
+                android:title="@string/critical_high_ringtone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
                 android:key="device_1_high_threshold"
                 android:dependency="device_1_enable"
                 android:title="@string/pref_device_high_title"
@@ -85,6 +98,19 @@
                 android:key="device_1_low_ringtone"
                 android:dependency="device_1_enable"
                 android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_1_critical_low_threshold"
+                android:dependency="device_1_enable"
+                android:title="@string/pref_device_critical_low_title"
+                android:defaultValue="@integer/pref_default_critical_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_1_critical_low_ringtone"
+                android:dependency="device_1_enable"
+                android:title="@string/critical_low_ringtone_title"
                 android:ringtoneType="notification"
                 android:defaultValue="content://settings/system/notification_sound" />
         </PreferenceCategory>
@@ -239,9 +265,21 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null" />
         </PreferenceScreen>
-
         <PreferenceCategory android:title="@string/prefs_cat_threshold"
             android:key="pref_device_2_threshold">
+            <EditTextPreference
+                android:key="device_2_critical_high_threshold"
+                android:dependency="device_2_enable"
+                android:title="@string/pref_device_critical_high_title"
+                android:defaultValue="@integer/pref_default_critical_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_2_critical_high_ringtone"
+                android:dependency="device_2_enable"
+                android:title="@string/critical_high_ringtone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
             <EditTextPreference
                 android:key="device_2_high_threshold"
                 android:dependency="device_2_enable"
@@ -266,6 +304,19 @@
                 android:key="device_2_low_ringtone"
                 android:dependency="device_2_enable"
                 android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_2_critical_low_threshold"
+                android:dependency="device_2_enable"
+                android:title="@string/pref_device_critical_low_title"
+                android:defaultValue="@integer/pref_default_critical_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_2_critical_low_ringtone"
+                android:dependency="device_2_enable"
+                android:title="@string/critical_low_ringtone_title"
                 android:ringtoneType="notification"
                 android:defaultValue="content://settings/system/notification_sound" />
         </PreferenceCategory>
@@ -421,6 +472,19 @@
         <PreferenceCategory android:title="@string/prefs_cat_threshold"
             android:key="pref_device_3_threshold">
             <EditTextPreference
+                android:key="device_3_critical_high_threshold"
+                android:dependency="device_3_enable"
+                android:title="@string/pref_device_critical_high_title"
+                android:defaultValue="@integer/pref_default_critical_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_3_critical_high_ringtone"
+                android:dependency="device_3_enable"
+                android:title="@string/critical_high_ringtone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
                 android:key="device_3_high_threshold"
                 android:dependency="device_3_enable"
                 android:title="@string/pref_device_high_title"
@@ -444,6 +508,19 @@
                 android:key="device_3_low_ringtone"
                 android:dependency="device_3_enable"
                 android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_3_critical_low_threshold"
+                android:dependency="device_3_enable"
+                android:title="@string/pref_device_critical_low_title"
+                android:defaultValue="@integer/pref_default_critical_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_3_critical_low_ringtone"
+                android:dependency="device_3_enable"
+                android:title="@string/critical_low_ringtone_title"
                 android:ringtoneType="notification"
                 android:defaultValue="content://settings/system/notification_sound" />
         </PreferenceCategory>
@@ -599,6 +676,19 @@
         <PreferenceCategory android:title="@string/prefs_cat_threshold"
             android:key="pref_device_4_threshold">
             <EditTextPreference
+                android:key="device_4_critical_high_threshold"
+                android:dependency="device_4_enable"
+                android:title="@string/pref_device_critical_high_title"
+                android:defaultValue="@integer/pref_default_critical_device_high"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_4_critical_high_ringtone"
+                android:dependency="device_4_enable"
+                android:title="@string/critical_high_ringtone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
                 android:key="device_4_high_threshold"
                 android:dependency="device_4_enable"
                 android:title="@string/pref_device_high_title"
@@ -622,6 +712,19 @@
                 android:key="device_4_low_ringtone"
                 android:dependency="device_4_enable"
                 android:title="@string/low_ring_tone_title"
+                android:ringtoneType="notification"
+                android:defaultValue="content://settings/system/notification_sound" />
+            <EditTextPreference
+                android:key="device_4_critical_low_threshold"
+                android:dependency="device_4_enable"
+                android:title="@string/pref_device_critical_low_title"
+                android:defaultValue="@integer/pref_default_critical_device_low"
+                android:selectAllOnFocus="true"
+                android:inputType="number"/>
+            <RingtonePreference
+                android:key="device_4_critical_low_ringtone"
+                android:dependency="device_4_enable"
+                android:title="@string/critical_low_ringtone_title"
                 android:ringtoneType="notification"
                 android:defaultValue="content://settings/system/notification_sound" />
         </PreferenceCategory>
@@ -719,27 +822,26 @@
         android:title="@string/privacy_title"
         android:key="privacy_prefs"
         android:summary="Privacy settings. No private information will be collected">
-        <CheckBoxPreference android:key="acra.disable"
+        <CheckBoxPreference android:key="acra.enable"
             android:title="@string/pref_disable_acra"
             android:summaryOn="@string/pref_acra_disabled"
             android:summaryOff="@string/pref_acra_enabled"
             android:defaultValue="false"/>
         <CheckBoxPreference android:key="acra.syslog.enable"
-            android:dependency="acra.disable"
+            android:dependency="acra.enable"
             android:summaryOn="@string/pref_acra_syslog_enabled"
             android:summaryOff="@string/pref_acra_syslog_disabled"
             android:title="@string/pref_acra_syslog"
             android:defaultValue="true"/>
         <CheckBoxPreference android:key="acra.deviceid.enable"
-            android:dependency="acra.disable"
+            android:dependency="acra.enable"
             android:title="@string/pref_acra_deviceid"
             android:summaryOn="@string/pref_acra_deviceid_enabled"
             android:summaryOff="@string/pref_acra_deviceid_disabled"
             android:defaultValue="true"/>
         <EditTextPreference android:key="acra.user.email"
-            android:dependency="acra.disable"
+            android:dependency="acra.enable"
             android:title="@string/pref_acra_user_email"
             android:summary="@string/pref_acra_user_email_summary"/>
     </PreferenceCategory>
-
 </PreferenceScreen>
