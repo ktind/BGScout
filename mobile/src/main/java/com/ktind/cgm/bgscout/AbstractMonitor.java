@@ -131,6 +131,10 @@ abstract public class AbstractMonitor implements MonitorInterface {
         editor.apply();
     }
 
+    public void savelastSuccessDate(Date date){
+        savelastSuccessDate(date.getTime());
+    }
+
     @Override
     public void stop(){
         Log.i(TAG,"Stopping monitor "+monitorType+" for "+name);

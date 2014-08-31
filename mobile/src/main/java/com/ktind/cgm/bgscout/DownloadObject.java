@@ -10,8 +10,7 @@ import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
+
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -57,7 +56,16 @@ public class DownloadObject implements Parcelable {
     protected String deviceID;
     protected Date lastReadingDate;
     protected String driver;
-//    private Date downloadDate=new Date();
+    private Date downloadDate;
+
+    public Date getDownloadDate() {
+        return downloadDate;
+    }
+
+    public DownloadObject setDownloadDate(Date downloadDate) {
+        this.downloadDate = downloadDate;
+        return this;
+    }
 
     public DownloadObject(){
         status=DownloadStatus.NONE;

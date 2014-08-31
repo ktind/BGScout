@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -338,7 +339,10 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         keepAliveIntent = new Intent(KEEPALIVE_INTENT_FILTER);
         keepAliveIntent.putExtra("device",deviceIDStr);
         keepAlivePendingIntent=PendingIntent.getBroadcast(context, 61, keepAliveIntent, 0);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + KEEPALIVE_INTERVAL - 3000, keepAlivePendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarmMgr.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + KEEPALIVE_INTERVAL - 3000, keepAlivePendingIntent);
+        else
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + KEEPALIVE_INTERVAL - 3000, keepAlivePendingIntent);
     }
 
     @Override
@@ -372,7 +376,10 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 
     public void reconnectDelayed(long delay_ms){
         Log.i(TAG, "Attempting to reconnect again in "+delay_ms/1000+" seconds");
-        alarmMgr.set(AlarmManager.RTC_WAKEUP,new Date().getTime()+delay_ms,reconnectPendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarmMgr.setExact(AlarmManager.RTC_WAKEUP,new Date().getTime()+delay_ms,reconnectPendingIntent);
+        else
+            alarmMgr.set(AlarmManager.RTC_WAKEUP,new Date().getTime()+delay_ms,reconnectPendingIntent);
     }
 
     private void reconnect(){

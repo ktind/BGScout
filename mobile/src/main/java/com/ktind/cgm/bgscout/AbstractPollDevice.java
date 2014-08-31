@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
@@ -62,12 +63,12 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         Log.i(TAG,"Initial download complete");
         wl.release();
         Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
-        Intent intent = new Intent("com.ktind.cgm.DEVICE_POLL");
+        Intent intent = new Intent(Constants.DEVICE_POLL);
         intent.putExtra("device",deviceIDStr);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, intent, 0);
         alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
         alarmReceiver=new AlarmReceiver();
-        appContext.registerReceiver(alarmReceiver,new IntentFilter("com.ktind.cgm.DEVICE_POLL"));
+        appContext.registerReceiver(alarmReceiver,new IntentFilter(Constants.DEVICE_POLL));
     }
 
     public Date getNextReadingTime() {
@@ -159,18 +160,20 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("com.ktind.cgm.DEVICE_POLL")){
+            if (intent.getAction().equals(Constants.DEVICE_POLL)){
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
                     AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
                     Log.d(TAG, deviceIDStr+": Received a request to poll " + intent.getExtras().get("device"));
                     pollDevice();
                     Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
-                    Intent pIntent = new Intent("com.ktind.cgm.DEVICE_POLL");
+                    Intent pIntent = new Intent(Constants.DEVICE_POLL);
                     pIntent.putExtra("device",deviceIDStr);
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
-                    // FIXME - this causes the default of 45 seconds to fire ~49 seconds instead..
-                    // FIXME - the jitter needs to be aligned with the G4CGMDevice class time difference tolerance. Needs a constant
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
+                    // FIXME - Needs to use setExact on Kitkat devices otherwise the alarm gets batched
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                        alarmMgr.setExact(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
+                    else
+                        alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
                 } else {
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an Device Poll operation");
                 }

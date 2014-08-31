@@ -29,7 +29,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ktind.cgm.bgscout.model.Battery;
+import com.ktind.cgm.bgscout.model.Device;
+import com.ktind.cgm.bgscout.model.DownloadDataSource;
+import com.ktind.cgm.bgscout.model.EGV;
+import com.ktind.cgm.bgscout.model.Role;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -96,6 +104,7 @@ public class MainActivity extends Activity {
         mDrawerMenuItemsArrList.add("Stop");
         mDrawerMenuItemsArrList.add("Dump stats to log");
         mDrawerMenuItemsArrList.add("Settings");
+        mDrawerMenuItemsArrList.add("Dump EGV");
         numItemsInMenu=mDrawerMenuItemsArrList.size();
 
         mDrawerMenuItems=mDrawerMenuItemsArrList.toArray(new String[mDrawerMenuItemsArrList.size()]);
@@ -157,16 +166,16 @@ public class MainActivity extends Activity {
     // FIXME breaks the rules - order here is must match the order the items were put into the string array(list)
     private void selectItem(int position){
         Log.d(TAG,"Position: "+position+ " number of items in menu: "+numItemsInMenu);
-        if (position==(numItemsInMenu-1)) {
+        if (position==(numItemsInMenu-2)) {
             Log.d(TAG,"Starting settings");
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
-        if (position==(numItemsInMenu-2)) {
+        if (position==(numItemsInMenu-3)) {
             Log.d(TAG,"Dumping stats");
             BGScout.statsMgr.logStats();
         }
-        if (position==(numItemsInMenu-3)) {
+        if (position==(numItemsInMenu-4)) {
             Log.d(TAG,"Stopping service");
             Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
             getBaseContext().sendBroadcast(intent);
@@ -174,12 +183,37 @@ public class MainActivity extends Activity {
 //            bindSvc();
 //            stopService(mIntent);
         }
-        if (position==(numItemsInMenu-4)) {
+        if (position==(numItemsInMenu-5)) {
             Log.d(TAG,"Starting service");
             Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
             startService(mIntent);
             bindSvc();
         }
+        if (position==(numItemsInMenu-1)) {
+            DownloadDataSource downloadDataSource=new DownloadDataSource(this);
+            try {
+                downloadDataSource.open();
+                for (EGV egv:downloadDataSource.getEGVHistory("device_1"))
+                    Log.d(TAG,"Date: "+new Date(egv.getEpoch())+" EGV: "+egv.getEgv()+" Trend: "+Trend.values()[egv.getTrend()].toString()+" Unit: "+GlucoseUnit.values()[egv.getUnit()]);
+                for (Battery battery:downloadDataSource.getBatteryHistory("device_1"))
+                    Log.d(TAG,"Date: "+new Date(battery.getEpoch())+" Battery Level:"+battery.getBatterylevel()+" Device: "+downloadDataSource.getDevice(battery.getDeviceid()).getName()+" Role: "+downloadDataSource.getRole(battery.getRoleid()).getRole());
+//                for (Device device:downloadDataSource.getAllDevices()){
+//                    Log.d(TAG,"Device: "+device.getName()+" ID: "+device.getId());
+//                }
+//                for (Role role:downloadDataSource.getAllRoles()){
+//                    Log.d(TAG,"Role: "+role.getRole()+" ID: "+role.getId());
+//                }
+                downloadDataSource.close();
+            } catch (SQLException e) {
+                Log.e(TAG,"Caught exception: ",e);
+            }
+
+            Log.d(TAG,"Starting service");
+            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
+            startService(mIntent);
+            bindSvc();
+        }
+
 
     }
 

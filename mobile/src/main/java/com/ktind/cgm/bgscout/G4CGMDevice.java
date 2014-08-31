@@ -145,6 +145,7 @@ public class G4CGMDevice extends AbstractPollDevice {
                 .setStatus(status)
                 .setEgvRecords(egvList)
                 .setDriver(driver)
+                .setDownloadDate(new Date())
                 .setSpecialValueMessage(specialMessage);
 //                .addAlertMessages(alerts);
         editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);

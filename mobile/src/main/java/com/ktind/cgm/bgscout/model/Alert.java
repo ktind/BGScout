@@ -24,33 +24,67 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ktind.cgm.bgscout;
+package com.ktind.cgm.bgscout.model;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+/**
+ * Created by klee24 on 8/30/14.
+ */
+public class Alert {
+    private int id;
+    private long epoch;
+    private int severity;
+    private int deviceid;
+    private String message;
 
-public class DownloadStorageOpenHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
-    private static final String DATABASENAME = "DOWNLOADDATA";
-    private static final String DEVICES_TABLE_CREATE = "Create TABLE DEVICES( serialnum, name )";
-    private static final String EGV_TABLE_CREATE = "Create TABLE EGV( time, device, egv, trend, unit )";
-    private static final String BATTERY_TABLE_CREATE = "Create TABLE BATTERY ( time, device, role, battery )";
-    private static final String ALERTS_TABLE_CREATE = "Create TABLE ALERTS( time, severity, message )";
+    public Alert(){
 
-
-
-    DownloadStorageOpenHelper(Context context) {
-        super(context, DATABASENAME,null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(EGV_TABLE_CREATE);
+    public Alert(long epoch,int severity,int deviceid, String message){
+        super();
+        this.epoch=epoch;
+        this.severity=severity;
+        this.deviceid=deviceid;
+        this.message=message;
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public long getEpoch() {
+        return epoch;
+    }
+
+    public void setEpoch(long epoch) {
+        this.epoch = epoch;
+    }
+
+    public int getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(int severity) {
+        this.severity = severity;
+    }
+
+    public int getDeviceid() {
+        return deviceid;
+    }
+
+    public void setDeviceid(int deviceid) {
+        this.deviceid = deviceid;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

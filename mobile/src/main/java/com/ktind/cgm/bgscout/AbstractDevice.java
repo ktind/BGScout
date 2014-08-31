@@ -81,6 +81,10 @@ public abstract class AbstractDevice implements DeviceInterface {
         AbstractMonitor mon;
         monitors=new ArrayList<AbstractMonitor>();
 
+        // FIXME - Mandatory monitor
+        mon=new SQLiteMonitor(getName(),deviceID,getAppContext());
+        monitors.add(mon);
+
         if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
             Log.i(TAG, "Adding a local android monitor");
             mon = new AndroidNotificationMonitor(getName(), deviceID, getAppContext());
@@ -109,11 +113,11 @@ public abstract class AbstractDevice implements DeviceInterface {
         started=true;
     }
 
-    public void mainloop(){
-        while(started){
-
-        }
-    }
+//    public void mainloop(){
+//        while(started){
+//
+//        }
+//    }
     public void setHandler(Handler mH){
         this.mHandler=mH;
     }
