@@ -5,17 +5,23 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -24,17 +30,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ktind.cgm.bgscout.model.Battery;
-import com.ktind.cgm.bgscout.model.Device;
 import com.ktind.cgm.bgscout.model.DownloadDataSource;
 import com.ktind.cgm.bgscout.model.EGV;
-import com.ktind.cgm.bgscout.model.Role;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,12 +99,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList=(ListView) findViewById(R.id.left_drawer);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String[] devices={"device_1","device_2","device_3","device_4"};
+//        Button callButton = (Button) findViewById(R.id.call_button);
+
+
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//        String[] devices={"device_1","device_2","device_3","device_4"};
         ArrayList<String> mDrawerMenuItemsArrList=new ArrayList<String>();
-        for (String device:devices) {
+        for (String device:Constants.DEVICES) {
             if (sharedPref.getBoolean(device+"_enable",false)){
-                Log.d(TAG,device+" is enabled");
+//                Log.d(TAG,device+" is enabled");
                 mDrawerMenuItemsArrList.add(sharedPref.getString(device+"_name",device));
             }
         }
@@ -105,24 +116,20 @@ public class MainActivity extends Activity {
         mDrawerMenuItemsArrList.add("Dump stats to log");
         mDrawerMenuItemsArrList.add("Settings");
         mDrawerMenuItemsArrList.add("Dump EGV");
+        mDrawerMenuItemsArrList.add("Set contact");
         numItemsInMenu=mDrawerMenuItemsArrList.size();
 
         mDrawerMenuItems=mDrawerMenuItemsArrList.toArray(new String[mDrawerMenuItemsArrList.size()]);
-//        mDrawerMenuItems=getResources().getStringArray(R.array.devices);
-//        ActionBar actionBar = getActionBar();
-//        actionBar.hide();
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item,mDrawerMenuItems));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        UIDevice uiDevice = new UIDevice((ImageView) findViewById(R.id.main_display), (ImageView) findViewById(R.id.direction_image), (TextView) findViewById(R.id.reading_text), (TextView) findViewById(R.id.app_name), (ImageView) findViewById(R.id.uploader_battery_indicator), (TextView) findViewById(R.id.uploader_battery_label), (ImageView) findViewById(R.id.deviceBattery), (TextView) findViewById(R.id.device_battery_label));
+        UIDevice uiDevice = new UIDevice((ImageView) findViewById(R.id.main_display), (ImageView) findViewById(R.id.direction_image), (TextView) findViewById(R.id.reading_text), (TextView) findViewById(R.id.app_name), (ImageView) findViewById(R.id.uploader_battery_indicator), (TextView) findViewById(R.id.uploader_battery_label), (ImageView) findViewById(R.id.device_battery_indicator), (TextView) findViewById(R.id.device_battery_label));
         UIDeviceList.add(uiDevice);
         alarmReceiver = new AlarmReceiver();
-        registerReceiver(alarmReceiver, new IntentFilter("com.ktind.cgm.UI_READING_UPDATE"));
+        registerReceiver(alarmReceiver, new IntentFilter(Constants.UI_UPDATE));
         if (savedInstanceState!=null){
             ld=savedInstanceState.getParcelable("lastDownload");
-            if (ld==null){
-                Log.d(TAG,"Its null...");
-            } else {
+            if (ld!=null){
                 for (UIDevice uid:UIDeviceList){
                     uid.update(ld);
                 }
@@ -149,10 +156,34 @@ public class MainActivity extends Activity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         if (isServiceRunning(DeviceDownloadService.class)) {
             bindSvc();
         }
+
+
+        ImageButton contact = (ImageButton) findViewById(R.id.imageButton);
+        contact.setImageBitmap(getThumbnailByPhoneDataUri(Uri.parse(sharedPref.getString("device_1_contact_data_uri", ""))));
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNum=getPhone(sharedPref.getString("device_1_contact_data_uri", ""));
+                if (phoneNum!=null && phoneNum!="") {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + phoneNum));
+                    startActivity(callIntent);
+                }
+            }
+        });
+
+//        contact.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+//                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+//                // hardcoding this to device_1 for now
+//                startActivityForResult(contactPickerIntent,Constants.CONTACTREQUESTCODE+1);
+//            }
+//        });
 
     }
 
@@ -160,22 +191,45 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
+            mDrawerLayout.closeDrawers();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"Result code="+resultCode);
+        Log.d(TAG,"Request code="+requestCode);
+        if (resultCode!=-1)
+            return;
+        // Multiple devices will need to rely on different code offsets to distinguish itself.
+        // Start at 601 for device_1, device_2 is 602, etc.
+        if (requestCode>Constants.CONTACTREQUESTCODE && requestCode<Constants.CONTACTREQUESTCODE+Constants.DEVICES.length){
+            Uri result = data.getData();
+            String id = result.getLastPathSegment();
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String deviceID="device_"+(requestCode-Constants.CONTACTREQUESTCODE);
+            Log.d(TAG,"Device: "+deviceID);
+            editor.putString(deviceID+"_contact_data_uri",result.toString());
+            editor.apply();
+//            Log.d(TAG,"Phone: "+getPhone(result.toString()));
         }
     }
 
     // FIXME breaks the rules - order here is must match the order the items were put into the string array(list)
     private void selectItem(int position){
         Log.d(TAG,"Position: "+position+ " number of items in menu: "+numItemsInMenu);
-        if (position==(numItemsInMenu-2)) {
+        if (position==(numItemsInMenu-3)) {
             Log.d(TAG,"Starting settings");
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
-        if (position==(numItemsInMenu-3)) {
+        if (position==(numItemsInMenu-4)) {
             Log.d(TAG,"Dumping stats");
             BGScout.statsMgr.logStats();
         }
-        if (position==(numItemsInMenu-4)) {
+        if (position==(numItemsInMenu-5)) {
             Log.d(TAG,"Stopping service");
             Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
             getBaseContext().sendBroadcast(intent);
@@ -183,13 +237,13 @@ public class MainActivity extends Activity {
 //            bindSvc();
 //            stopService(mIntent);
         }
-        if (position==(numItemsInMenu-5)) {
+        if (position==(numItemsInMenu-6)) {
             Log.d(TAG,"Starting service");
             Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
             startService(mIntent);
             bindSvc();
         }
-        if (position==(numItemsInMenu-1)) {
+        if (position==(numItemsInMenu-2)) {
             DownloadDataSource downloadDataSource=new DownloadDataSource(this);
             try {
                 downloadDataSource.open();
@@ -213,8 +267,11 @@ public class MainActivity extends Activity {
             startService(mIntent);
             bindSvc();
         }
-
-
+        if (position==(numItemsInMenu-1)) {
+            Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+            // hardcoding this to device_1 for now
+            startActivityForResult(contactPickerIntent,Constants.CONTACTREQUESTCODE+1);
+        }
     }
 
 
@@ -316,7 +373,7 @@ public class MainActivity extends Activity {
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("com.ktind.cgm.UI_READING_UPDATE")){
+            if (intent.getAction().equals(Constants.UI_UPDATE)){
                 Log.d(TAG,"Received a UI update");
                 DownloadObject downloadObject=new DownloadObject();
 //                downloadObject=downloadObject.buildFromJSON(intent.getExtras().getString("download", downloadObject.getJson().toString()));
@@ -520,5 +577,56 @@ public class MainActivity extends Activity {
         public void setBg(TextView bg) {
             this.bg = bg;
         }
+    }
+
+    private String getPhone(String uriString){
+        return getPhone(Uri.parse(uriString));
+    }
+
+    private String getPhone(Uri dataUri){
+        String id=dataUri.getLastPathSegment();
+        Log.d(TAG,"id="+id);
+        Log.d(TAG,"URI="+dataUri);
+        // TODO Limit fields returned to specific field that we want? Phone?
+        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data._ID + " = ?", new String[]{id}, null);
+        int numIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+        Log.d(TAG, "cursor.getCount(): " + cursor.getCount());
+        String phoneNum=null;
+        if (cursor.moveToFirst()){
+            phoneNum=cursor.getString(numIdx);
+        }
+        cursor.close();
+        return phoneNum;
+    }
+
+    // TODO move these methods out into a contact class for easier access.
+    private Bitmap getThumbnailByPhoneDataUri(Uri phoneDataUri){
+        String id=phoneDataUri.getLastPathSegment();
+//        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
+//        int rawContactIdx=cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID);
+//        String rawContactId=null;
+//        if (cursor.moveToFirst()){
+//            rawContactId=cursor.getString(rawContactIdx);
+//        }
+//        cursor.close();
+        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
+        int thumbnailUriIdx=cursor.getColumnIndex(ContactsContract.Data.PHOTO_ID);
+        String thumbnailId=null;
+        if (cursor.moveToFirst()){
+            thumbnailId=cursor.getString(thumbnailUriIdx);
+        }
+        cursor.close();
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI,Long.valueOf(thumbnailId));
+        cursor = getContentResolver().query(uri, new String[] {ContactsContract.CommonDataKinds.Photo.PHOTO},null,null,null);
+        Bitmap thumbnail=null;
+        if (cursor.moveToFirst()){
+            final byte[] thumbnailBytes = cursor.getBlob(0);
+            if (thumbnailBytes!=null){
+                thumbnail= BitmapFactory.decodeByteArray(thumbnailBytes,0,thumbnailBytes.length);
+            }
+        }
+//        InputStream photoDataStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),uri);
+//        Bitmap photo=BitmapFactory.decodeStream(photoDataStream);
+        return thumbnail;
     }
 }

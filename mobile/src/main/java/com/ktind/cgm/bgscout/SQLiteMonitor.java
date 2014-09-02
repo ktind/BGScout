@@ -59,12 +59,13 @@ public class SQLiteMonitor extends AbstractMonitor{
             downloadDataSource.createBattery(d.getDeviceBattery(),deviceIDStr,"cgm",d.getLastRecordReadingDate().getTime());
             downloadDataSource.createBattery(d.getUploaderBattery(),deviceIDStr,"uploader",d.getLastRecordReadingDate().getTime());
             // TODO add battery for this device?
-            downloadDataSource.close();
             savelastSuccessDate(d.getLastRecordReadingDate().getTime());
         } catch (SQLException e) {
             Log.e(TAG,"Caught SQLException: ",e);
         } catch (NoDataException e) {
             Log.e(TAG, "No data in download. Unable to save last reading date");
+        } finally {
+            downloadDataSource.close();
         }
     }
 }

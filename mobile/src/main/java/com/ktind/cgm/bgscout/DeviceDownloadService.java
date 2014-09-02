@@ -107,9 +107,9 @@ public class DeviceDownloadService extends Service {
         if (state!=ServiceState.STARTED) {
             cgms=new ArrayList<AbstractDevice>();
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String[] device_list={"device_1","device_2","device_3","device_4"};
+//            String[] device_list={"device_1","device_2","device_3","device_4"};
             int devCount=1;
-            for (String dev:device_list) {
+            for (String dev:Constants.DEVICES) {
                 boolean enabled = sharedPref.getBoolean(dev+"_enable", false);
                 if (enabled){
                     String name = sharedPref.getString(dev+"_name","");

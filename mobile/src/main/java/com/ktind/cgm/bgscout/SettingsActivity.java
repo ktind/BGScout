@@ -15,6 +15,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -30,34 +31,9 @@ import java.util.List;
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
- * Copyright (C) 2014  Kevin Lee
-
- Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
- All rights reserved.
-
- Redistribution and use in source and binary forms, with or without modification,
- are permitted provided that the following conditions are met:
-
- 1. Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
-
- 2. Redistributions in binary form must reproduce the above copyright notice, this
- list of conditions and the following disclaimer in the documentation and/or
- other materials provided with the distribution.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
  */
 public class SettingsActivity extends PreferenceActivity {
+    private static final String TAG = SettingsActivity.class.getSimpleName();
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -125,45 +101,74 @@ public class SettingsActivity extends PreferenceActivity {
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
 
-//        // Add 'notifications' preferences, and a corresponding header.
-//        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-//        fakeHeader.setTitle(R.string.pref_header_notifications);
-//        getPreferenceScreen().addPreference(fakeHeader);
-//        addPreferencesFromResource(R.xml.pref_notification);
-//
-//        // Add 'data and sync' preferences, and a corresponding header.
-//        fakeHeader = new PreferenceCategory(this);
-//        fakeHeader.setTitle(R.string.pref_header_data_sync);
-//        getPreferenceScreen().addPreference(fakeHeader);
-//        addPreferencesFromResource(R.xml.pref_data_sync);
-
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("device_1_name"));
-        bindPreferenceSummaryToValue(findPreference("device_2_name"));
-        bindPreferenceSummaryToValue(findPreference("device_3_name"));
-        bindPreferenceSummaryToValue(findPreference("device_4_name"));
-        bindPreferenceSummaryToValue(findPreference("device_1_high_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_1_low_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_2_high_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_2_low_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_3_high_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_3_low_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_4_high_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_4_low_threshold"));
-        bindPreferenceSummaryToValue(findPreference("device_1_high_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_1_low_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_2_high_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_2_low_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_3_high_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_3_low_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_4_high_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_4_low_ringtone"));
-        bindPreferenceSummaryToValue(findPreference("device_1_mongo_uri"));
-        bindPreferenceSummaryToValue(findPreference("device_2_mongo_uri"));
-        bindPreferenceSummaryToValue(findPreference("device_3_mongo_uri"));
-        bindPreferenceSummaryToValue(findPreference("device_4_mongo_uri"));
+//        String[] devices={"device_1","device_2","device_3","device_4"};
+        for (String device:Constants.DEVICES){
+            Log.d(TAG, "Trying to setup "+device+"_name");
+            bindPreferenceSummaryToValue(findPreference(device + "_name"));
+            Log.d(TAG, "Trying to setup "+device+"_high_threshold");
+            bindPreferenceSummaryToValue(findPreference(device+"_high_threshold"));
+            Log.d(TAG, "Trying to setup "+device+"_critical_high_threshold");
+            bindPreferenceSummaryToValue(findPreference(device+"_critical_high_threshold"));
+            Log.d(TAG, "Trying to setup "+device+"_low_threshold");
+            bindPreferenceSummaryToValue(findPreference(device+"_low_threshold"));
+            Log.d(TAG, "Trying to setup "+device+"_critical_low_threshold");
+            bindPreferenceSummaryToValue(findPreference(device+"_critical_low_threshold"));
+            Log.d(TAG, "Trying to setup "+device+"_high_ringtone");
+            bindPreferenceSummaryToValue(findPreference(device+"_high_ringtone"));
+            Log.d(TAG, "Trying to setup "+device+"_critical_high_ringtone");
+            bindPreferenceSummaryToValue(findPreference(device+"_critical_high_ringtone"));
+            Log.d(TAG, "Trying to setup "+device+"_low_ringtone");
+            bindPreferenceSummaryToValue(findPreference(device+"_low_ringtone"));
+            Log.d(TAG, "Trying to setup "+device+"_critical_ringtone");
+            bindPreferenceSummaryToValue(findPreference(device+"_critical_low_ringtone"));
+            Log.d(TAG, "Trying to setup "+device+"_mongo_uri");
+            bindPreferenceSummaryToValue(findPreference(device+"_mongo_uri"));
+            Log.d(TAG, "Trying to setup "+device+"_nsapi");
+            bindPreferenceSummaryToValue(findPreference(device+"_nsapi"));
+            Log.d(TAG, "Trying to setup "+device+"_mqtt_endpoint");
+            bindPreferenceSummaryToValue(findPreference(device+"_mqtt_endpoint"));
+            Log.d(TAG, "Trying to setup "+device+"_mqtt_user");
+            bindPreferenceSummaryToValue(findPreference(device+"_mqtt_user"));
+            Log.d(TAG, "Trying to setup button_"+device);
+            Preference buttonPref=findPreference("button_"+device);
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(buttonPref,findPreference(device+"_name"));
+        }
+//        bindPreferenceSummaryToValue(findPreference("device_1_name"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_name"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_name"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_name"));
+//        bindPreferenceSummaryToValue(findPreference("device_1_high_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_1_low_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_high_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_low_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_high_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_low_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_high_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_low_threshold"));
+//        bindPreferenceSummaryToValue(findPreference("device_1_high_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_1_low_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_high_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_low_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_high_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_low_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_high_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_low_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("device_1_mongo_uri"));
+//        bindPreferenceSummaryToValue(findPreference("device_2_mongo_uri"));
+//        bindPreferenceSummaryToValue(findPreference("device_3_mongo_uri"));
+//        bindPreferenceSummaryToValue(findPreference("device_4_mongo_uri"));
+
+//        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+//
+//        // Trigger the listener immediately with the preference's
+//        // current value.
+//        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+//                PreferenceManager
+//                        .getDefaultSharedPreferences(preference.getContext())
+//                        .getString(preference.getKey(), ""));
     }
 
     /** {@inheritDoc} */
@@ -277,70 +282,16 @@ public class SettingsActivity extends PreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("example_text"));
-//            bindPreferenceSummaryToValue(findPreference("example_list"));
-        }
-    }
-
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class MQTTPreferenceFragement extends  PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState){
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_headers);
-//        }
-//    }
-
 //    /**
-//     * This fragment shows notification preferences only. It is used when the
+//     * This fragment shows general preferences only. It is used when the
 //     * activity is showing a two-pane settings UI.
 //     */
 //    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class NotificationPreferenceFragment extends PreferenceFragment {
+//    public static class GeneralPreferenceFragment extends PreferenceFragment {
 //        @Override
 //        public void onCreate(Bundle savedInstanceState) {
 //            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_notification);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-//        }
-//    }
-//
-//    /**
-//     * This fragment shows data and sync preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class DataSyncPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_data_sync);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+//            addPreferencesFromResource(R.xml.pref_general);
 //        }
 //    }
 }

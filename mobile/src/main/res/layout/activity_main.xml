@@ -106,7 +106,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/deviceBattery"
+                android:id="@+id/device_battery_indicator"
                 android:layout_alignParentLeft="false"
                 android:layout_alignParentStart="false"
                 android:adjustViewBounds="false"
@@ -130,10 +130,10 @@
                 android:layout_alignParentEnd="false"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:layout_alignLeft="@+id/deviceBattery"
-                android:layout_alignTop="@+id/deviceBattery"
-                android:layout_alignBottom="@+id/deviceBattery"
-                android:layout_alignRight="@+id/deviceBattery"
+                android:layout_alignLeft="@+id/device_battery_indicator"
+                android:layout_alignTop="@+id/device_battery_indicator"
+                android:layout_alignBottom="@+id/device_battery_indicator"
+                android:layout_alignRight="@+id/device_battery_indicator"
                 android:textColor="#ffffffff" />
 
             <TextView
@@ -143,10 +143,28 @@
                 android:text="@string/device_battery_label"
                 android:id="@+id/device_battery_identifier"
                 android:layout_alignParentRight="false"
-                android:layout_below="@+id/deviceBattery"
+                android:layout_below="@+id/device_battery_indicator"
                 android:layout_alignParentBottom="false"
-                android:layout_alignRight="@+id/deviceBattery"
+                android:layout_alignRight="@+id/device_battery_indicator"
                 android:layout_alignParentEnd="false" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton"
+                android:layout_alignParentBottom="false"
+                android:layout_alignTop="@+id/main_display"
+                android:background="#ffffffff"
+                android:layout_toLeftOf="@+id/main_display" />
+
+            <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/Call"-->
+                <!--android:id="@+id/call_button"-->
+                <!--android:layout_alignBottom="@+id/imageButton"-->
+                <!--android:layout_toLeftOf="@+id/imageButton"-->
+                <!--android:layout_toStartOf="@+id/imageButton" />-->
 
         </RelativeLayout>
 

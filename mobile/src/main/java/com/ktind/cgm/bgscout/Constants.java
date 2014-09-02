@@ -35,4 +35,9 @@ public class Constants {
     public final static String START_DOWNLOAD_SVC="com.ktind.cgm.STARTSERVICE";
     public final static String SNOOZE_INTENT="com.ktind.cgm.SNOOZE_ALARM";
     public final static String DEVICE_POLL="com.ktind.cgm.DEVICE_POLL";
+    public final static String UI_UPDATE="com.ktind.cgm.UI_READING_UPDATE";
+    // UPDATE the DATABASE VERSION and FIX the update routine if this value is modified (increased)!
+    public final static String[] DEVICES={"device_1","device_2","device_3","device_4"};
+    public final static int CONTACTREQUESTCODE=600;
+    public final static String CONTACTDATAURISUFFIX="_contact_data_uri";
 }

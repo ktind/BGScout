@@ -59,7 +59,7 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">closed</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_device">DeviceActivity</string>
+    <string name="title_activity_device">Sugarcaster-multi</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -80,5 +80,6 @@
     <string name="critical_high_ringtone_title">Critical high ringtone</string>
     <string name="pref_device_critical_low_title">Critical Low</string>
     <string name="critical_low_ringtone_title">Critical low ringtone</string>
+    <string name="Call">Call PWD</string>
 
 </resources>

@@ -58,8 +58,8 @@ public class RemoteMongoDevice extends AbstractPollDevice {
         // Give it some time to settle. If not it'll try again in 45 seconds.
         this.setPollInterval(304000);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        String[] device_list={"device_1","device_2","device_3","device_4"};
-        for (String dev:device_list) {
+//        String[] device_list={"device_1","device_2","device_3","device_4"};
+        for (String dev:Constants.DEVICES) {
             if (sharedPref.getString(dev+"_name","").equals(getName())){
                 mongoURI=sharedPref.getString(dev+"_mongo_uri","");
                 collectionName=sharedPref.getString(dev+"_mongo_col","");

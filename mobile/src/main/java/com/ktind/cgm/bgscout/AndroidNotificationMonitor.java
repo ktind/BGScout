@@ -4,17 +4,23 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,8 +49,6 @@ import java.util.Date;
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
- * TODO This is a HORRIBLE class. Needs to be refactored majorly - Completely violates DRY
- * FIXME most of this needs to be passed in from the device itself as a message - that way the logic stays with the device and can be easily passed to the UI
  */
 public class AndroidNotificationMonitor extends AbstractMonitor {
     private static final String TAG = AndroidNotificationMonitor.class.getSimpleName();
@@ -53,19 +57,19 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     final protected String monitorType="android notification";
     protected boolean isSilenced=false;
     protected Date timeSilenced;
-    protected AlarmReceiver alarmReceiver=new AlarmReceiver();
+    protected AlarmReceiver alarmReceiver;
     protected DownloadObject lastDownload;
     protected ArrayList<DownloadObject> previousDownloads=new ArrayList<DownloadObject>();
     protected final int MAXPREVIOUS=3;
     private PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
-    private Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
+//    private Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
+    private Bitmap bm;
     private final int SNOOZEDURATION=1800000;
     private SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     // Good is defined as one that has all data that we need to convey our message
     private DownloadObject lastKnownGood;
-    private final int MINUPLOADERBATTERY=40;
-    private final int MINDEVICEBATTERY=20;
-
+    protected String phoneNum=null;
+    protected AnalyzedDownload analyzedDownload;
 
 
     public void setNotifBuilder(Notification.Builder notifBuilder) {
@@ -75,9 +79,19 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     AndroidNotificationMonitor(String name,int devID,Context contxt){
         super(name, devID, contxt, "android_notification");
         init();
+
+        Uri uri=Uri.parse(sharedPref.getString(deviceIDStr+Constants.CONTACTDATAURISUFFIX,Uri.EMPTY.toString()));
+        if (! uri.equals(Uri.EMPTY)) {
+            InputStream inputStream = openDisplayPhoto(uri);
+            bm = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream),200,200,true);
+        }
+        else {
+            bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
+        }
     }
 
     public void init(){
+        Log.d(TAG,"Android notification monitor init called");
         mNotifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
@@ -92,8 +106,16 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         mNotifyMgr.notify(deviceID, notification);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         this.setAllowVirtual(true);
-//        alarmReceiver=new AlarmReceiver();
+        alarmReceiver = new AlarmReceiver();
         context.registerReceiver(alarmReceiver, new IntentFilter(Constants.SNOOZE_INTENT));
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
     @Override
@@ -117,7 +139,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
 
         // TODO add devicetype to the download object so that we can instantiate the proper analyzer
         AbstractDownloadAnalyzer downloadAnalyzer=new G4DownloadAnalyzer(dl, context);
-        AnalyzedDownload analyzedDownload=downloadAnalyzer.analyze();
+        analyzedDownload=downloadAnalyzer.analyze();
 
         if (isSilenced){
             long duration=new Date().getTime()-timeSilenced.getTime();
@@ -151,6 +173,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         return notifBuilder.build();
     }
     protected void setSound(AnalyzedDownload dl){
+        if (isSilenced)
+            return;
         ArrayList<Conditions> conditions=dl.getConditions();
         Uri uri = Uri.EMPTY;
         // allows us to give some sounds higher precedence than others
@@ -317,12 +341,24 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                     snoozeIntent.putExtra("device", deviceIDStr);
                     PendingIntent snoozePendIntent = PendingIntent.getBroadcast(context, deviceID, snoozeIntent, 0);
                     // TODO make the snooze time configurable
-                    String snoozeActionText="Snooze for "+(SNOOZEDURATION/1000)/60+" minutes";
-                    notifBuilder.addAction(android.R.drawable.ic_popup_reminder, snoozeActionText, snoozePendIntent);
+                    // TODO dont hardcode this value - move it to strings.xml
+                    String snoozeActionText="Snooze";
+                    notifBuilder.addAction(R.drawable.ic_snooze, snoozeActionText, snoozePendIntent);
                 }
             }
-
         }
+        if (phoneNum!=null) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + phoneNum));
+            // TODO switch over messages to strings.xml to be localalized easier.
+            PendingIntent callPendingIntent = PendingIntent.getActivity(context, 42, callIntent, 0);
+            notifBuilder.addAction(android.R.drawable.sym_action_call, "Call", callPendingIntent);
+
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",phoneNum,null));
+            PendingIntent smsPendingIntent = PendingIntent.getActivity(context,43,smsIntent,0);
+            notifBuilder.addAction(android.R.drawable.sym_action_chat,"Text",smsPendingIntent);
+        }
+
     }
 
     protected void setContent(AnalyzedDownload dl){
@@ -375,7 +411,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     @Override
     public void start() {
         super.start();
-        init();
+//        init();
     }
 
     @Override
@@ -398,12 +434,64 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                         isSilenced = true;
                         timeSilenced = new Date();
                     }
-                    if (lastDownload!=null)
-                        doProcess(lastDownload);
+                    if (analyzedDownload!=null)
+                        mNotifyMgr.notify(deviceID, buildNotification(analyzedDownload));
                 }else{
                     Log.d(TAG,deviceIDStr+": Ignored a request to snooze alarm on "+intent.getExtras().get("device"));
                 }
             }
+        }
+    }
+
+    private Bitmap getThumbnailByPhoneDataUri(Uri phoneDataUri){
+        String id=phoneDataUri.getLastPathSegment();
+//        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
+//        int rawContactIdx=cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID);
+//        String rawContactId=null;
+//        if (cursor.moveToFirst()){
+//            rawContactId=cursor.getString(rawContactIdx);
+//        }
+//        cursor.close();
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
+        int thumbnailUriIdx=cursor.getColumnIndex(ContactsContract.Data.PHOTO_ID);
+        String thumbnailId=null;
+        if (cursor.moveToFirst()){
+            thumbnailId=cursor.getString(thumbnailUriIdx);
+        }
+        cursor.close();
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI, Long.valueOf(thumbnailId));
+        cursor = context.getContentResolver().query(uri, new String[] {ContactsContract.CommonDataKinds.Photo.PHOTO},null,null,null);
+        Bitmap thumbnail=null;
+        if (cursor.moveToFirst()){
+            final byte[] thumbnailBytes = cursor.getBlob(0);
+            if (thumbnailBytes!=null){
+                thumbnail= BitmapFactory.decodeByteArray(thumbnailBytes,0,thumbnailBytes.length);
+            }
+        }
+//        InputStream photoDataStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),uri);
+//        Bitmap photo=BitmapFactory.decodeStream(photoDataStream);
+        return thumbnail;
+    }
+
+
+    public InputStream openDisplayPhoto(Uri phoneDataUri) {
+        String id=phoneDataUri.getLastPathSegment();
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
+        int thumbnailUriIdx=cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);
+        String contactId=null;
+        if (cursor.moveToFirst()){
+            contactId=cursor.getString(thumbnailUriIdx);
+        }
+        cursor.close();
+        Log.d(TAG,"ContactId=>"+contactId);
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
+        Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+        try {
+            AssetFileDescriptor fd =
+                    context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+            return fd.createInputStream();
+        } catch (IOException e) {
+            return null;
         }
     }
 }

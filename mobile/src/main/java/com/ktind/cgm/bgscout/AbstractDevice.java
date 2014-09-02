@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.IOException;
@@ -59,6 +62,9 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected SharedPreferences sharedPref;
     protected DeviceStats stats=new DeviceStats();
     protected boolean started=false;
+    protected AlarmReceiver uiQuery;
+
+    protected String phoneNum;
 
     public AbstractDevice(String n, int deviceID, Context appContext, Handler mH) {
         Log.i(TAG, "Creating " + n);
@@ -69,6 +75,12 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.deviceIDStr = "device_" + String.valueOf(getDeviceID());
         sharedPref=PreferenceManager.getDefaultSharedPreferences(appContext);
         monitors=new ArrayList<AbstractMonitor>();
+        String contactDataUri=sharedPref.getString(deviceIDStr+"_contact_data_uri",Uri.EMPTY.toString());
+        phoneNum=getPhone(contactDataUri);
+    }
+
+    public String getContactNum() {
+        return phoneNum;
     }
 
     public String getDeviceIDStr() {
@@ -81,13 +93,19 @@ public abstract class AbstractDevice implements DeviceInterface {
         AbstractMonitor mon;
         monitors=new ArrayList<AbstractMonitor>();
 
-        // FIXME - Mandatory monitor
-        mon=new SQLiteMonitor(getName(),deviceID,getAppContext());
-        monitors.add(mon);
+        monitors.add(new SQLiteMonitor(getName(),deviceID,getAppContext()));
+
+        if (sharedPref.getBoolean(deviceIDStr + "_pebble_monitor", false)) {
+            Log.i(TAG, "Adding a Pebble monitor");
+            monitors.add(new PebbleMonitor(getName(),deviceID,getAppContext()));
+        }
 
         if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
             Log.i(TAG, "Adding a local android monitor");
             mon = new AndroidNotificationMonitor(getName(), deviceID, getAppContext());
+            if (phoneNum!=null) {
+                ((AndroidNotificationMonitor) mon).setPhoneNum(phoneNum);
+            }
             monitors.add(mon);
         }
         if (!isRemote()) {
@@ -111,7 +129,11 @@ public abstract class AbstractDevice implements DeviceInterface {
         }
         Log.d(TAG, "Number of monitors created: " + monitors.size());
         started=true;
+        IntentFilter intentFilter=new IntentFilter(Constants.UIDO_QUERY);
+        uiQuery=new AlarmReceiver();
+        appContext.registerReceiver(uiQuery,intentFilter);
     }
+
 
 //    public void mainloop(){
 //        while(started){
@@ -273,6 +295,7 @@ public abstract class AbstractDevice implements DeviceInterface {
                 Log.d(TAG, "Not on the MAIN Thread ("+Thread.currentThread().getName()+"/"+Thread.currentThread().getState()+")");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
             SharedPreferences.Editor editor = sharedPref.edit();
+            // FIXME should this really be "last_g4_download"? Perhaps it should be "driver"
             editor.putLong(deviceIDStr + appContext.getText(R.string.last_g4_download), getLastDownloadObject().getLastReadingDate().getTime());
             editor.apply();
         } catch (NoDataException e) {
@@ -283,14 +306,16 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     public void sendToUI(){
-        Intent uiIntent = new Intent("com.ktind.cgm.UI_READING_UPDATE");
+        Intent uiIntent = new Intent(Constants.UI_UPDATE);
         uiIntent.putExtra("deviceID",deviceIDStr);
         DownloadObject downloadObject=null;
         try {
             downloadObject=getLastDownloadObject();
+            Log.d(TAG,"Name: "+downloadObject.getDeviceName());
         } catch (NoDataException e) {
             downloadObject=new DownloadObject();
-            e.printStackTrace();
+            Log.e(TAG,"Sending empty DownloadObject",e);
+//            e.printStackTrace();
         } finally {
             if (downloadObject!=null) {
                 downloadObject.setDeviceID(deviceIDStr);
@@ -300,7 +325,7 @@ public abstract class AbstractDevice implements DeviceInterface {
             }
         }
 //        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
-        Log.d(TAG,"Name: "+downloadObject.getDeviceName());
+
         appContext.sendBroadcast(uiIntent);
     }
 
@@ -311,6 +336,8 @@ public abstract class AbstractDevice implements DeviceInterface {
     @Override
     public void stop() {
         this.stopMonitors();
+        if (appContext!=null && uiQuery!=null)
+            appContext.unregisterReceiver(uiQuery);
         started=false;
     }
 
@@ -322,6 +349,26 @@ public abstract class AbstractDevice implements DeviceInterface {
                 sendToUI();
             }
         }
+    }
+
+    private String getPhone(String uriString){
+        return getPhone(Uri.parse(uriString));
+    }
+
+    private String getPhone(Uri dataUri){
+        String id=dataUri.getLastPathSegment();
+        Log.d(TAG,"id="+id);
+        Log.d(TAG,"URI="+dataUri);
+        // TODO Limit fields returned to specific field that we want? Phone?
+        Cursor cursor = appContext.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data._ID + " = ?", new String[]{id}, null);
+        int numIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+        Log.d(TAG, "cursor.getCount(): " + cursor.getCount());
+        String phoneNum=null;
+        if (cursor.moveToFirst()){
+            phoneNum=cursor.getString(numIdx);
+        }
+        cursor.close();
+        return phoneNum;
     }
 
 }

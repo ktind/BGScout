@@ -6,11 +6,19 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.ktind.cgm.bgscout.DeviceActivity$PlaceholderFragment">
+    tools:context="com.ktind.cgm.bgscout.DeviceActivity$PlaceholderFragment"
+    android:background="#ff3c3f41">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="#FFFFFFFF"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -102,7 +110,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/deviceBattery"
+            android:id="@+id/device_battery_indicator"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
             android:adjustViewBounds="false"
@@ -126,10 +134,10 @@
             android:layout_alignParentEnd="false"
             android:gravity="center"
             android:textStyle="bold"
-            android:layout_alignLeft="@+id/deviceBattery"
-            android:layout_alignTop="@+id/deviceBattery"
-            android:layout_alignBottom="@+id/deviceBattery"
-            android:layout_alignRight="@+id/deviceBattery"
+            android:layout_alignLeft="@+id/device_battery_indicator"
+            android:layout_alignTop="@+id/device_battery_indicator"
+            android:layout_alignBottom="@+id/device_battery_indicator"
+            android:layout_alignRight="@+id/device_battery_indicator"
             android:textColor="#ffffffff" />
 
         <TextView
@@ -139,9 +147,9 @@
             android:text="@string/device_battery_label"
             android:id="@+id/device_battery_identifier"
             android:layout_alignParentRight="false"
-            android:layout_below="@+id/deviceBattery"
+            android:layout_below="@+id/device_battery_indicator"
             android:layout_alignParentBottom="false"
-            android:layout_alignRight="@+id/deviceBattery"
+            android:layout_alignRight="@+id/device_battery_indicator"
             android:layout_alignParentEnd="false" />
 
     </RelativeLayout>

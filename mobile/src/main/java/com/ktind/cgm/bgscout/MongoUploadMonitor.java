@@ -54,8 +54,8 @@ public class MongoUploadMonitor extends AbstractMonitor {
 
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         // FIXME there has to be a better way than this?!
-        String[] device_list={"device_1","device_2","device_3","device_4"};
-        for (String dev:device_list) {
+//        String[] device_list={"device_1","device_2","device_3","device_4"};
+        for (String dev:Constants.DEVICES) {
             if (sharedPref.getString(dev+"_name","").equals(getName())){
                 mongoURI=sharedPref.getString(dev+"_mongo_uri","");
                 collectionName=sharedPref.getString(dev+"_mongo_col","");

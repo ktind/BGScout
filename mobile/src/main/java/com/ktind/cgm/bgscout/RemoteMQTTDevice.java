@@ -3,6 +3,7 @@ package com.ktind.cgm.bgscout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -70,17 +71,37 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     @Override
     public void connect() {
         Log.d(TAG,"Connect started");
+        if (Looper.getMainLooper().getThread()==Thread.currentThread())
+            Log.w(TAG,"On main thread!");
+        else
+            Log.i(TAG,"On background thread");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
-        String url=sharedPref.getString(deviceIDStr+"_mqtt_endpoint","");
+        final String url=sharedPref.getString(deviceIDStr+"_mqtt_endpoint","");
         String usr=sharedPref.getString(deviceIDStr+"_mqtt_user","");
         String pw=sharedPref.getString(deviceIDStr+"_mqtt_pass","");
         mqttMgr=new MQTTMgr(appContext,usr,pw,getDeviceIDStr());
-        mqttMgr.initConnect(url);
-        mqttMgr.registerObserver(this);
-        Log.d(TAG, "Subscribe start");
+//        mqttMgr.initConnect(url);
+//        Log.d(TAG, "Subscribe start");
+//        mqttMgr.subscribe("/entries/sgv");
+//        Log.d(TAG,"Connect ended");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mqttMgr.initConnect(url);
+                Log.d(TAG, "Subscribe start");
 //        mqttMgr.subscribe("/entries/sgv", "/uploader");
-        mqttMgr.subscribe("/entries/sgv");
-        Log.d(TAG,"Connect ended");
+                mqttMgr.subscribe("/entries/sgv");
+                Log.d(TAG,"Connect ended");
+            }
+        }).start();
+//        thread.start();
+//        try {
+//            thread.join(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        mqttMgr.registerObserver(this);
     }
 
     @Override

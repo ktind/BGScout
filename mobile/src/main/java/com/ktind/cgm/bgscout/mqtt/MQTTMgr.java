@@ -60,19 +60,13 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     public static final int	MQTT_QOS_0 = 0; // QOS Level 0 ( Delivery Once no confirmation )
     public static final int MQTT_QOS_1 = 1; // QOS Level 1 ( Delevery at least Once with confirmation )
     public static final int	MQTT_QOS_2 = 2; // QOS Level 2 ( Delivery only once with confirmation with handshake )
-    private static final int MQTT_KEEP_ALIVE = 24000; // KeepAlive Interval in MS
     private static final String MQTT_KEEP_ALIVE_TOPIC_FORMAT = "/users/%s/keepalive"; // Topic format for KeepAlives
     private static final byte[] MQTT_KEEP_ALIVE_MESSAGE = { 0 }; // Keep Alive message to send
     private static final int MQTT_KEEP_ALIVE_QOS = MQTT_QOS_0; // Default Keepalive QOS
     private static final boolean MQTT_CLEAN_SESSION = false;
-    private static final String MQTT_URL_FORMAT = "tcp://%s:%d";
-    private static final String DEVICE_ID_FORMAT = "%s_%s";
+    private static final String DEVICE_ID_FORMAT = "%s_1_%s";
     private static final long RECONNECT_DELAY=60000L;
     private static final int KEEPALIVE_INTERVAL=150000;
-//    private static final int KEEPALIVE_INTERVAL=30000;
-
-    private DownloadObject lastDownload;
-    private AlarmReceiver alarmReceiver;
     private AlarmReceiver keepAliveReceiver;
     private ReconnectReceiver reconnectReceiver;
     private NetConnReceiver netConnReceiver;
@@ -80,7 +74,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     //    private MqttDefaultFilePersistence mDataStore;
     private MemoryPersistence mDataStore;
     private MqttConnectOptions mOpts;
-//    private MqttTopic mKeepAliveTopic;
     private MqttClient mClient;
 
     private Context context;
@@ -127,13 +120,9 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     }
 
     public void initConnect(String url, String lwt) {
-//        alarmReceiver=new AlarmReceiver();
-//        setupNetworkNotifications();
-//        setupReconnect();
-//        setupKeepAlives();
-
+        setupReconnect();
+        setupKeepAlives();
         connect(url, lwt);
-
     }
 
     public void connect(String url, String lwt) {
@@ -143,8 +132,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             return;
         }
 //        setupNetworkNotifications();
-        setupReconnect();
-        setupKeepAlives();
 //        mClient=null;
         stats.addConnect();
         setupOpts(lwt);
@@ -481,22 +468,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
                 }else{
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
                 }
-            } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
-                Log.d(TAG,"Received broadcast to reconnect");
-                // Prevent a reconnect if we haven't subscribed to anything.
-                // I suspect this was a race condition where a reconnect somehow triggered before the initial connection completed
-                reconnect();
-            } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
-                Log.d(TAG,"Received network broadcast "+intent.getAction());
-                if (mqttUrl==null){
-                    Log.e(TAG,"Ignoring connection change because mqttUrl is null");
-                    return;
-                }
-                if (isOnline() && state==State.CONNECTED) {
-                    stats.addNetworkNotification();
-                    Log.i(TAG, "Network is online. Attempting to reconnect");
-                    reconnectDelayed(5000);
-                }
             }
         }
     }
@@ -505,30 +476,11 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG,"Received a broadcast: "+intent.getAction());
-            if (intent.getAction().equals(KEEPALIVE_INTENT_FILTER)){
-                if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    Log.d(TAG, "Received a request to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
-                    sendKeepalive();
-//                    alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000L,keepAlivePendingIntent);
-                }else{
-                    Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
-                }
-            } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
+            if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
                 Log.d(TAG,"Received broadcast to reconnect");
                 // Prevent a reconnect if we haven't subscribed to anything.
                 // I suspect this was a race condition where a reconnect somehow triggered before the initial connection completed
                 reconnect();
-            } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
-                Log.d(TAG,"Received network broadcast "+intent.getAction());
-                if (mqttUrl==null){
-                    Log.e(TAG,"Ignoring connection change because mqttUrl is null");
-                    return;
-                }
-                if (isOnline() && state==State.CONNECTED) {
-                    stats.addNetworkNotification();
-                    Log.i(TAG, "Network is online. Attempting to reconnect");
-                    reconnectDelayed(5000);
-                }
             }
         }
     }
@@ -537,20 +489,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG,"Received a broadcast: "+intent.getAction());
-            if (intent.getAction().equals(KEEPALIVE_INTENT_FILTER)){
-                if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    Log.d(TAG, "Received a request to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
-                    sendKeepalive();
-//                    alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000L,keepAlivePendingIntent);
-                }else{
-                    Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
-                }
-            } else if (intent.getAction().equals(RECONNECT_INTENT_FILTER)) {
-                Log.d(TAG,"Received broadcast to reconnect");
-                // Prevent a reconnect if we haven't subscribed to anything.
-                // I suspect this was a race condition where a reconnect somehow triggered before the initial connection completed
-                reconnect();
-            } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
                 Log.d(TAG,"Received network broadcast "+intent.getAction());
                 if (mqttUrl==null){
                     Log.e(TAG,"Ignoring connection change because mqttUrl is null");

@@ -32,6 +32,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.ktind.cgm.bgscout.Constants;
+
 public class DownloadSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_DEVICE="devices";
     public static final String COLUMN_ID="_id";
@@ -89,14 +91,18 @@ public class DownloadSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DEVICES_TABLE_CREATE);
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME,"device_1");
-        db.insert(TABLE_DEVICE,null,values);
-        values.put(COLUMN_NAME,"device_2");
-        db.insert(TABLE_DEVICE,null,values);
-        values.put(COLUMN_NAME,"device_3");
-        db.insert(TABLE_DEVICE,null,values);
-        values.put(COLUMN_NAME,"device_4");
-        db.insert(TABLE_DEVICE,null,values);
+        for (String device: Constants.DEVICES){
+            values.put(COLUMN_NAME,device);
+            db.insert(TABLE_DEVICE,null,values);
+        }
+//        values.put(COLUMN_NAME,"device_1");
+//        db.insert(TABLE_DEVICE,null,values);
+//        values.put(COLUMN_NAME,"device_2");
+//        db.insert(TABLE_DEVICE,null,values);
+//        values.put(COLUMN_NAME,"device_3");
+//        db.insert(TABLE_DEVICE,null,values);
+//        values.put(COLUMN_NAME,"device_4");
+//        db.insert(TABLE_DEVICE,null,values);
 
         values = new ContentValues();
         db.execSQL(ROLES_TABLE_CREATE);

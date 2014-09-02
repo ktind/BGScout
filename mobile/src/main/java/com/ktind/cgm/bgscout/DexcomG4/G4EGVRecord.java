@@ -118,6 +118,7 @@ public class G4EGVRecord extends G4Record {
                 long dtime=(long) BitTools.byteArraytoInt(dispTimeArray)*1000;
                 Calendar mCalendar = new GregorianCalendar();
                 TimeZone mTimeZone = mCalendar.getTimeZone();
+                //FIXME - Is this logic right?
                 long displayTimeLong=G4Constants.RECEIVERBASEDATE+dtime;
                 if (mTimeZone.inDaylightTime(new Date())){
                     displayTimeLong-=3600000L;

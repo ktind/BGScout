@@ -88,11 +88,13 @@
     <orderEntry type="library" exported="" name="org.eclipse.paho.client.mqttv3-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-5.0.77" level="project" />
     <orderEntry type="library" exported="" name="protobuf-java-2.5.0" level="project" />
+    <orderEntry type="library" exported="" name="guava-14.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="mongo-java-driver-2.12.3" level="project" />
     <orderEntry type="library" exported="" name="acra-4.5.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
+    <orderEntry type="module" module-name="pEBBLE_KIT" exported="" />
   </component>
 </module>
 

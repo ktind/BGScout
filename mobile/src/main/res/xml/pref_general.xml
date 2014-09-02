@@ -122,6 +122,11 @@
                 android:dependency="device_1_enable"
                 android:title="Enable Android notification"
                 android:checked="true"/>
+            <CheckBoxPreference
+                android:key="device_1_pebble_monitor"
+                android:dependency="device_1_enable"
+                android:title="Enable Pebble notification"
+                android:checked="true"/>
             <PreferenceScreen
                 android:key="device_1_ns"
                 android:title="@string/device_ns"
@@ -328,6 +333,11 @@
                 android:dependency="device_2_enable"
                 android:title="Enable Android notification"
                 android:checked="true"/>
+            <CheckBoxPreference
+                android:key="device_2_pebble_monitor"
+                android:dependency="device_2_enable"
+                android:title="Enable Pebble notification"
+                android:checked="true"/>
             <PreferenceScreen
                 android:key="device_2_ns"
                 android:title="@string/device_ns"
@@ -532,6 +542,11 @@
                 android:dependency="device_3_enable"
                 android:title="Enable Android notification"
                 android:checked="true"/>
+            <CheckBoxPreference
+                android:key="device_3_pebble_monitor"
+                android:dependency="device_3_enable"
+                android:title="Enable Pebble notification"
+                android:checked="true"/>
             <PreferenceScreen
                 android:key="device_3_ns"
                 android:title="@string/device_ns"
@@ -735,6 +750,11 @@
                 android:key="device_4_android_monitor"
                 android:dependency="device_4_enable"
                 android:title="Enable Android notification"
+                android:checked="true"/>
+            <CheckBoxPreference
+                android:key="device_4_pebble_monitor"
+                android:dependency="device_4_enable"
+                android:title="Enable Pebble notification"
                 android:checked="true"/>
             <PreferenceScreen
                 android:key="device_4_ns"
