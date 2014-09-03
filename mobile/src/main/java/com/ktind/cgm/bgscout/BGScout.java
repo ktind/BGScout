@@ -2,6 +2,8 @@ package com.ktind.cgm.bgscout;
 
 import android.app.Application;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.acra.*;
 import org.acra.annotation.*;
 import org.acra.sender.HttpSender;

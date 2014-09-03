@@ -240,9 +240,9 @@ public class DeviceDownloadService extends Service {
 //                for (Thread thread:threads){
 //                    Log.d(TAG,"Thread "+thread.getName()+" before stop state: "+thread.getState());
 //                }
-//                for (AbstractDevice cgm:cgms){
-//                    cgm.stop();
-//                }
+                for (AbstractDevice cgm:cgms){
+                    cgm.stop();
+                }
 //                for (Thread thread:threads){
 //                    Log.d(TAG,"Thread "+thread.getName()+" after stop state: "+thread.getState());
 //                }
