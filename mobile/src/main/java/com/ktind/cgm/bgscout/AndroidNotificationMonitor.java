@@ -57,7 +57,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     final protected String monitorType="android notification";
     protected boolean isSilenced=false;
     protected Date timeSilenced;
-    protected AlarmReceiver alarmReceiver;
+    protected SnoozeReceiver snoozeReceiver;
     protected DownloadObject lastDownload;
     protected ArrayList<DownloadObject> previousDownloads=new ArrayList<DownloadObject>();
     protected final int MAXPREVIOUS=3;
@@ -79,6 +79,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     AndroidNotificationMonitor(String name,int devID,Context contxt){
         super(name, devID, contxt, "android_notification");
         init();
+
 
         Uri uri=Uri.parse(sharedPref.getString(deviceIDStr+Constants.CONTACTDATAURISUFFIX,Uri.EMPTY.toString()));
         if (! uri.equals(Uri.EMPTY)) {
@@ -106,8 +107,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         mNotifyMgr.notify(deviceID, notification);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         this.setAllowVirtual(true);
-        alarmReceiver = new AlarmReceiver();
-        context.registerReceiver(alarmReceiver, new IntentFilter(Constants.SNOOZE_INTENT));
+        snoozeReceiver = new SnoozeReceiver();
+        context.registerReceiver(snoozeReceiver, new IntentFilter(Constants.SNOOZE_INTENT));
     }
 
     public String getPhoneNum() {
@@ -418,12 +419,12 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     public void stop() {
         Log.i(TAG, "Stopping monitor " + monitorType + " for " + name);
         mNotifyMgr.cancel(deviceID);
-        if (context != null && alarmReceiver != null)
-            context.unregisterReceiver(alarmReceiver);
+        if (context != null && snoozeReceiver != null)
+            context.unregisterReceiver(snoozeReceiver);
 
     }
 
-    public class AlarmReceiver extends BroadcastReceiver {
+    public class SnoozeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.SNOOZE_INTENT)){

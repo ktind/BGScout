@@ -72,10 +72,10 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
     public AnalyzedDownload analyze() {
         try {
             super.analyze();
+            checkDownloadStatus();
             checkUploaderBattery();
             checkCGMBattery();
             checkRecordAge();
-            checkDownloadStatus();
             checkThresholdholds();
             checkLastRecordTime();
         } catch (NoDataException e) {
@@ -87,18 +87,18 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
 
     protected void checkUploaderBattery(){
         if (downloadObject.getUploaderBattery() < UPLOADERBATTERYWARN) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "Uploader battery is low"),Conditions.UPLOADERLOW);
+            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "Uploader battery is low: "+(int) downloadObject.getUploaderBattery()),Conditions.UPLOADERLOW);
         } else if (downloadObject.getUploaderBattery() < UPLOADERBATTERYCRITICAL) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "Uploader battery is critically low"),Conditions.UPLOADERCRITICALLOW);
+            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "Uploader battery is critically low: "+(int) downloadObject.getUploaderBattery()),Conditions.UPLOADERCRITICALLOW);
         }
     }
 
     protected void checkCGMBattery(){
         if (downloadObject.getStatus()==DownloadStatus.SUCCESS) {
             if (downloadObject.getDeviceBattery() < DEVICEBATTERYWARN) {
-                downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "CGM battery is low"),Conditions.DEVICELOW);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "CGM battery is low: "+downloadObject.getDeviceBattery()),Conditions.DEVICELOW);
             } else if (downloadObject.getDeviceBattery() < DEVICEBATTERYCRITICAL) {
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM battery is critically low"),Conditions.DEVICECRITICALLOW);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM battery is critically low"+downloadObject.getDeviceBattery()),Conditions.DEVICECRITICALLOW);
             }
         }
     }
@@ -115,14 +115,14 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
             case DEVICENOTFOUND:
                 downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No CGM device found"),Conditions.DEVICEDISCONNECTED);
                 break;
+            case IOERROR:
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to read or write to the CGM"),Conditions.DOWNLOADFAILED);
+                break;
             case NODATA:
                 downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No data in download"),Conditions.NODATA);
                 break;
             case APPLICATIONERROR:
                 downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown application error"),Conditions.UNKNOWN);
-                break;
-            case IOERROR:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to read or write to the CGM"),Conditions.DOWNLOADFAILED);
                 break;
             case UNKNOWN:
                 downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown error while trying to retrieve data from CGM"),Conditions.UNKNOWN);

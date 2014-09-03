@@ -43,6 +43,8 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     private static final String TAG = AbstractPollDevice.class.getSimpleName();
     protected long nextFire=Constants.DEFAULTRETRYINTERVAL;
     AlarmReceiver alarmReceiver;
+    AlarmManager alarmMgr;
+    PendingIntent alarmIntent;
 
 
     public AbstractPollDevice(String n, int deviceID, Context appContext, Handler mH){
@@ -131,6 +133,8 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     @Override
     public void stop() {
         super.stop();
+        if (alarmMgr!=null && alarmIntent!=null)
+            alarmMgr.cancel(alarmIntent);
         if (alarmReceiver != null)
             appContext.unregisterReceiver(alarmReceiver);
     }
@@ -147,7 +151,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
             long diff=(millis-(System.currentTimeMillis() - lastDLlong));
             Log.d(TAG,"nextFire calculated to be: "+diff+" for "+getName()+" using a poll interval of "+millis);
             if (diff<0) {
-                Log.w(TAG,"nextFire returning 45 seconds because diff was negative");
+                Log.w(TAG,"nextFire returning "+(millis/1000)+" seconds because diff was negative");
                 return millis;
             }
             return diff;
@@ -162,13 +166,13 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.DEVICE_POLL)){
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
+                    alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
                     Log.d(TAG, deviceIDStr+": Received a request to poll " + intent.getExtras().get("device"));
                     pollDevice();
                     Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
                     Intent pIntent = new Intent(Constants.DEVICE_POLL);
                     pIntent.putExtra("device",deviceIDStr);
-                    PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
+                    alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
                     // FIXME - Needs to use setExact on Kitkat devices otherwise the alarm gets batched
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                         alarmMgr.setExact(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);

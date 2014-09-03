@@ -41,7 +41,7 @@ import org.acra.sender.HttpSender;
         formUri = "http://nightscout.iriscouch.com/acra-storage/_design/acra-storage/_update/report",
         formUriBasicAuthLogin = "scout",
         formUriBasicAuthPassword = "set4now",
-        excludeMatchingSharedPreferencesKeys={"mqtt_pass","nskey","nsapi","mongo_uri"}
+        excludeMatchingSharedPreferencesKeys={".*mqtt_pass",".*nskey",".*nsapi",".*mongo_uri"}
 )
 public class BGScout extends Application {
     public static StatsMgr statsMgr=new StatsMgr();

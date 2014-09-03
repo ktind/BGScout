@@ -82,7 +82,7 @@ public class DeviceActivity extends Activity {
         setContentView(R.layout.activity_device);
         mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout2);
         mDrawerList=(ListView) findViewById(R.id.left_drawer2);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String[] devices={"device_1","device_2","device_3","device_4"};
         ArrayList<String> mDrawerMenuItemsArrList=new ArrayList<String>();
         for (String device:Constants.DEVICES) {
@@ -135,7 +135,7 @@ public class DeviceActivity extends Activity {
 
         uiReceiver=new UIReceiver();
         IntentFilter intentFilter=new IntentFilter(Constants.UI_UPDATE);
-        getBaseContext().registerReceiver(uiReceiver,intentFilter);
+        getApplicationContext().registerReceiver(uiReceiver,intentFilter);
         if (savedInstanceState!=null){
             ld=savedInstanceState.getParcelable("lastDownload");
             if (ld==null){
@@ -196,7 +196,7 @@ public class DeviceActivity extends Activity {
         if (position==(numItemsInMenu-4)) {
             Log.d(TAG,"Stopping service");
             Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
-            getBaseContext().sendBroadcast(intent);
+            getApplicationContext().sendBroadcast(intent);
 //            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
 //            bindSvc();
 //            stopService(mIntent);
@@ -580,8 +580,8 @@ public class DeviceActivity extends Activity {
             try {
                 direction.setImageLevel(dl.getLastTrend().getVal());
                 int r=dl.getLastReading();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                Resources res=getBaseContext().getResources();
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                Resources res=getApplicationContext().getResources();
                 int lowThreshold=Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_low_threshold", String.valueOf(res.getInteger(R.integer.pref_default_device_low))));
                 int highThreshold=Integer.valueOf(sharedPref.getString(dl.getDeviceID() + "_high_threshold", String.valueOf(res.getInteger(R.integer.pref_default_device_high))));
 
@@ -651,7 +651,7 @@ public class DeviceActivity extends Activity {
         if (mBounded)
             unbindService(mConnection);
         if (uiReceiver!=null)
-            getBaseContext().unregisterReceiver(uiReceiver);
+            getApplicationContext().unregisterReceiver(uiReceiver);
     }
 
     public class UIReceiver extends BroadcastReceiver {

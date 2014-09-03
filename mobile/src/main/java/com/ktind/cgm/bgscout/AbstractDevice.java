@@ -14,6 +14,8 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,6 +65,7 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected DeviceStats stats=new DeviceStats();
     protected boolean started=false;
     protected AlarmReceiver uiQuery;
+    protected State state;
 
     protected String phoneNum;
 
@@ -74,9 +77,12 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.setHandler(mH);
         this.deviceIDStr = "device_" + String.valueOf(getDeviceID());
         sharedPref=PreferenceManager.getDefaultSharedPreferences(appContext);
-        monitors=new ArrayList<AbstractMonitor>();
+//        monitors=new ArrayList<AbstractMonitor>();
+        state=State.STOPPED;
         String contactDataUri=sharedPref.getString(deviceIDStr+"_contact_data_uri",Uri.EMPTY.toString());
-        phoneNum=getPhone(contactDataUri);
+
+        if (!contactDataUri.equals(Uri.EMPTY.toString()))
+            phoneNum=getPhone(contactDataUri);
     }
 
     public String getContactNum() {
@@ -88,6 +94,11 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     public void start(){
+        if (state==State.STARTED || state==State.STARTING){
+            Log.w(TAG, getName()+"/"+getDeviceType()+" has already been started");
+            return;
+        }
+        state=State.STARTING;
         BGScout.statsMgr.registerCollector(stats);
         Log.d(TAG,"Starting "+getName()+" (device_"+getDeviceID()+"/"+getDeviceType()+")");
         AbstractMonitor mon;
@@ -132,6 +143,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         IntentFilter intentFilter=new IntentFilter(Constants.UIDO_QUERY);
         uiQuery=new AlarmReceiver();
         appContext.registerReceiver(uiQuery,intentFilter);
+        state=State.STARTED;
     }
 
 
@@ -180,9 +192,13 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     public void stopMonitors(){
+        state=State.STOPPING;
+        Log.d(TAG,"stopMonitors called");
         for (AbstractMonitor monitor:monitors){
             monitor.stop();
         }
+        state=State.STOPPED;
+        monitors=null;
     }
 
     public void setUnit(GlucoseUnit unit) {
@@ -335,10 +351,21 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     @Override
     public void stop() {
+        if (state==State.STOPPED || state==State.STOPPING) {
+            Log.w(TAG,getName()+"/"+getDeviceType()+" has already been stopped");
+            return;
+        }
         this.stopMonitors();
         if (appContext!=null && uiQuery!=null)
             appContext.unregisterReceiver(uiQuery);
         started=false;
+    }
+
+    public enum State{
+        STARTING,
+        STARTED,
+        STOPPING,
+        STOPPED
     }
 
     public class AlarmReceiver extends BroadcastReceiver {

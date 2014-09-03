@@ -44,19 +44,19 @@ public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
 
     @Override
     public AnalyzedDownload analyze() {
-        try {
-            super.analyze();
-            checkSpecialValues();
-        } catch (NoDataException e) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data"),Conditions.NODATA);
-//            e.printStackTrace();
-        }
+        super.analyze();
+        checkSpecialValues();
         return this.downloadObject;
     }
 
 
-    protected void checkSpecialValues() throws NoDataException {
-        int egvValue=downloadObject.getLastReading();
+    protected void checkSpecialValues() {
+        int egvValue;
+        try {
+            egvValue = downloadObject.getLastReading();
+        }catch(NoDataException e){
+            return;
+        }
 
         if (egvValue<MINEGV){
             G4EGVSpecialValue specialValue=G4EGVSpecialValue.getEGVSpecialValue(egvValue);

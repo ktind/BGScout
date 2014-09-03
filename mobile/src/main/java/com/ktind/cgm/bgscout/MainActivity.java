@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
 //        Button callButton = (Button) findViewById(R.id.call_button);
 
 
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String[] devices={"device_1","device_2","device_3","device_4"};
         ArrayList<String> mDrawerMenuItemsArrList=new ArrayList<String>();
         for (String device:Constants.DEVICES) {
@@ -162,18 +162,21 @@ public class MainActivity extends Activity {
 
 
         ImageButton contact = (ImageButton) findViewById(R.id.imageButton);
-        contact.setImageBitmap(getThumbnailByPhoneDataUri(Uri.parse(sharedPref.getString("device_1_contact_data_uri", ""))));
-        contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String phoneNum=getPhone(sharedPref.getString("device_1_contact_data_uri", ""));
-                if (phoneNum!=null && phoneNum!="") {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + phoneNum));
-                    startActivity(callIntent);
+        String contactUri=sharedPref.getString("device_1_contact_data_uri", "");
+        if (!contactUri.equals("")) {
+            contact.setImageBitmap(getThumbnailByPhoneDataUri(Uri.parse(contactUri)));
+            contact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phoneNum = getPhone(sharedPref.getString("device_1_contact_data_uri", ""));
+                    if (phoneNum != null && phoneNum != "") {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + phoneNum));
+                        startActivity(callIntent);
+                    }
                 }
-            }
-        });
+            });
+        }
 
 //        contact.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -207,7 +210,7 @@ public class MainActivity extends Activity {
         if (requestCode>Constants.CONTACTREQUESTCODE && requestCode<Constants.CONTACTREQUESTCODE+Constants.DEVICES.length){
             Uri result = data.getData();
             String id = result.getLastPathSegment();
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
             String deviceID="device_"+(requestCode-Constants.CONTACTREQUESTCODE);
             Log.d(TAG,"Device: "+deviceID);
@@ -232,7 +235,7 @@ public class MainActivity extends Activity {
         if (position==(numItemsInMenu-5)) {
             Log.d(TAG,"Stopping service");
             Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
-            getBaseContext().sendBroadcast(intent);
+            getApplicationContext().sendBroadcast(intent);
 //            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
 //            bindSvc();
 //            stopService(mIntent);
@@ -402,7 +405,7 @@ public class MainActivity extends Activity {
         super.onResume();
         Intent intent=new Intent();
         intent.setAction(Constants.UIDO_QUERY);
-        getBaseContext().sendBroadcast(intent);
+        getApplicationContext().sendBroadcast(intent);
 //        if (svcUp)
 //            mHandler.post(updateProgress);
     }
@@ -516,7 +519,7 @@ public class MainActivity extends Activity {
             try {
                 direction.setImageLevel(dl.getLastTrend().getVal());
                 int r=dl.getLastReading();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 int highThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_high_threshold", "180"));
                 int lowThreshold=Integer.parseInt(sharedPref.getString(dl.getDeviceID() + "_low_threshold", "60"));
 //                int newColor=Color.WHITE;
@@ -584,6 +587,8 @@ public class MainActivity extends Activity {
     }
 
     private String getPhone(Uri dataUri){
+        if (dataUri.equals("") || dataUri==null || dataUri.equals(Uri.EMPTY.toString()))
+            return null;
         String id=dataUri.getLastPathSegment();
         Log.d(TAG,"id="+id);
         Log.d(TAG,"URI="+dataUri);
@@ -601,6 +606,8 @@ public class MainActivity extends Activity {
 
     // TODO move these methods out into a contact class for easier access.
     private Bitmap getThumbnailByPhoneDataUri(Uri phoneDataUri){
+        if (phoneDataUri.equals("") || phoneDataUri==null || phoneDataUri.equals(Uri.EMPTY.toString()))
+            return null;
         String id=phoneDataUri.getLastPathSegment();
 //        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
 //        int rawContactIdx=cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID);

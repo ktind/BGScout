@@ -135,7 +135,7 @@
                     android:title="Nightscout API Upload"
                     android:dependency="device_1_enable"
                     android:key="device_1_nsapi_enable"
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:summary="The REST API is an alternative to direct mongodb upload">
                 </CheckBoxPreference>
                 <EditTextPreference
@@ -346,7 +346,7 @@
                     android:title="Nightscout API Upload"
                     android:dependency="device_2_enable"
                     android:key="device_2_nsapi_enable"
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:summary="The REST API is an alternative to direct mongodb upload">
                 </CheckBoxPreference>
                 <EditTextPreference
@@ -555,7 +555,7 @@
                     android:title="Nightscout API Upload"
                     android:dependency="device_3_enable"
                     android:key="device_3_nsapi_enable"
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:summary="The REST API is an alternative to direct mongodb upload">
                 </CheckBoxPreference>
                 <EditTextPreference
@@ -668,7 +668,7 @@
                 android:title="Battery balancing"
                 android:dependency="device_4_enable"
                 android:key="device_4_bat_bal"
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
             </CheckBoxPreference>
             <CheckBoxPreference
@@ -764,7 +764,7 @@
                     android:title="Nightscout API Upload"
                     android:dependency="device_4_enable"
                     android:key="device_4_nsapi_enable"
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:summary="The REST API is an alternative to direct mongodb upload">
                 </CheckBoxPreference>
                 <EditTextPreference
@@ -846,7 +846,7 @@
             android:title="@string/pref_disable_acra"
             android:summaryOn="@string/pref_acra_disabled"
             android:summaryOff="@string/pref_acra_enabled"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
         <CheckBoxPreference android:key="acra.syslog.enable"
             android:dependency="acra.enable"
             android:summaryOn="@string/pref_acra_syslog_enabled"

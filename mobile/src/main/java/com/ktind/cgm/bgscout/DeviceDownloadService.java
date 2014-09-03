@@ -117,16 +117,16 @@ public class DeviceDownloadService extends Service {
                     AbstractDevice cgm=null;
                     switch(type){
                         case 0:
-                            cgm=new G4CGMDevice(name,devCount,getBaseContext(),mHandler);
+                            cgm=new G4CGMDevice(name,devCount,getApplicationContext(),mHandler);
                             break;
                         case 1:
-                            cgm=new RemoteMongoDevice(name,devCount,getBaseContext(),mHandler);
+                            cgm=new RemoteMongoDevice(name,devCount,getApplicationContext(),mHandler);
                             break;
                         case 2:
-                            cgm=new RemoteMQTTDevice(name,devCount,getBaseContext(),mHandler);
+                            cgm=new RemoteMQTTDevice(name,devCount,getApplicationContext(),mHandler);
                             break;
                         case 3:
-                            cgm=new MockDevice(name,devCount,getBaseContext(),mHandler);
+                            cgm=new MockDevice(name,devCount,getApplicationContext(),mHandler);
                             break;
                         default:
                             Log.e(TAG,"Unknown CGM type: "+type);
@@ -140,7 +140,7 @@ public class DeviceDownloadService extends Service {
                     }
                 }
             }
-            Log.i(TAG,"Added "+(devCount-1)+" devices to the device list");
+            Log.i(TAG,"Added "+(devCount)+" devices to the device list");
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), MainActivity.class), 0);
             cr=new commandReceiver();
@@ -197,12 +197,16 @@ public class DeviceDownloadService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG,"onDestory called");
-        stopForeground(true);
+//        stopForeground(true);
         for (AbstractDevice cgm:cgms){
             cgm.stop();
         }
-        if (cr!=null)
+        if (cr!=null) {
             unregisterReceiver(cr);
+        }else{
+            Log.w(TAG,"cr was null. not unregisteringReceiver");
+        }
+
         state=ServiceState.STOPPED;
         super.onDestroy();
     }
@@ -233,15 +237,15 @@ public class DeviceDownloadService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction()==Constants.STOP_DOWNLOAD_SVC && state!=ServiceState.STOPPED){
                 Log.i(TAG, "Received the stop command");
-                for (Thread thread:threads){
-                    Log.d(TAG,"Thread "+thread.getName()+" before stop state: "+thread.getState());
-                }
-                for (AbstractDevice cgm:cgms){
-                    cgm.stop();
-                }
-                for (Thread thread:threads){
-                    Log.d(TAG,"Thread "+thread.getName()+" after stop state: "+thread.getState());
-                }
+//                for (Thread thread:threads){
+//                    Log.d(TAG,"Thread "+thread.getName()+" before stop state: "+thread.getState());
+//                }
+//                for (AbstractDevice cgm:cgms){
+//                    cgm.stop();
+//                }
+//                for (Thread thread:threads){
+//                    Log.d(TAG,"Thread "+thread.getName()+" after stop state: "+thread.getState());
+//                }
                 stopForeground(true);
                 stopSelf();
                 state=ServiceState.STOPPED;

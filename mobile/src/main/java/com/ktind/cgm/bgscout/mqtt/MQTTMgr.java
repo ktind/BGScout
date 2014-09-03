@@ -63,8 +63,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     private static final String MQTT_KEEP_ALIVE_TOPIC_FORMAT = "/users/%s/keepalive"; // Topic format for KeepAlives
     private static final byte[] MQTT_KEEP_ALIVE_MESSAGE = { 0 }; // Keep Alive message to send
     private static final int MQTT_KEEP_ALIVE_QOS = MQTT_QOS_0; // Default Keepalive QOS
-    private static final boolean MQTT_CLEAN_SESSION = false;
-    private static final String DEVICE_ID_FORMAT = "%s_1_%s";
+    private static final boolean MQTT_CLEAN_SESSION = true;
+    private static final String DEVICE_ID_FORMAT = "%s_2_%s";
     private static final long RECONNECT_DELAY=60000L;
     private static final int KEEPALIVE_INTERVAL=150000;
     private AlarmReceiver keepAliveReceiver;
@@ -167,8 +167,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 
     private void setupKeepAlives(){
         Log.d(TAG, "Setting up keepalives");
-        //FIXME - do we need two instances of AlarmReceiver or will one suffice?
-//        alarmReceiver=new AlarmReceiver();
         keepAliveReceiver =new AlarmReceiver();
         keepAliveIntent = new Intent(KEEPALIVE_INTENT_FILTER);
         keepAliveIntent.putExtra("device",deviceIDStr);
@@ -408,10 +406,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             context.unregisterReceiver(netConnReceiver);
             netConnReceiver=null;
         }
-//        if (context != null && alarmReceiver != null) {
-//            context.unregisterReceiver(alarmReceiver);
-//            alarmReceiver=null;
-//        }
         if (context != null && keepAliveReceiver != null) {
             context.unregisterReceiver(keepAliveReceiver);
             keepAliveReceiver=null;
