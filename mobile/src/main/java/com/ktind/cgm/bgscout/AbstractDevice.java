@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -191,12 +190,12 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     public void stopMonitors(){
-        state=State.STOPPING;
+//        state=State.STOPPING;
         Log.d(TAG,"stopMonitors called");
         for (AbstractMonitor monitor:monitors){
             monitor.stop();
         }
-        state=State.STOPPED;
+//        state=State.STOPPED;
         monitors=null;
     }
 
@@ -208,6 +207,9 @@ public abstract class AbstractDevice implements DeviceInterface {
     public void fireMonitors() {
         stats.startMonitorTimer();
         Log.d(TAG,"Firing monitors");
+        // FIXME why is monitors set to null here sometimes?
+        if (monitors==null)
+            return;
         for (AbstractMonitor monitor:monitors){
             try {
                 monitor.process(getLastDownloadObject());
@@ -350,10 +352,11 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     @Override
     public void stop() {
-        if (state==State.STOPPED || state==State.STOPPING) {
+        if (state==State.STOPPED) {
             Log.w(TAG,getName()+"/"+getDeviceType()+" has already been stopped");
             return;
         }
+        state=State.STOPPING;
         this.stopMonitors();
         if (context !=null && uiQuery!=null)
             context.unregisterReceiver(uiQuery);

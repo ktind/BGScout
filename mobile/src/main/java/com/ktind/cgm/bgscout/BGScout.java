@@ -57,7 +57,7 @@ public class BGScout extends Application {
     }
 
     synchronized public Tracker getTracker() {
-        GoogleAnalytics analytics= GoogleAnalytics.getInstance(this);
+        GoogleAnalytics analytics=GoogleAnalytics.getInstance(this);
         return analytics.newTracker(R.xml.app_tracker);
     }
 }

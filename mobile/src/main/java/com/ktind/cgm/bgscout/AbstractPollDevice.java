@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -126,9 +125,10 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                 tracker.send(new HitBuilders.TimingBuilder()
                                 .setCategory("Download")
                                 .setLabel(driver)
-                                .setValue(System.currentTimeMillis()-downloadTimeStart)
+                                .setValue(System.currentTimeMillis() - downloadTimeStart)
                                 .build()
                 );
+                Log.d(TAG,"Sent timing to GA: "+(System.currentTimeMillis()-downloadTimeStart));
                 stats.stopDownloadTimer();
                 Log.i(TAG,"Download complete in download thread");
                 onDownload();
@@ -146,12 +146,15 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     @Override
     public void stop() {
         super.stop();
-        if (state==State.STOPPED || state==State.STOPPING)
+        if (state==State.STOPPED)
             return;
         if (alarmMgr!=null && alarmIntent!=null)
             alarmMgr.cancel(alarmIntent);
         if (alarmReceiver != null)
             context.unregisterReceiver(alarmReceiver);
+        // FIXME - The G4 implementation doesn't implement the stop method and I'd like to keep the stop method as optional
+        // I'm not sure how to set the value to stopped when this method is overridden right now.
+        state=State.STOPPED;
     }
 
     public long nextFire(){

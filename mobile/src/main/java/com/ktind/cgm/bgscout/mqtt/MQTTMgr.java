@@ -12,8 +12,8 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.ktind.cgm.bgscout.BGScout;
-import com.ktind.cgm.bgscout.DownloadObject;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -223,6 +223,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             // Likely due to disconnected that wasn't detected earlier? Should not happen unless connect was called without initConnect
             reconnectDelayed();
         }
+        GoogleAnalytics.getInstance(context.getApplicationContext()).dispatchLocalHits();
 //        mClient.publish("/entries/sgv",jsonString.getBytes(),MQTT_QOS_1,true);
     }
 
@@ -335,7 +336,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         Log.i(TAG,"deliveryComplete called");
         stats.addDelivered();
         setNextKeepAlive();
-//        alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000,keepAlivePendingIntent);
     }
 
     public void sendKeepalive() {
@@ -353,6 +353,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 //            notifyDisconnect();
             reconnectDelayed(5000);
         }
+        setNextKeepAlive();
     }
 
     public void reconnectDelayed(){
@@ -458,7 +459,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
                     Log.d(TAG, "Received a request to perform an MQTT keepalive operation on " + intent.getExtras().get("device"));
                     sendKeepalive();
-//                    alarmMgr.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+KEEPALIVE_INTERVAL-3000L,keepAlivePendingIntent);
                 }else{
                     Log.d(TAG,deviceIDStr+": Ignored a request for "+intent.getExtras().get("device")+" to perform an MQTT keepalive operation");
                 }
@@ -497,8 +497,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             }
         }
     }
-
-
 
     // TODO honor disable background data setting..
 
