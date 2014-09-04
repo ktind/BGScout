@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -101,6 +104,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
 
     @Override
     final public void process(DownloadObject d) {
+        long startTime=System.currentTimeMillis();
         Log.d(TAG,"Monitor "+name+" has fired for "+monitorType);
         if (isAllowVirtual() || ! d.isRemoteDevice()){
             lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
@@ -118,6 +122,13 @@ abstract public class AbstractMonitor implements MonitorInterface {
         } else {
             Log.w(TAG, "Not processing monitor "+name+" for "+monitorType+" because device is classified as a remote device.");
         }
+        Tracker tracker=((BGScout) context.getApplicationContext()).getTracker();
+        tracker.send(new HitBuilders.TimingBuilder()
+                .setCategory("Monitors")
+                .setLabel(monitorType)
+                .setValue(System.currentTimeMillis()-startTime)
+                .build()
+        );
     }
 
     public long getlastSuccessDate(){

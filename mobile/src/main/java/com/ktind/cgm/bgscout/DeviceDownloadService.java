@@ -107,7 +107,6 @@ public class DeviceDownloadService extends Service {
         if (state!=ServiceState.STARTED) {
             cgms=new ArrayList<AbstractDevice>();
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-//            String[] device_list={"device_1","device_2","device_3","device_4"};
             int devCount=1;
             for (String dev:Constants.DEVICES) {
                 boolean enabled = sharedPref.getBoolean(dev+"_enable", false);
@@ -117,16 +116,16 @@ public class DeviceDownloadService extends Service {
                     AbstractDevice cgm=null;
                     switch(type){
                         case 0:
-                            cgm=new G4CGMDevice(name,devCount,getApplicationContext(),mHandler);
+                            cgm=new G4CGMDevice(name,devCount,getApplicationContext());
                             break;
                         case 1:
-                            cgm=new RemoteMongoDevice(name,devCount,getApplicationContext(),mHandler);
+                            cgm=new RemoteMongoDevice(name,devCount,getApplicationContext());
                             break;
                         case 2:
-                            cgm=new RemoteMQTTDevice(name,devCount,getApplicationContext(),mHandler);
+                            cgm=new RemoteMQTTDevice(name,devCount,getApplicationContext());
                             break;
                         case 3:
-                            cgm=new MockDevice(name,devCount,getApplicationContext(),mHandler);
+                            cgm=new MockDevice(name,devCount,getApplicationContext());
                             break;
                         default:
                             Log.e(TAG,"Unknown CGM type: "+type);
@@ -155,23 +154,6 @@ public class DeviceDownloadService extends Service {
             threads=new ArrayList<Thread>();
             for (final AbstractDevice cgm : cgms) {
                 cgm.start();
-//                Thread thread=new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        cgm.start();
-//                        cgm.mainloop();
-////                        cgm.stop();
-//                    }
-//                }, "CGM" + cgm.deviceIDStr);
-//                thread.start();
-//                Log.d(TAG, "Thread " + thread.getName() + " state: " + thread.getState());
-////                try {
-////                    thread.join();
-////                } catch (InterruptedException e) {
-////                    e.printStackTrace();
-////                }
-////                Log.d(TAG,"Thread exited");
-//                threads.add(thread);
             }
             startForeground(0, notification);
             super.onStartCommand(intent, flags, startId);

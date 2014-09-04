@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.Date;
 
 /**
@@ -47,17 +50,19 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     PendingIntent alarmIntent;
 
 
-    public AbstractPollDevice(String n, int deviceID, Context appContext, Handler mH){
-        super(n,deviceID,appContext,mH);
+    public AbstractPollDevice(String n, int deviceID, Context context, String driver){
+        super(n,deviceID,context,driver);
     }
 
     abstract protected DownloadObject doDownload();
 
     // entry point
-    final public void start(){
+    public void start(){
         super.start();
-        AlarmManager alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
-        PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
+        if (state==State.STARTED)
+            return;
+        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DLInit");
         wl.acquire();
         Log.i(TAG,"Performing initial download");
@@ -67,10 +72,10 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
         Intent intent = new Intent(Constants.DEVICE_POLL);
         intent.putExtra("device",deviceIDStr);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, deviceID, intent, 0);
         alarmMgr.set(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
         alarmReceiver=new AlarmReceiver();
-        appContext.registerReceiver(alarmReceiver,new IntentFilter(Constants.DEVICE_POLL));
+        context.registerReceiver(alarmReceiver, new IntentFilter(Constants.DEVICE_POLL));
     }
 
     public Date getNextReadingTime() {
@@ -99,7 +104,7 @@ abstract public class AbstractPollDevice extends AbstractDevice {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
+                    PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                     PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "G4DL");
                     wl.acquire();
                     download();
@@ -115,7 +120,15 @@ abstract public class AbstractPollDevice extends AbstractDevice {
             public void run() {
                 Log.i(TAG,"Beginning download in download thread");
                 stats.startDownloadTimer();
+                Tracker tracker=((BGScout) context.getApplicationContext()).getTracker();
+                long downloadTimeStart=System.currentTimeMillis();
                 doDownload();
+                tracker.send(new HitBuilders.TimingBuilder()
+                                .setCategory("Download")
+                                .setLabel(driver)
+                                .setValue(System.currentTimeMillis()-downloadTimeStart)
+                                .build()
+                );
                 stats.stopDownloadTimer();
                 Log.i(TAG,"Download complete in download thread");
                 onDownload();
@@ -133,10 +146,12 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     @Override
     public void stop() {
         super.stop();
+        if (state==State.STOPPED || state==State.STOPPING)
+            return;
         if (alarmMgr!=null && alarmIntent!=null)
             alarmMgr.cancel(alarmIntent);
         if (alarmReceiver != null)
-            appContext.unregisterReceiver(alarmReceiver);
+            context.unregisterReceiver(alarmReceiver);
     }
 
     public long nextFire(){
@@ -166,13 +181,13 @@ abstract public class AbstractPollDevice extends AbstractDevice {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.DEVICE_POLL)){
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    alarmMgr = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
+                    alarmMgr = (AlarmManager) AbstractPollDevice.this.context.getSystemService(Context.ALARM_SERVICE);
                     Log.d(TAG, deviceIDStr+": Received a request to poll " + intent.getExtras().get("device"));
                     pollDevice();
                     Log.d(TAG,"Next readingTime to be: "+getNextReadingTime().toString()+" Current time: "+new Date());
                     Intent pIntent = new Intent(Constants.DEVICE_POLL);
                     pIntent.putExtra("device",deviceIDStr);
-                    alarmIntent = PendingIntent.getBroadcast(appContext, deviceID, pIntent, 0);
+                    alarmIntent = PendingIntent.getBroadcast(AbstractPollDevice.this.context, deviceID, pIntent, 0);
                     // FIXME - Needs to use setExact on Kitkat devices otherwise the alarm gets batched
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                         alarmMgr.setExact(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);

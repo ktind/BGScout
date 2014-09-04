@@ -29,11 +29,11 @@ import android.os.Handler;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 abstract public class AbstractPushDevice extends AbstractDevice {
-    public AbstractPushDevice(String n, int deviceID, Context appContext, Handler mH) {
-        super(n, deviceID, appContext, mH);
+    public AbstractPushDevice(String n, int deviceID, Context appContext, String driver) {
+        super(n, deviceID, appContext, driver);
     }
 
-    abstract void onDataReady(DownloadObject ddo);
+//    abstract void onDataReady(DownloadObject ddo);
 
     @Override
     public void onDownload(){

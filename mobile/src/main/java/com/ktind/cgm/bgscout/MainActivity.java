@@ -38,6 +38,8 @@ import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.ktind.cgm.bgscout.model.Battery;
 import com.ktind.cgm.bgscout.model.DownloadDataSource;
 import com.ktind.cgm.bgscout.model.EGV;
@@ -177,17 +179,9 @@ public class MainActivity extends Activity {
                 }
             });
         }
-
-//        contact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-//                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-//                // hardcoding this to device_1 for now
-//                startActivityForResult(contactPickerIntent,Constants.CONTACTREQUESTCODE+1);
-//            }
-//        });
-
+//        Tracker t = ((BGScout) getApplication()).getTracker();
+//        t.setScreenName("Main");
+//        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -227,15 +221,22 @@ public class MainActivity extends Activity {
             Log.d(TAG,"Starting settings");
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+            Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+            tracker.send(new HitBuilders.EventBuilder("Settings","selected").build());
+
         }
         if (position==(numItemsInMenu-4)) {
             Log.d(TAG,"Dumping stats");
             BGScout.statsMgr.logStats();
+            Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+            tracker.send(new HitBuilders.EventBuilder("Stats","selected").build());
         }
         if (position==(numItemsInMenu-5)) {
             Log.d(TAG,"Stopping service");
             Intent intent=new Intent(Constants.STOP_DOWNLOAD_SVC);
             getApplicationContext().sendBroadcast(intent);
+            Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+            tracker.send(new HitBuilders.EventBuilder("Stop","selected").build());
 //            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
 //            bindSvc();
 //            stopService(mIntent);
@@ -245,6 +246,8 @@ public class MainActivity extends Activity {
             Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
             startService(mIntent);
             bindSvc();
+            Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+            tracker.send(new HitBuilders.EventBuilder("Start","selected").build());
         }
         if (position==(numItemsInMenu-2)) {
             DownloadDataSource downloadDataSource=new DownloadDataSource(this);
@@ -261,19 +264,23 @@ public class MainActivity extends Activity {
 //                    Log.d(TAG,"Role: "+role.getRole()+" ID: "+role.getId());
 //                }
                 downloadDataSource.close();
+                Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+                tracker.send(new HitBuilders.EventBuilder("DB Dump","selected").build());
             } catch (SQLException e) {
                 Log.e(TAG,"Caught exception: ",e);
             }
 
-            Log.d(TAG,"Starting service");
-            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
-            startService(mIntent);
-            bindSvc();
+//            Log.d(TAG,"Starting service");
+//            Intent mIntent = new Intent(MainActivity.this, DeviceDownloadService.class);
+//            startService(mIntent);
+//            bindSvc();
         }
         if (position==(numItemsInMenu-1)) {
             Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
             // hardcoding this to device_1 for now
             startActivityForResult(contactPickerIntent,Constants.CONTACTREQUESTCODE+1);
+            Tracker tracker=((BGScout) getApplicationContext()).getTracker();
+            tracker.send(new HitBuilders.EventBuilder("SelectContact","selected").build());
         }
     }
 

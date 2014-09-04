@@ -52,8 +52,8 @@ public class RemoteMongoDevice extends AbstractPollDevice {
     long lastQueryDate;
     EGVRecord[] lastRecord=new EGVRecord[1];
 
-    public RemoteMongoDevice(String n,int deviceID,Context appContext,Handler mH){
-        super(n,deviceID,appContext,mH);
+    public RemoteMongoDevice(String n,int deviceID,Context appContext){
+        super(n,deviceID,appContext,"RemoteMongo");
         // Quasi race condition - CGM takes a second or 2 to read and upload while the "remote CGM" takes less time.
         // Give it some time to settle. If not it'll try again in 45 seconds.
         this.setPollInterval(304000);

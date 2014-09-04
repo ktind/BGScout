@@ -3,6 +3,8 @@ package com.ktind.cgm.bgscout.DexcomG4;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.ktind.cgm.bgscout.*;
 
 import org.w3c.dom.Document;
@@ -57,8 +59,10 @@ public class G4 {
     private static final String TAG = G4.class.getSimpleName();
     CGMTransportAbstract cgmTransport;
     protected GlucoseUnit unit;
+    protected Context context;
 
     public G4(Context context){
+        this.context=context;
         cgmTransport=new G4USBSerialTransport(context);
     }
 
@@ -70,7 +74,7 @@ public class G4 {
 
     public void connect() throws NoDeviceFoundException, DeviceIOException, OperationNotSupportedException {
         cgmTransport.open();
-        setup();
+//        setup();
     }
 
     public boolean isConnected(){
@@ -163,7 +167,7 @@ public class G4 {
         writeCmd(G4RcvrCmd.READDATABASEPAGERANGE,recordType.getValue());
         byte[] responseBuff = readResponse();
         if (responseBuff==null || responseBuff.length!=8)
-            throw new DeviceIOException("Problem reading response");
+            throw new DeviceIOException("Problem reading response while trying to read record type "+recordType.toString());
         byte[] firstPage = {responseBuff[0],responseBuff[1],responseBuff[2],responseBuff[3]};
         byte[] lastPage = {responseBuff[4],responseBuff[5],responseBuff[6],responseBuff[7]};
         response.Partition=recordType;
@@ -589,7 +593,7 @@ public class G4 {
             // Ugly code to capture the null terminated string
             for (i = 0; i < page.PageData.length && page.PageData[i] != 0x00; i++) { }
             if (i<8)
-                throw new DeviceIOException("Expected larger page data in getParam for "+recType.toString()+" parameter: "+param);
+                throw new DeviceIOException("Expected larger page data in getParam for " + recType.toString() + " parameter: " + param);
             // Strip the header and reduce the size of the string by the header length
             data+=new String(page.PageData,8,i-8);
         }

@@ -2,6 +2,7 @@ package com.ktind.cgm.bgscout;
 
 import android.app.Application;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
 import org.acra.*;
@@ -52,5 +53,11 @@ public class BGScout extends Application {
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
+
+    }
+
+    synchronized public Tracker getTracker() {
+        GoogleAnalytics analytics= GoogleAnalytics.getInstance(this);
+        return analytics.newTracker(R.xml.app_tracker);
     }
 }

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.ktind.cgm.bgscout.DexcomG4.G4;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVRecord;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
@@ -46,28 +48,34 @@ public class G4CGMDevice extends AbstractPollDevice {
 //    protected String serialNum;
 //    protected String receiverID;
     protected int cgmBattery=-1;
-    protected String driver="DexcomG4";
+
     private static final String TAG = G4CGMDevice.class.getSimpleName();
     G4 device;
 
-    public G4CGMDevice(String name,int devID,Context appContext,Handler mH){
-        super(name,devID,appContext,mH);
-        device=new G4(appContext);
+    public G4CGMDevice(String name,int devID,Context context){
+        super(name,devID,context,"DexcomG4");
+        device=new G4(context);
         remote = false;
+//        driver="DexcomG4";
 //        cgmTransport=new G4USBSerialTransport(context);
         this.deviceType="Dexcom G4";
     }
 
     @Override
     public int getDeviceBattery() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
-        if (cgmBattery==-1)
-            cgmBattery=device.getBatteryLevel();
+        cgmBattery=device.getBatteryLevel();
         return cgmBattery;
     }
 
     @Override
     public void connect() throws NoDeviceFoundException, OperationNotSupportedException, DeviceIOException {
         device.connect();
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        state=State.STARTED;
     }
 
     @Override
@@ -86,7 +94,8 @@ public class G4CGMDevice extends AbstractPollDevice {
         if (g_unit==GlucoseUnit.NONE)
             g_unit=GlucoseUnit.MGDL;
         try {
-            connect();
+            device.connect();
+            device.setup();
             egvList = G4RecordAdapter.convertToEGVRecordArrayList((ArrayList<G4EGVRecord>) device.getLastRecords());
             Log.d(TAG,"Display Time: "+device.getDisplayTime()+ " Current time: "+new Date());
             if (sharedPref.getBoolean(deviceIDStr+"_time_sync",true))
@@ -94,8 +103,8 @@ public class G4CGMDevice extends AbstractPollDevice {
             if (g_unit==null)
                 getUnit();
             deviceBattery = this.getDeviceBattery();
-            batteryBalance(deviceBattery,uploaderBattery);
-            disconnect();
+            batteryBalance(deviceBattery, uploaderBattery);
+            device.disconnect();
             status = DownloadStatus.SUCCESS;
 
             if (egvList.size()>0) {
@@ -115,6 +124,11 @@ public class G4CGMDevice extends AbstractPollDevice {
             status=DownloadStatus.APPLICATIONERROR;
         } catch (DeviceIOException e) {
             Log.e(TAG,"Unable to read/write to the device",e);
+            Tracker t = ((BGScout) context.getApplicationContext()).getTracker();
+            t.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IO Error: "+e.getMessage()+" "+e)
+                    .setFatal(false)
+                    .build());
             status=DownloadStatus.IOERROR;
         } catch (NoDeviceFoundException e) {
             status=DownloadStatus.DEVICENOTFOUND;

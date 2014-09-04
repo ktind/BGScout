@@ -19,6 +19,9 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -342,7 +345,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                     snoozeIntent.putExtra("device", deviceIDStr);
                     PendingIntent snoozePendIntent = PendingIntent.getBroadcast(context, deviceID, snoozeIntent, 0);
                     // TODO make the snooze time configurable
-                    // TODO dont hardcode this value - move it to strings.xml
+                    // TODO dont hardcode this value - use i18n
                     String snoozeActionText="Snooze";
                     notifBuilder.addAction(R.drawable.ic_snooze, snoozeActionText, snoozePendIntent);
                 }
@@ -351,12 +354,13 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         if (phoneNum!=null) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + phoneNum));
-            // TODO switch over messages to strings.xml to be localalized easier.
-            PendingIntent callPendingIntent = PendingIntent.getActivity(context, 42, callIntent, 0);
+            // TODO switch over messages to standard i18n for localization.
+            // TODO add tracking to this feature
+            PendingIntent callPendingIntent = PendingIntent.getActivity(context, 30+deviceID, callIntent, 0);
             notifBuilder.addAction(android.R.drawable.sym_action_call, "Call", callPendingIntent);
 
             Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",phoneNum,null));
-            PendingIntent smsPendingIntent = PendingIntent.getActivity(context,43,smsIntent,0);
+            PendingIntent smsPendingIntent = PendingIntent.getActivity(context,40+deviceID,smsIntent,0);
             notifBuilder.addAction(android.R.drawable.sym_action_chat,"Text",smsPendingIntent);
         }
 
@@ -429,6 +433,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.SNOOZE_INTENT)){
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
+                    Tracker tracker=((BGScout) context.getApplicationContext()).getTracker();
+                    tracker.send(new HitBuilders.EventBuilder("Snooze","pressed").build());
                     Log.d(TAG, deviceIDStr + ": Received a request to snooze alarm on " + intent.getExtras().get("device"));
                     // Only capture the first snooze operation.. ignore others until it is reset
                     if (!isSilenced) {

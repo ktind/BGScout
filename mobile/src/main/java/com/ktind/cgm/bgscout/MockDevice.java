@@ -41,8 +41,8 @@ public class MockDevice extends AbstractPollDevice {
     private boolean initialRun;
     private Date lastReading=new Date(new Date().getTime()-10800000L);
 
-    public MockDevice(String n, int deviceID, Context appContext, Handler mH) {
-        super(n,deviceID,appContext,mH);
+    public MockDevice(String n, int deviceID, Context appContext) {
+        super(n,deviceID,appContext,"MockCGM");
         initialRun=true;
         remote =false;
         this.pollInterval=15000;

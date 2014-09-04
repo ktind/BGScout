@@ -14,8 +14,6 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,10 +51,10 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected GlucoseUnit unit=GlucoseUnit.NONE;
     protected ArrayList<AbstractMonitor> monitors;
     protected DownloadObject lastDownloadObject;
-    protected Context appContext;
+    protected Context context;
     protected CGMTransportAbstract cgmTransport;
     protected boolean remote=false;
-    protected Handler mHandler;
+//    protected Handler mHandler;
     protected String deviceType=null;
     protected String deviceIDStr;
     // Set the default pollInterval to 5 minutes...
@@ -66,17 +64,19 @@ public abstract class AbstractDevice implements DeviceInterface {
     protected boolean started=false;
     protected AlarmReceiver uiQuery;
     protected State state;
+    protected String driver;
 
     protected String phoneNum;
 
-    public AbstractDevice(String n, int deviceID, Context appContext, Handler mH) {
-        Log.i(TAG, "Creating " + n);
-        setName(n);
+    public AbstractDevice(String name, int deviceID, Context context, String driver) {
+        Log.i(TAG, "Creating " + name+"/"+driver);
+        this.name=name;
+        this.driver=driver;
         this.setDeviceID(deviceID);
-        this.setAppContext(appContext);
-        this.setHandler(mH);
+        this.setContext(context);
+//        this.setHandler(mH);
         this.deviceIDStr = "device_" + String.valueOf(getDeviceID());
-        sharedPref=PreferenceManager.getDefaultSharedPreferences(appContext);
+        sharedPref=PreferenceManager.getDefaultSharedPreferences(context);
 //        monitors=new ArrayList<AbstractMonitor>();
         state=State.STOPPED;
         String contactDataUri=sharedPref.getString(deviceIDStr+"_contact_data_uri",Uri.EMPTY.toString());
@@ -104,16 +104,16 @@ public abstract class AbstractDevice implements DeviceInterface {
         AbstractMonitor mon;
         monitors=new ArrayList<AbstractMonitor>();
 
-        monitors.add(new SQLiteMonitor(getName(),deviceID,getAppContext()));
+        monitors.add(new SQLiteMonitor(getName(),deviceID, getContext()));
 
         if (sharedPref.getBoolean(deviceIDStr + "_pebble_monitor", false)) {
             Log.i(TAG, "Adding a Pebble monitor");
-            monitors.add(new PebbleMonitor(getName(),deviceID,getAppContext()));
+            monitors.add(new PebbleMonitor(getName(),deviceID, getContext()));
         }
 
         if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
             Log.i(TAG, "Adding a local android monitor");
-            mon = new AndroidNotificationMonitor(getName(), deviceID, getAppContext());
+            mon = new AndroidNotificationMonitor(getName(), deviceID, getContext());
             if (phoneNum!=null) {
                 ((AndroidNotificationMonitor) mon).setPhoneNum(phoneNum);
             }
@@ -122,17 +122,17 @@ public abstract class AbstractDevice implements DeviceInterface {
         if (!isRemote()) {
             if (sharedPref.getBoolean(deviceIDStr + "_mongo_upload", false)) {
                 Log.i(TAG, "Adding a mongo upload monitor");
-                mon = new MongoUploadMonitor(getName(), deviceID, getAppContext());
+                mon = new MongoUploadMonitor(getName(), deviceID, getContext());
                 monitors.add(mon);
             }
             if (sharedPref.getBoolean(deviceIDStr + "_push_upload", false)) {
                 Log.i(TAG, "Adding a push notification upload monitor");
-                mon = new MqttUploader(getName(), deviceID, getAppContext());
+                mon = new MqttUploader(getName(), deviceID, getContext());
                 monitors.add(mon);
             }
             if (sharedPref.getBoolean(deviceIDStr + "_nsapi_enable", false)) {
                 Log.i(TAG, "Adding a Nightscout upload monitor");
-                mon = new NightScoutUpload(getName(), deviceID, getAppContext());
+                mon = new NightScoutUpload(getName(), deviceID, getContext());
                 monitors.add(mon);
             }
         } else {
@@ -142,8 +142,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         started=true;
         IntentFilter intentFilter=new IntentFilter(Constants.UIDO_QUERY);
         uiQuery=new AlarmReceiver();
-        appContext.registerReceiver(uiQuery,intentFilter);
-        state=State.STARTED;
+        context.registerReceiver(uiQuery,intentFilter);
     }
 
 
@@ -152,13 +151,13 @@ public abstract class AbstractDevice implements DeviceInterface {
 //
 //        }
 //    }
-    public void setHandler(Handler mH){
-        this.mHandler=mH;
-    }
+//    public void setHandler(Handler mH){
+//        this.mHandler=mH;
+//    }
 
     public float getUploaderBattery(){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = appContext.registerReceiver(null, ifilter);
+        Intent batteryStatus = context.registerReceiver(null, ifilter);
         assert batteryStatus != null;
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
@@ -175,8 +174,8 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.deviceID = deviceID;
     }
 
-    public Context getAppContext() {
-        return appContext;
+    public Context getContext() {
+        return context;
     }
 
     public String getName() {
@@ -223,8 +222,8 @@ public abstract class AbstractDevice implements DeviceInterface {
         return cgmTransport.isOpen();
     }
 
-    public void setAppContext(Context appContext) {
-        this.appContext = appContext;
+    public void setContext(Context appContext) {
+        this.context = appContext;
     }
 
     public void connect() throws IOException, DeviceException {
@@ -309,10 +308,10 @@ public abstract class AbstractDevice implements DeviceInterface {
                 Log.d(TAG,"ON THE MAIN Thread!!!");
             else
                 Log.d(TAG, "Not on the MAIN Thread ("+Thread.currentThread().getName()+"/"+Thread.currentThread().getState()+")");
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedPref.edit();
             // FIXME should this really be "last_g4_download"? Perhaps it should be "driver"
-            editor.putLong(deviceIDStr + appContext.getText(R.string.last_g4_download), getLastDownloadObject().getLastReadingDate().getTime());
+            editor.putLong(deviceIDStr +"_last_"+driver, getLastDownloadObject().getLastReadingDate().getTime());
             editor.apply();
         } catch (NoDataException e) {
             Log.i(TAG,"No data on download");
@@ -342,7 +341,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         }
 //        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
 
-        appContext.sendBroadcast(uiIntent);
+        context.sendBroadcast(uiIntent);
     }
 
     public void setRemote(boolean remote) {
@@ -356,17 +355,17 @@ public abstract class AbstractDevice implements DeviceInterface {
             return;
         }
         this.stopMonitors();
-        if (appContext!=null && uiQuery!=null)
-            appContext.unregisterReceiver(uiQuery);
+        if (context !=null && uiQuery!=null)
+            context.unregisterReceiver(uiQuery);
         started=false;
     }
 
-    public enum State{
-        STARTING,
-        STARTED,
-        STOPPING,
-        STOPPED
-    }
+//    public enum State{
+//        STARTING,
+//        STARTED,
+//        STOPPING,
+//        STOPPED
+//    }
 
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
@@ -387,7 +386,7 @@ public abstract class AbstractDevice implements DeviceInterface {
         Log.d(TAG,"id="+id);
         Log.d(TAG,"URI="+dataUri);
         // TODO Limit fields returned to specific field that we want? Phone?
-        Cursor cursor = appContext.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data._ID + " = ?", new String[]{id}, null);
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data._ID + " = ?", new String[]{id}, null);
         int numIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
         Log.d(TAG, "cursor.getCount(): " + cursor.getCount());
         String phoneNum=null;

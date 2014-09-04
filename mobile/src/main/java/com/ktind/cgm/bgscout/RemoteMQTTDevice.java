@@ -47,15 +47,15 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
 
     private MQTTMgr mqttMgr;
 
-    public RemoteMQTTDevice(String n, int deviceID, Context appContext, Handler mH) {
-        super(n, deviceID, appContext, mH);
+    public RemoteMQTTDevice(String n, int deviceID, Context appContext) {
+        super(n, deviceID, appContext, "RemoteMQTT");
         setDeviceType("Remote MQTT");
         setRemote(true);
     }
 
-    @Override
-    public void onDataReady(DownloadObject ddo) {
-    }
+//    @Override
+//    public void onDataReady(DownloadObject ddo) {
+//    }
 
     @Override
     public int getDeviceBattery() throws IOException {
@@ -66,24 +66,17 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     public void start() {
         super.start();
         connect();
+        state=State.STARTED;
     }
 
     @Override
     public void connect() {
         Log.d(TAG,"Connect started");
-        if (Looper.getMainLooper().getThread()==Thread.currentThread())
-            Log.w(TAG,"On main thread!");
-        else
-            Log.i(TAG,"On background thread");
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(appContext);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         final String url=sharedPref.getString(deviceIDStr+"_mqtt_endpoint","");
         String usr=sharedPref.getString(deviceIDStr+"_mqtt_user","");
         String pw=sharedPref.getString(deviceIDStr+"_mqtt_pass","");
-        mqttMgr=new MQTTMgr(appContext,usr,pw,getDeviceIDStr());
-//        mqttMgr.initConnect(url);
-//        Log.d(TAG, "Subscribe start");
-//        mqttMgr.subscribe("/entries/sgv");
-//        Log.d(TAG,"Connect ended");
+        mqttMgr=new MQTTMgr(context,usr,pw,getDeviceIDStr());
 
         new Thread(new Runnable() {
             @Override
@@ -95,17 +88,14 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                 Log.d(TAG,"Connect ended");
             }
         }).start();
-//        thread.start();
-//        try {
-//            thread.join(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
         mqttMgr.registerObserver(this);
     }
 
     @Override
     public void disconnect() {
+        if (mqttMgr==null)
+            return;
         mqttMgr.disconnect();
         mqttMgr.close();
         mqttMgr.unregisterObserver(this);
