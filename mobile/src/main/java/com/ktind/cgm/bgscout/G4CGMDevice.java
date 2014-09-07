@@ -2,7 +2,6 @@ package com.ktind.cgm.bgscout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -11,11 +10,9 @@ import com.ktind.cgm.bgscout.DexcomG4.G4;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVRecord;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 /**
@@ -80,7 +77,7 @@ public class G4CGMDevice extends AbstractPollDevice {
 
     @Override
     protected DownloadObject doDownload() {
-        String specialMessage="";
+//        String specialMessage="";
         int deviceBattery=-1;
         float uploaderBattery=getUploaderBattery()*100.0f;
 
@@ -112,7 +109,7 @@ public class G4CGMDevice extends AbstractPollDevice {
                 for (G4EGVSpecialValue specialValue : G4EGVSpecialValue.values()) {
                     if (lastBG == specialValue.getValue()) {
                         status = DownloadStatus.SPECIALVALUE;
-                        specialMessage=G4EGVSpecialValue.getEGVSpecialValue(lastBG).toString();
+//                        specialMessage=G4EGVSpecialValue.getEGVSpecialValue(lastBG).toString();
                         break;
                     }
                 }
@@ -159,11 +156,12 @@ public class G4CGMDevice extends AbstractPollDevice {
                 .setStatus(status)
                 .setEgvRecords(egvList)
                 .setDriver(driver)
-                .setDownloadDate(new Date())
-                .setSpecialValueMessage(specialMessage);
+                .setDownloadDate(new Date());
+//                .setSpecialValueMessage(specialMessage);
 //                .addAlertMessages(alerts);
         editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);
         editor.apply();
+//        Log.d("XXX","downloadDate=>"+ddo.getDownloadDate());
         setLastDownloadObject(ddo);
         return ddo;
     }

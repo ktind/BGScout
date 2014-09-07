@@ -3,10 +3,18 @@ package com.ktind.cgm.bgscout;
 import android.content.Context;
 import android.util.Log;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoException;
+import com.mongodb.MongoTimeoutException;
+import com.mongodb.WriteConcern;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -72,11 +80,11 @@ public class MongoUploadMonitor extends AbstractMonitor {
             MongoClient mongoClient = new MongoClient(uri);
             db = mongoClient.getDB(uri.getDatabase());
             deviceData = db.getCollection(collectionName);
-            EGVRecord[] r=d.getEgvRecords();
+            ArrayList<EGVRecord> r=d.getEgvArrayListRecords();
             int uploadCount=0;
             for (EGVRecord sr:r) {
                 BasicDBObject data = new BasicDBObject();
-                if (sr.isNew()) {
+//                if (sr.isNew()) {
                     data.put("name", d.getDeviceName());
                     data.put("trend", sr.getTrend().getVal());
 
@@ -90,9 +98,9 @@ public class MongoUploadMonitor extends AbstractMonitor {
                     deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
                     uploadCount+=1;
                     Log.v(TAG, "Added Record - EGV: " + sr.getEgv() + " Trend: " + sr.getTrend().getNsString() + " Date: " + new SimpleDateFormat("MM/dd/yyy hh:mm:ss aa").format(sr.getDate()));
-                }
+//                }
             }
-            Log.i(TAG,"Records processed: "+r.length+" Records Uploaded: "+uploadCount);
+            Log.i(TAG,"Records processed: "+r.size()+" Records Uploaded: "+uploadCount);
             if (!d.isRemoteDevice()) {
                 BasicDBObject data = new BasicDBObject();
                 data.put("name", d.getDeviceName());

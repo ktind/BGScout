@@ -43,7 +43,7 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
     protected final int UPLOADERBATTERYCRITICAL =20;
     protected final int DEVICEBATTERYWARN =30;
     protected final int DEVICEBATTERYCRITICAL =20;
-    protected final int MAXRECORDAGE=300000;
+    protected final int MAXRECORDAGE=310000;
     protected EGVLimits egvLimits=new EGVLimits();
 //    protected EGVThresholdsEnum conditions=EGVThresholdsEnum.INRANGE;
     
@@ -107,6 +107,9 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
         Long recordAge=new Date().getTime() - downloadObject.getLastRecordReadingDate().getTime();
         if (recordAge > MAXRECORDAGE)
             downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Last record is greater than "+((recordAge/1000)/60)+" minutes old"),Conditions.STALEDATA);
+        Long downloadAge=new Date().getTime() - downloadObject.getDownloadDate().getTime();
+        if (downloadAge > MAXRECORDAGE)
+            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Have not heard from remote CGM for more than "+((downloadAge/1000)/60)+" minutes"),Conditions.STALEDATA);
     }
 
     protected void checkDownloadStatus(){
@@ -157,7 +160,43 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
     }
 
     protected void checkLastRecordTime() throws NoDataException {
-        String msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
+//        String msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
+        String msg="~";
+        int timeDiff=(int) (new Date().getTime()-downloadObject.getLastRecordReadingDate().getTime());
+        Log.d("XXX","Time difference: "+timeDiff);
+        if (timeDiff<60000) {
+            msg += "Now";
+        }else if (timeDiff>60000 && timeDiff<3600000){
+            msg += String.valueOf((timeDiff/1000)/60);
+            msg += "m";
+        }else if (timeDiff>3600000 && timeDiff<86400000){
+            msg += String.valueOf(((timeDiff/1000)/60)/24);
+            msg += "h";
+        }else if (timeDiff>86400000 && timeDiff<604800000){
+            msg += String.valueOf((((timeDiff/1000)/60)/24)/7);
+            msg += "w";
+        }else {
+            msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
+        }
+        msg+="\n"+new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
         downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,msg),Conditions.NONE);
+//        msg="Download: ~";
+//        timeDiff=(int) (new Date().getTime()-downloadObject.getDownloadDate().getTime());
+//        Log.d("XXX","Time difference: "+timeDiff);
+//        if (timeDiff<60000) {
+//            msg += "Now";
+//        }else if (timeDiff>60000 && timeDiff<3600000){
+//            msg += String.valueOf((timeDiff/1000)/60);
+//            msg += "m";
+//        }else if (timeDiff>3600000 && timeDiff<86400000){
+//            msg += String.valueOf(((timeDiff/1000)/60)/24);
+//            msg += "h";
+//        }else if (timeDiff>86400000 && timeDiff<604800000){
+//            msg += String.valueOf((((timeDiff/1000)/60)/24)/7);
+//            msg += "w";
+//        }else {
+//            msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
+//        }
+//        downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,msg),Conditions.NONE);
     }
 }

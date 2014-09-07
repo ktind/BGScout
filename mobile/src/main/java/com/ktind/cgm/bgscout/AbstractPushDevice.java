@@ -1,7 +1,6 @@
 package com.ktind.cgm.bgscout;
 
 import android.content.Context;
-import android.os.Handler;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -36,9 +35,9 @@ abstract public class AbstractPushDevice extends AbstractDevice {
 //    abstract void onDataReady(DownloadObject ddo);
 
     @Override
-    public void onDownload(){
+    public void onDownload(DownloadObject dl){
         stats.addDownload();
-        super.onDownload();
+        super.onDownload(dl);
     }
     @Override
     public void start() {

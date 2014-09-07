@@ -50,6 +50,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
     protected Context context;
     protected SharedPreferences sharedPref;
     protected long lastSuccessDate;
+    protected State state;
 //    protected EGVLimits egvLimits;
 
     public AbstractMonitor(String n,int devID,Context context, String monitorName){
@@ -148,6 +149,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
 
     @Override
     public void stop(){
+        state=State.STOPPED;
         Log.i(TAG,"Stopping monitor "+monitorType+" for "+name);
     }
 

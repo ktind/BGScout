@@ -61,6 +61,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected boolean isSilenced=false;
     protected Date timeSilenced;
     protected SnoozeReceiver snoozeReceiver;
+    protected tickReceiver tickReceiver;
+    protected screenStateReceiver screenStateReceiver;
     protected DownloadObject lastDownload;
     protected ArrayList<DownloadObject> previousDownloads=new ArrayList<DownloadObject>();
     protected final int MAXPREVIOUS=3;
@@ -73,6 +75,9 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     private DownloadObject lastKnownGood;
     protected String phoneNum=null;
     protected AnalyzedDownload analyzedDownload;
+    protected int tickCounter=0;
+    protected boolean isTickCounterSyncd=false;
+    protected boolean isScreenOn=true;
 
 
     public void setNotifBuilder(Notification.Builder notifBuilder) {
@@ -111,7 +116,12 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         this.setAllowVirtual(true);
         snoozeReceiver = new SnoozeReceiver();
+        screenStateReceiver= new screenStateReceiver();
+        tickReceiver = new tickReceiver();
         context.registerReceiver(snoozeReceiver, new IntentFilter(Constants.SNOOZE_INTENT));
+        context.registerReceiver(screenStateReceiver,new IntentFilter(Intent.ACTION_SCREEN_ON));
+        context.registerReceiver(screenStateReceiver,new IntentFilter(Intent.ACTION_SCREEN_OFF));
+        context.registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
     public String getPhoneNum() {
@@ -138,9 +148,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         } else {
             Log.w(TAG, "No previous downloads?");
         }
-        if (dl.getEgvRecords().length>0)
+        if (dl.getEgvArrayListRecords().size()>0)
             lastKnownGood = dl;
-
         // TODO add devicetype to the download object so that we can instantiate the proper analyzer
         AbstractDownloadAnalyzer downloadAnalyzer=new G4DownloadAnalyzer(dl, context);
         analyzedDownload=downloadAnalyzer.analyze();
@@ -159,10 +168,28 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         }
 
         mNotifyMgr.notify(deviceID, buildNotification(analyzedDownload));
+        if (! isTickCounterSyncd) {
+            syncTickCounter();
+            // Not sure this is what we want to do but I don't want to spend valuable CPU time/battery recalc'ing the sync when it will rarely if ever change.
+            isTickCounterSyncd=true;
+        }
         try {
             savelastSuccessDate(dl.getLastRecordReadingDate().getTime());
         } catch (NoDataException e) {
             Log.d(TAG,"No data in reading to get the last date");
+        }
+    }
+
+    private void syncTickCounter(){
+        try {
+            // tickCounter represents the number of minutes since the previous analyzed download
+            if (previousDownloads != null && previousDownloads.size() > 0) {
+                int timeSinceDownload = (int) (new Date().getTime() - previousDownloads.get(previousDownloads.size() - 1).getLastRecordReadingDate().getTime());
+                tickCounter = (timeSinceDownload / 1000) / 60;
+                Log.d(TAG, "Setting tickCounter to " + tickCounter);
+            }
+        } catch (NoDataException e) {
+            e.printStackTrace();
         }
     }
 
@@ -360,7 +387,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
             notifBuilder.addAction(android.R.drawable.sym_action_call, "Call", callPendingIntent);
 
             Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",phoneNum,null));
-            PendingIntent smsPendingIntent = PendingIntent.getActivity(context,40+deviceID,smsIntent,0);
+            PendingIntent smsPendingIntent = PendingIntent.getActivity(context, 40 + deviceID, smsIntent, 0);
             notifBuilder.addAction(android.R.drawable.sym_action_chat,"Text",smsPendingIntent);
         }
 
@@ -408,7 +435,6 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
             iconLevel = trend.getVal() + (state * 10) + (range * 20);
         } catch (NoDataException e) {
             iconLevel=60;
-//            e.printStackTrace();
         }
         notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
     }
@@ -423,29 +449,106 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     public void stop() {
         Log.i(TAG, "Stopping monitor " + monitorType + " for " + name);
         mNotifyMgr.cancel(deviceID);
-        if (context != null && snoozeReceiver != null)
-            context.unregisterReceiver(snoozeReceiver);
+        if (context !=null) {
+            if (snoozeReceiver != null)
+                context.unregisterReceiver(snoozeReceiver);
+            if (screenStateReceiver !=null)
+                context.unregisterReceiver(screenStateReceiver);
+            if (tickReceiver != null)
+                context.unregisterReceiver(tickReceiver);
+        }
 
     }
 
     public class SnoozeReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Constants.SNOOZE_INTENT)){
+        public void onReceive(Context mContext, Intent intent) {
+            if (intent.getAction().equals(Constants.SNOOZE_INTENT)) {
                 if (intent.getExtras().get("device").equals(deviceIDStr)) {
-                    Tracker tracker=((BGScout) context.getApplicationContext()).getTracker();
-                    tracker.send(new HitBuilders.EventBuilder("Snooze","pressed").build());
+                    Tracker tracker = ((BGScout) context.getApplicationContext()).getTracker();
+                    tracker.send(new HitBuilders.EventBuilder("Snooze", "pressed").build());
                     Log.d(TAG, deviceIDStr + ": Received a request to snooze alarm on " + intent.getExtras().get("device"));
                     // Only capture the first snooze operation.. ignore others until it is reset
                     if (!isSilenced) {
                         isSilenced = true;
                         timeSilenced = new Date();
                     }
-                    if (analyzedDownload!=null)
+                    if (analyzedDownload != null)
                         mNotifyMgr.notify(deviceID, buildNotification(analyzedDownload));
-                }else{
-                    Log.d(TAG,deviceIDStr+": Ignored a request to snooze alarm on "+intent.getExtras().get("device"));
+                } else {
+                    Log.d(TAG, deviceIDStr + ": Ignored a request to snooze alarm on " + intent.getExtras().get("device"));
                 }
+            }
+        }
+    }
+
+    public void updateNotification(){
+        Log.d(TAG, "Reanalyzing the download");
+        if (previousDownloads.size() > 0) {
+            AbstractDownloadAnalyzer downloadAnalyzer = new G4DownloadAnalyzer(previousDownloads.get(previousDownloads.size() - 1), context);
+            analyzedDownload = downloadAnalyzer.analyze();
+            setDefaults();
+            setActions(analyzedDownload);
+            setContent(analyzedDownload);
+            setIcon(analyzedDownload);
+            notifBuilder.setPriority(Notification.PRIORITY_LOW);
+            Notification notification=notifBuilder.build();
+            mNotifyMgr.notify(deviceID, notification);
+        }
+    }
+
+    public class screenStateReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context mContext, Intent intent) {
+            Log.d(TAG,"Intent=>"+intent.getAction()+" received");
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                updateNotification();
+                isScreenOn=true;
+//                tickReceiver=new tickReceiver();
+//                IntentFilter intentFilter = new IntentFilter("android.intent.action.TIME_TICK");
+//                context.registerReceiver(tickReceiver, intentFilter);
+                Log.d(TAG, "Kicking off tick timer");
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//                IntentFilter intentFilter = new IntentFilter("android.intent.action.TIME_TICK");
+//                context.unregisterReceiver(tickReceiver);
+//                tickReceiver=null;
+                isScreenOn=false;
+//                Log.d(TAG, "Canceling tick timer");
+            }
+        }
+    }
+
+    public class tickReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context mContext, Intent intent) {
+            if (intent.getAction().equals("android.intent.action.TIME_TICK")) {
+                try {
+                    Log.d(TAG, "Comparing "+(new Date().getTime()-analyzedDownload.getLastRecordReadingDate().getTime()));
+                    if (new Date().getTime()-analyzedDownload.getLastRecordReadingDate().getTime()< 310000 && ! isScreenOn) {
+                        Log.d(TAG,"tickReceiver is returning because screen is off and the last reading is less than 5 minutes and 10 seconds old");
+                        return;
+                    }
+                    if (isScreenOn)
+                        updateNotification();
+                    // On every 5th tick lets only do an update to avoid double notifications when there is a timing mismatch
+                    if (tickCounter==5) {
+                        updateNotification();
+                        return;
+                    }
+                    if (tickCounter>6) {
+                        Log.d(TAG, "Reanalyzing the download");
+                        if (previousDownloads.size() > 0) {
+                            AbstractDownloadAnalyzer downloadAnalyzer = new G4DownloadAnalyzer(previousDownloads.get(previousDownloads.size() - 1), context);
+                            analyzedDownload = downloadAnalyzer.analyze();
+                            mNotifyMgr.notify(deviceID, buildNotification(analyzedDownload));
+                        }
+                        tickCounter=0;
+                    }
+                    tickCounter+=1;
+                } catch (NoDataException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
@@ -475,6 +578,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 thumbnail= BitmapFactory.decodeByteArray(thumbnailBytes,0,thumbnailBytes.length);
             }
         }
+        cursor.close();
 //        InputStream photoDataStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),uri);
 //        Bitmap photo=BitmapFactory.decodeStream(photoDataStream);
         return thumbnail;

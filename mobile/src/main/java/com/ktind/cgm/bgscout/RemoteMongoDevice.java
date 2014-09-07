@@ -2,11 +2,16 @@ package com.ktind.cgm.bgscout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -50,7 +55,7 @@ public class RemoteMongoDevice extends AbstractPollDevice {
     DB db;
     MongoClient mongoClient = null;
     long lastQueryDate;
-    EGVRecord[] lastRecord=new EGVRecord[1];
+    EGVRecord lastRecord;
 
     public RemoteMongoDevice(String n,int deviceID,Context appContext){
         super(n,deviceID,appContext,"RemoteMongo");
@@ -87,7 +92,7 @@ public class RemoteMongoDevice extends AbstractPollDevice {
 //        ddo.setDevice(this);
         ddo.setStatus(DownloadStatus.APPLICATIONERROR);
         ArrayList<EGVRecord> egvRecords=new ArrayList<EGVRecord>();
-        ddo.setEgvRecords(new EGVRecord[0]);
+//        ddo.setEgvRecords(egvRecords);
         try {
             mongoClient = new MongoClient(uri);
             db = mongoClient.getDB(uri.getDatabase());
@@ -106,19 +111,20 @@ public class RemoteMongoDevice extends AbstractPollDevice {
                     EGVRecord record;
                     if (recQueryDate>lastQueryDate){
                         lastQueryDate=recQueryDate;
-                        record=new EGVRecord(bgValue,recDate,trend,true);
-                        lastRecord[0]=record;
+                        record=new EGVRecord(bgValue,recQueryDate,trend,true);
+                        lastRecord=record;
                     }else{
-                        record=new EGVRecord(bgValue,recDate,trend,false);
+                        record=new EGVRecord(bgValue,recQueryDate,trend,false);
                     }
                     egvRecords.add(record);
-                    ddo.setEgvRecords(egvRecords.toArray(new EGVRecord[egvRecords.size()]));
+                    ddo.setEgvRecords(egvRecords);
                 }
                 ddo.setStatus(DownloadStatus.SUCCESS);
-                //FIXME there has to be a more efficient way
-                if (lastRecord!=null && ddo.getEgvRecords().length==0){
+                if (lastRecord!=null && ddo.getEgvArrayListRecords().size()==0){
                     ddo.setStatus(DownloadStatus.NODATA);
-                    ddo.setEgvRecords(lastRecord);
+                    ArrayList<EGVRecord> lastDL = new ArrayList<EGVRecord>();
+                    lastDL.add(lastRecord);
+                    ddo.setEgvRecords(lastDL);
                 }
 
             } finally {
@@ -129,7 +135,7 @@ public class RemoteMongoDevice extends AbstractPollDevice {
         }catch(UnknownHostException e){
             Log.e(TAG,"Unable to connect to MongoDB URI",e);
             ddo.setStatus(DownloadStatus.DEVICENOTFOUND);
-            ddo.setEgvRecords(new EGVRecord[0]);
+//            ddo.setEgvRecords(new ArrayList<EGVRecord>());
         }
         lastDownloadObject=ddo;
         return ddo;

@@ -190,12 +190,14 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     public void stopMonitors(){
-//        state=State.STOPPING;
+        if (monitors==null) {
+            Log.w(TAG, "monitors is null. A stop was previously issued. How did I get here?");
+            return;
+        }
         Log.d(TAG,"stopMonitors called");
         for (AbstractMonitor monitor:monitors){
             monitor.stop();
         }
-//        state=State.STOPPED;
         monitors=null;
     }
 
@@ -204,18 +206,19 @@ public abstract class AbstractDevice implements DeviceInterface {
     }
 
     @Override
-    public void fireMonitors() {
+    public void fireMonitors(DownloadObject dl) {
         stats.startMonitorTimer();
         Log.d(TAG,"Firing monitors");
         // FIXME why is monitors set to null here sometimes?
         if (monitors==null)
             return;
         for (AbstractMonitor monitor:monitors){
-            try {
-                monitor.process(getLastDownloadObject());
-            } catch (DeviceException e) {
-                Log.w(TAG,e.getMessage());
-            }
+//            try {
+//                monitor.process(getLastDownloadObject());
+                monitor.process(dl);
+//            } catch (DeviceException e) {
+//                Log.w(TAG,e.getMessage());
+//            }
         }
         stats.stopMonitorTimer();
     }
@@ -289,37 +292,36 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     public int getLastBG() throws NoDataException {
         int lastIndex= 0;
-        lastIndex = getLastDownloadObject().getEgvRecords().length-1;
+        lastIndex = getLastDownloadObject().getEgvArrayListRecords().size()-1;
         if (lastIndex<0)
             throw new NoDataException("No previous download available");
-        return getLastDownloadObject().getEgvRecords()[lastIndex].getEgv();
+        return getLastDownloadObject().getEgvArrayListRecords().get(lastIndex).getEgv();
     }
 
     public Trend getLastTrend() throws NoDataException {
         int lastIndex = 0;
-        lastIndex = getLastDownloadObject().getEgvRecords().length - 1;
+        lastIndex = getLastDownloadObject().getEgvArrayListRecords().size() - 1;
         if (lastIndex<0)
             throw new NoDataException("No previous download available");
-        return getLastDownloadObject().getEgvRecords()[lastIndex].getTrend();
+        return getLastDownloadObject().getEgvArrayListRecords().get(lastIndex).getTrend();
     }
 
-    protected void onDownload(){
+    protected void onDownload(DownloadObject dl){
         sendToUI();
-        try {
+//        try {
             if (Looper.getMainLooper().getThread()==Thread.currentThread())
                 Log.d(TAG,"ON THE MAIN Thread!!!");
             else
                 Log.d(TAG, "Not on the MAIN Thread ("+Thread.currentThread().getName()+"/"+Thread.currentThread().getState()+")");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedPref.edit();
-            // FIXME should this really be "last_g4_download"? Perhaps it should be "driver"
-            editor.putLong(deviceIDStr +"_last_"+driver, getLastDownloadObject().getLastReadingDate().getTime());
+            editor.putLong(deviceIDStr +"_last_"+driver, dl.getLastReadingDate().getTime());
             editor.apply();
-        } catch (NoDataException e) {
-            Log.i(TAG,"No data on download");
-//            e.printStackTrace();
-        }
-        fireMonitors();
+//        } catch (NoDataException e) {
+//            Log.i(TAG,"No data on download");
+////            e.printStackTrace();
+//        }
+        fireMonitors(dl);
     }
 
     public void sendToUI(){

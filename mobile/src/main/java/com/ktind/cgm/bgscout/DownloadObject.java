@@ -4,13 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
-
-
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
-
+import java.util.TimeZone;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -47,29 +44,65 @@ public class DownloadObject implements Parcelable {
 
     protected ArrayList<EGVRecord> egvRecords=new ArrayList<EGVRecord>();
     protected DownloadStatus status;
-    protected String specialValueMessage=null;
+//    protected String specialValueMessage=null;
     protected int deviceBattery;
     protected float uploaderBattery;
-    protected GlucoseUnit unit;
-//    protected ArrayList<HashMap<AlertLevels,String>> alertMessages=new ArrayList<HashMap<AlertLevels, String>>();
-//    protected HashMap<String, String> downloadMessage=new HashMap<String, String>();
+    // FIXME - default to MGDL for now.
+    protected GlucoseUnit unit=GlucoseUnit.MGDL;
     protected String deviceID;
-    protected Date lastReadingDate;
+    protected Long lastReadingDate;
     protected String driver;
-    private Date downloadDate;
+    protected Long downloadDate;
 
-    public Date getDownloadDate() {
-        return downloadDate;
+    public Date getDownloadDate(){
+        return new Date(downloadDate);
     }
 
-    public DownloadObject setDownloadDate(Date downloadDate) {
-        this.downloadDate = downloadDate;
+//    private Date adjustForLocal(Date date){
+//    }
+
+    private long adjustForLocal(long date){
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        if (tz.inDaylightTime(new Date(date)))
+            date+=3600000;
+        return date;
+    }
+
+    private long adjustForUTC(long date){
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        if (tz.inDaylightTime(new Date(date)))
+            date-=3600000;
+        return date;
+    }
+
+    public void adjustDataToLocalTime(){
+        lastReadingDate=adjustForLocal(lastReadingDate);
+//        downloadDate=adjustForLocal(downloadDate);
+        for (int index=0;index<egvRecords.size();index++){
+            egvRecords.get(index).setDate(adjustForLocal(egvRecords.get(index).getDate().getTime()));
+        }
+    }
+
+    public void adjustDataToUTC(){
+        lastReadingDate=adjustForUTC(lastReadingDate);
+//        downloadDate=adjustForUTC(downloadDate);
+        for (int index=0;index<egvRecords.size();index++){
+            egvRecords.get(index).setDate(adjustForUTC(egvRecords.get(index).getDate().getTime()));
+        }
+
+    }
+
+    public DownloadObject setDownloadDate(Date downloadDate){
+        this.downloadDate=downloadDate.getTime();
+//        setDownloadDate(downloadDate,false);
         return this;
     }
 
     public DownloadObject(){
         status=DownloadStatus.NONE;
-        specialValueMessage=G4EGVSpecialValue.NONE.toString();
+//        specialValueMessage=G4EGVSpecialValue.NONE.toString();
     }
 
     public DownloadObject(DownloadObject dl){
@@ -77,32 +110,27 @@ public class DownloadObject implements Parcelable {
         isRemoteDevice=dl.isRemoteDevice;
         egvRecords=dl.egvRecords;
         status=dl.status;
-        specialValueMessage=dl.specialValueMessage;
+//        specialValueMessage=dl.specialValueMessage;
         deviceBattery=dl.deviceBattery;
         uploaderBattery=dl.uploaderBattery;
         unit=dl.unit;
         deviceID=dl.deviceID;
         lastReadingDate=dl.lastReadingDate;
         driver=dl.driver;
+        downloadDate=dl.downloadDate;
     }
-    
-//    public DownloadObject(DownloadObject dl){
-//        deviceName=dl.getDeviceName();
-//        isRemoteDevice=dl.isRemoteDevice();
-//        egvRecords=dl.egvRecords;
-//        status=dl.getStatus();
-//        uploaderBattery=dl.getUploaderBattery();
-//        deviceBattery=dl.getDeviceBattery();
-//        unit=dl.getUnit();
-//        deviceID=dl.getDeviceID();
-//        lastReadingDate=dl.lastReadingDate;
-//        driver=dl.driver;
+
+//    public DownloadObject(AbstractDevice device, EGVRecord[] egvRecords, DownloadStatus downloadStatus){
+//        super();
+//        setDeviceID(device.getDeviceIDStr());
+//        setEgvRecords(new ArrayList<EGVRecord>(Arrays.asList(egvRecords)));
+//        setStatus(downloadStatus);
 //    }
 
-    public DownloadObject(AbstractDevice device, EGVRecord[] egvRecords, DownloadStatus downloadStatus){
+    public DownloadObject(AbstractDevice device, ArrayList<EGVRecord> egvRecords, DownloadStatus downloadStatus){
         super();
         setDeviceID(device.getDeviceIDStr());
-        setEgvRecords(new ArrayList<EGVRecord>(Arrays.asList(egvRecords)));
+        setEgvRecords(egvRecords);
         setStatus(downloadStatus);
     }
 
@@ -167,18 +195,18 @@ public class DownloadObject implements Parcelable {
         return this;
     }
 
-    public String getSpecialValueMessage() {
-        return specialValueMessage;
-    }
+//    public String getSpecialValueMessage() {
+//        return specialValueMessage;
+//    }
+//
+//    public DownloadObject setSpecialValueMessage(String specialValueMessage) {
+//        this.specialValueMessage = specialValueMessage;
+//        return this;
+//    }
 
-    public DownloadObject setSpecialValueMessage(String specialValueMessage) {
-        this.specialValueMessage = specialValueMessage;
-        return this;
-    }
-
-    public EGVRecord[] getEgvRecords() {
-        return egvRecords.toArray(new EGVRecord[egvRecords.size()]);
-    }
+//    public EGVRecord[] getEgvRecords() {
+//        return egvRecords.toArray(new EGVRecord[egvRecords.size()]);
+//    }
 
     public ArrayList<EGVRecord> getEgvArrayListRecords() {
         return egvRecords;
@@ -190,10 +218,10 @@ public class DownloadObject implements Parcelable {
         return this;
     }
 
-    public DownloadObject setEgvRecords(EGVRecord[] records){
-        this.egvRecords=new ArrayList<EGVRecord>(Arrays.asList(records));
-        return this;
-    }
+//    public DownloadObject setEgvRecords(EGVRecord[] records){
+//        this.egvRecords=new ArrayList<EGVRecord>(Arrays.asList(records));
+//        return this;
+//    }
 
     public DownloadStatus getStatus() {
         return status;
@@ -227,7 +255,7 @@ public class DownloadObject implements Parcelable {
         // Then check to see if there are any records
         // finally set to now - 2.5 hours.
         if (this.lastReadingDate!=null)
-            return this.lastReadingDate;
+            return new Date(this.lastReadingDate);
 //        Log.e(TAG,"length=>"+egvRecords.length);
 //        Log.e(TAG,"Date=>"+egvRecords[egvRecords.length-1].date);
         if (this.egvRecords != null && this.egvRecords.size() > 0)
@@ -237,25 +265,9 @@ public class DownloadObject implements Parcelable {
     }
 
     public DownloadObject setLastReadingDate(Date date){
-        this.lastReadingDate=date;
+        this.lastReadingDate=date.getTime();
         return this;
     }
-
-//    public void trimReadingsAfter(Long afterDateLong){
-//        ArrayList<EGVRecord> recs=egvRecords;
-//        Log.d(TAG,"Size before trim: "+recs.size());
-//        Date afterDate=new Date(afterDateLong);
-//        for (Iterator<EGVRecord> iterator = recs.iterator(); iterator.hasNext(); ) {
-//            EGVRecord record = iterator.next();
-//            // trim anything after the date UNLESS that means we trim everything. Let's keep
-//            // the last record in there just in case. Need to find a better solution to this
-//            // the method doesn't reflect its purpose
-//            if (! record.getDate().after(afterDate) && recs.size()>1)
-//                iterator.remove();
-//        }
-//        Log.d(TAG,"Size after trim: "+recs.size()+" vs original "+egvRecords.size());
-//    }
-
 
     public int getLastReading() throws NoDataException {
         return getLastRecord().getEgv();
@@ -289,12 +301,13 @@ public class DownloadObject implements Parcelable {
         dest.writeByte((byte) (isRemoteDevice ? 1 : 0));
         dest.writeTypedList(egvRecords);
         dest.writeInt(status.getVal());
-        dest.writeString(specialValueMessage);
+//        dest.writeString(specialValueMessage);
         dest.writeInt(deviceBattery);
         dest.writeFloat(uploaderBattery);
         dest.writeInt(unit.getValue());
         dest.writeString(deviceID);
-        dest.writeLong(lastReadingDate.getTime());
+        dest.writeLong(lastReadingDate);
+        dest.writeLong(downloadDate);
     }
 
     public static final Parcelable.Creator<DownloadObject> CREATOR
@@ -313,12 +326,13 @@ public class DownloadObject implements Parcelable {
         isRemoteDevice=in.readByte() != 0;
         in.readTypedList(egvRecords,EGVRecord.CREATOR);
         status=DownloadStatus.values()[in.readInt()];
-        specialValueMessage=in.readString();
+//        specialValueMessage=in.readString();
         deviceBattery=in.readInt();
         uploaderBattery=in.readFloat();
         unit=GlucoseUnit.values()[in.readInt()];
         deviceID=in.readString();
-        lastReadingDate=new Date(in.readLong());
+        lastReadingDate=in.readLong();
+        downloadDate=in.readLong();
     }
 
     @Override
@@ -364,10 +378,15 @@ public class DownloadObject implements Parcelable {
             Log.d(TAG, "Failed comparison on lastReadingDate");
             return false;
         }
-        if (specialValueMessage != null ? !specialValueMessage.equals(that.specialValueMessage) : that.specialValueMessage != null) {
-            Log.d(TAG, "Failed comparison on specialValueMessage");
+        if (downloadDate != null ? !downloadDate.equals(that.downloadDate) : that.downloadDate != null) {
+            Log.d(TAG, "Failed comparison on downloadDate");
             return false;
         }
+
+//        if (specialValueMessage != null ? !specialValueMessage.equals(that.specialValueMessage) : that.specialValueMessage != null) {
+//            Log.d(TAG, "Failed comparison on specialValueMessage");
+//            return false;
+//        }
         if (status != that.status){
             Log.d(TAG, "Failed comparison on status");
             return false;
@@ -386,7 +405,7 @@ public class DownloadObject implements Parcelable {
         result = 31 * result + (isRemoteDevice ? 1 : 0);
         result = 31 * result + (egvRecords != null ? egvRecords.hashCode() : 0);
         result = 31 * result + status.hashCode();
-        result = 31 * result + (specialValueMessage != null ? specialValueMessage.hashCode() : 0);
+//        result = 31 * result + (specialValueMessage != null ? specialValueMessage.hashCode() : 0);
         result = 31 * result + deviceBattery;
         result = 31 * result + (uploaderBattery != +0.0f ? Float.floatToIntBits(uploaderBattery) : 0);
         result = 31 * result + unit.hashCode();
@@ -394,6 +413,7 @@ public class DownloadObject implements Parcelable {
 //        result = 31 * result + (downloadMessage != null ? downloadMessage.hashCode() : 0);
         result = 31 * result + deviceID.hashCode();
         result = 31 * result + (lastReadingDate != null ? lastReadingDate.hashCode() : 0);
+        result = 31 * result + (downloadDate != null ? downloadDate.hashCode() : 0);
         return result;
     }
 

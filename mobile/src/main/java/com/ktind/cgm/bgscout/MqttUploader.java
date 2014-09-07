@@ -57,6 +57,7 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
 
     @Override
     protected void doProcess(DownloadObject d) {
+//        Log.d("XXX","monitor downloadDate=>"+d.getDownloadDate());
         Gson gson=new Gson();
         if (initialUpload || (lastDownload!=null && ! lastDownload.equals(d))) {
             mqttMgr.publish(gson.toJson(d), "/entries/sgv");

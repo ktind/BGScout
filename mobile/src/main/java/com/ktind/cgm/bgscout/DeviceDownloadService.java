@@ -6,15 +6,12 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -49,7 +46,6 @@ public class DeviceDownloadService extends Service {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
     private ArrayList<AbstractDevice> cgms=new ArrayList<AbstractDevice>();
     private Notification.Builder notificationBuilder;
-    private Handler mHandler=new Handler();
     IBinder mBinder=new LocalBinder();
     private commandReceiver cr;
     private ServiceState state=ServiceState.STOPPED;
@@ -59,6 +55,9 @@ public class DeviceDownloadService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        // autostart
+//        Intent mIntent = new Intent(DeviceDownloadService.this, DeviceDownloadService.class);
+//        startService(mIntent);
 //        Intent uiIntent = new Intent("com.ktind.cgm.SERVICE_READY");
 //        sendBroadcast(uiIntent);
     }
@@ -212,6 +211,8 @@ public class DeviceDownloadService extends Service {
             return DeviceDownloadService.this;
         }
     }
+
+
 
     private class commandReceiver extends BroadcastReceiver{
 

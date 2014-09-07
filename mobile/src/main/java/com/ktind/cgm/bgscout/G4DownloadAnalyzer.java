@@ -66,7 +66,7 @@ public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
             }else{
                 alertMessage=new AlertMessage(AlertLevels.WARN,"Unknown special value received from G4");
             }
-            downloadObject.addMessage(alertMessage,Conditions.DEVICEMSGS);
+            downloadObject.addMessage(alertMessage,Conditions.SPECIALVALUE);
         }
     }
 

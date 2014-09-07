@@ -75,9 +75,9 @@ public class NightScoutUpload extends AbstractMonitor {
             Log.w(TAG,"Nightscout base API url is not set for "+getName()+"("+deviceIDStr+")");
             return;
         }
-        int numRecs=d.getEgvRecords().length;
+        int numRecs=d.getEgvArrayListRecords().size();
         int index=0;
-        for (EGVRecord record : d.getEgvRecords()) {
+        for (EGVRecord record : d.getEgvArrayListRecords()) {
             if (!record.isNew())
                 continue;
             // hack to only send the last record for now...

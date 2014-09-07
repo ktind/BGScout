@@ -28,7 +28,6 @@ package com.ktind.cgm.bgscout;
 
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -86,7 +85,7 @@ public class CGMDownloadObject extends DownloadObject {
         // Then check to see if there are any records
         // finally set to now - 2.5 hours.
         if (this.lastReadingDate!=null)
-            return this.lastReadingDate;
+            return new Date(this.lastReadingDate);
         if (this.egvRecords != null && this.egvRecords.size() > 0)
             return egvRecords.get(egvRecords.size()-1).getDate();
 //            return egvRecords[egvRecords.length-1].getDate();

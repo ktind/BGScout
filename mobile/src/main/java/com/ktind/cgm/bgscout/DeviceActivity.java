@@ -1,11 +1,5 @@
 package com.ktind.cgm.bgscout;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -21,10 +15,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -44,6 +38,12 @@ import android.widget.Toast;
 import com.ktind.cgm.bgscout.model.Battery;
 import com.ktind.cgm.bgscout.model.DownloadDataSource;
 import com.ktind.cgm.bgscout.model.EGV;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 
 public class DeviceActivity extends Activity {
@@ -144,12 +144,12 @@ public class DeviceActivity extends Activity {
                 if (ui.containsKey(ld.getDeviceID())){
                     ui.get(ld.getDeviceID()).update(ld);
                 } else {
-                    Log.w("XXX","UI does not contain "+ld.getDeviceID());
+//                    Log.w("XXX","UI does not contain "+ld.getDeviceID());
                 }
             }
 //            UIDeviceList.get(0).update((DownloadObject) savedInstanceState.getSerializable("lastDownload"));
         } else {
-            Log.w("XXX", "Saved instance does not contain anything");
+//            Log.w("XXX", "Saved instance does not contain anything");
         }
 
     }
@@ -164,7 +164,7 @@ public class DeviceActivity extends Activity {
 
     public void buildUI(){
         // Build the UI objects
-        Log.d("XXX","Number of fragments here: "+PlaceholderFragment.fragments.size());
+//        Log.d("XXX","Number of fragments here: "+PlaceholderFragment.fragments.size());
         for (String key:PlaceholderFragment.fragments.keySet()) {
             TextView egvValue = (TextView) PlaceholderFragment.fragments.get(key).getView().findViewById(R.id.reading_text);
             TextView uploaderBatteryLabel = (TextView) PlaceholderFragment.fragments.get(key).getView().findViewById(R.id.uploader_battery_label);
@@ -175,7 +175,7 @@ public class DeviceActivity extends Activity {
             ImageView uploaderBat = (ImageView) PlaceholderFragment.fragments.get(key).getView().findViewById(R.id.uploader_battery_indicator);
             ImageView deviceBat = (ImageView) PlaceholderFragment.fragments.get(key).getView().findViewById(R.id.device_battery_indicator);
             UIDevice uid=new UIDevice(main,direction,egvValue,name,uploaderBat,uploaderBatteryLabel,deviceBat,deviceBatteryLabel);
-            Log.d("XXX", "Adding "+key+" to ui elements map");
+//            Log.d("XXX", "Adding "+key+" to ui elements map");
             ui.put(key, uid);
         }
 
@@ -369,13 +369,13 @@ public class DeviceActivity extends Activity {
 
         @Override
         public void onDestroyView() {
-            Log.d("XXX","onDestoryView called");
+//            Log.d("XXX","onDestoryView called");
             super.onDestroyView();
         }
 
         @Override
         public void onDestroy() {
-            Log.d("XXX","onDestory called");
+//            Log.d("XXX","onDestory called");
             super.onDestroy();
         }
 
@@ -395,7 +395,7 @@ public class DeviceActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            Log.d("XXX","onCreateView called");
+//            Log.d("XXX","onCreateView called");
             if (savedInstanceState!=null){
                 ld=savedInstanceState.getParcelable("lastDownload");
                 if (ld==null){
@@ -404,12 +404,12 @@ public class DeviceActivity extends Activity {
                     if (ui.containsKey(ld.getDeviceID())){
                         ui.get(ld.getDeviceID()).update(ld);
                     } else {
-                        Log.w("XXX","UI does not contain "+ld.getDeviceID());
+//                        Log.w("XXX","UI does not contain "+ld.getDeviceID());
                     }
                 }
 //            UIDeviceList.get(0).update((DownloadObject) savedInstanceState.getSerializable("lastDownload"));
             } else {
-                Log.w("XXX", "Saved instance does not contain anything");
+//                Log.w("XXX", "Saved instance does not contain anything");
             }
             View rootView = inflater.inflate(R.layout.fragment_device, container, false);
             return rootView;

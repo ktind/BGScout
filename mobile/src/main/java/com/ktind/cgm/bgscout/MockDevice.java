@@ -1,7 +1,6 @@
 package com.ktind.cgm.bgscout;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
@@ -72,10 +71,11 @@ public class MockDevice extends AbstractPollDevice {
     private DownloadObject generateDownloadObject(){
         Log.d(TAG,"Generating start object");
         DownloadStatus downloadStatus=generateStatus();
-        EGVRecord[] egvArray=new EGVRecord[1];
+        ArrayList<EGVRecord> egvArray=new ArrayList<EGVRecord>();
         Random rand=new Random();
-        egvArray[0]=new EGVRecord(rand.nextInt(362)+39,new Date(),Trend.values()[rand.nextInt(Trend.values().length)],true);
-        egvHistory.add(egvArray[0]);
+        EGVRecord egvRecord=new EGVRecord(rand.nextInt(362)+39,new Date().getTime(),Trend.values()[rand.nextInt(Trend.values().length)],true);
+        egvArray.add(egvRecord);
+        egvHistory.add(egvRecord);
 
         DownloadObject ddo=new DownloadObject(this,egvArray,downloadStatus);
         ddo.setUnit(GlucoseUnit.MGDL).setLastReadingDate(new Date()).setUploaderBattery(rand.nextFloat()*100).setDeviceBattery(rand.nextInt(101));

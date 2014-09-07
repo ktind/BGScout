@@ -2,8 +2,6 @@ package com.ktind.cgm.bgscout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -12,9 +10,9 @@ import com.google.gson.GsonBuilder;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgrObserverInterface;
 
-import java.io.IOException;
-
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import java.io.IOException;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -123,13 +121,13 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
             DownloadObject ddo=gson.fromJson(new String(msg.getPayload()),DownloadObject.class);
             Log.d(TAG,"Message from device: "+ddo.getDeviceName());
             setLastDownloadObject(ddo);
-            onDownload();
+            onDownload(ddo);
         }
     }
 
     @Override
     public void onDisconnect() {
         lastDownloadObject.setStatus(DownloadStatus.REMOTEDISCONNECTED);
-        fireMonitors();
+//        fireMonitors(lastDownloadObject);
     }
 }

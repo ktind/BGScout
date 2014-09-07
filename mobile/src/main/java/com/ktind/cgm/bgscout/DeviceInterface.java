@@ -29,7 +29,7 @@ package com.ktind.cgm.bgscout;
 public interface DeviceInterface {
     public void start();
     public void stop();
-    public void fireMonitors();
+    public void fireMonitors(DownloadObject dl);
     public void stopMonitors();
 //    public void download();
 }

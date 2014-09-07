@@ -71,8 +71,8 @@ public class PushOverMonitor extends AbstractMonitor {
         String apiSecret="a6As5oZJhxLayHPKM2AGJSWG6VLMDk";
         String postURL="https://api.pushover.net/1/messages.json";
         Log.i(TAG, "Posting to: " + postURL);
-        Log.d(TAG,"Number of records: "+d.getEgvRecords().length);
-        for (EGVRecord record : d.getEgvRecords()) {
+        Log.d(TAG,"Number of records: "+d.getEgvArrayListRecords().size());
+        for (EGVRecord record : d.getEgvArrayListRecords()) {
             try {
                 HttpPost post = new HttpPost(postURL);
                 final List<NameValuePair> nvps = new ArrayList<NameValuePair>();

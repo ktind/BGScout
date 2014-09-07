@@ -121,17 +121,18 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                 stats.startDownloadTimer();
                 Tracker tracker=((BGScout) context.getApplicationContext()).getTracker();
                 long downloadTimeStart=System.currentTimeMillis();
-                doDownload();
+                DownloadObject dl=doDownload();
                 tracker.send(new HitBuilders.TimingBuilder()
-                                .setCategory("Download")
+                                .setCategory("Device Download")
                                 .setLabel(driver)
                                 .setValue(System.currentTimeMillis() - downloadTimeStart)
+                                .setVariable(driver)
                                 .build()
                 );
                 Log.d(TAG,"Sent timing to GA: "+(System.currentTimeMillis()-downloadTimeStart));
                 stats.stopDownloadTimer();
                 Log.i(TAG,"Download complete in download thread");
-                onDownload();
+                onDownload(dl);
             }
         },"Download_"+deviceIDStr).start();
         Log.i(TAG,"After download thread creation");
@@ -164,7 +165,8 @@ abstract public class AbstractPollDevice extends AbstractDevice {
     public long nextFire(long millis){
         try {
             // FIXME consider using system time to determine the offset for the next reading rather than the display time to get rid of the time sync problems.
-            long lastDLlong=getLastDownloadObject().getEgvRecords()[getLastDownloadObject().getEgvRecords().length-1].getDate().getTime();
+//            long lastDLlong=getLastDownloadObject().getEgvRecords()[getLastDownloadObject().getEgvRecords().length-1].getDate().getTime();
+            long lastDLlong=getLastDownloadObject().getLastRecordReadingDate().getTime();
             Log.d(TAG,"nextFire calculated last dl to be: "+lastDLlong + " currentMillis: "+System.currentTimeMillis());
             long diff=(millis-(System.currentTimeMillis() - lastDLlong));
             Log.d(TAG,"nextFire calculated to be: "+diff+" for "+getName()+" using a poll interval of "+millis);

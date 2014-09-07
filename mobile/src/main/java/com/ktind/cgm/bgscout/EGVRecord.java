@@ -37,12 +37,12 @@ import java.util.Date;
 public class EGVRecord implements Parcelable {
     private static final String TAG = EGVRecord.class.getSimpleName();
     protected int egv;
-    protected Date date;
+    protected Long date;
     protected Trend trend=Trend.NONE;
     protected GlucoseUnit unit=GlucoseUnit.MGDL;
     protected boolean isNew=true;
 
-    EGVRecord(int egv,Date date,Trend trend,boolean isNew){
+    EGVRecord(int egv,long date,Trend trend,boolean isNew){
         super();
         this.setEgv(egv);
         this.setDate(date);
@@ -50,7 +50,13 @@ public class EGVRecord implements Parcelable {
         this.setNew(isNew);
     }
 
-
+    EGVRecord(EGVRecord record){
+        this.egv=record.getEgv();
+        this.date=record.date;
+        this.trend=record.getTrend();
+        this.unit=record.getUnit();
+        this.isNew=record.isNew;
+    }
 
     public EGVRecord(){
         super();
@@ -73,11 +79,15 @@ public class EGVRecord implements Parcelable {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date);
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
+    }
+
+    public void setDate(Date date){
+        setDate(date.getTime());
     }
 
     public Trend getTrend() {
@@ -104,7 +114,7 @@ public class EGVRecord implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(egv);
-        dest.writeLong(date.getTime());
+        dest.writeLong(date);
         dest.writeInt(trend.getVal());
         dest.writeInt(unit.getValue());
         dest.writeByte((byte) (isNew ? 1 : 0));
@@ -123,7 +133,7 @@ public class EGVRecord implements Parcelable {
 
     private EGVRecord(Parcel in) {
         egv=in.readInt();
-        date=new Date(in.readLong());
+        date=in.readLong();
         trend=Trend.values()[in.readInt()];
         unit=GlucoseUnit.values()[in.readInt()];
         isNew = in.readByte() != 0;
@@ -144,11 +154,16 @@ public class EGVRecord implements Parcelable {
             Log.d(TAG, "EGV Record failed on comparison isNew");
             return false;
         }
-        if (!date.equals(record.date)){
+//        if (!date.equals(record.date)){
+//            Log.d(TAG, "EGV Record failed on comparison date");
+//            return false;
+//        }
+        if (date==record.date){
             Log.d(TAG, "EGV Record failed on comparison date");
             return false;
         }
-        if (trend != record.trend){
+
+            if (trend != record.trend){
             Log.d(TAG, "EGV Record failed on comparison trend");
             return false;
         }

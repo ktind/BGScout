@@ -3,9 +3,14 @@ package com.ktind.cgm.bgscout.DexcomG4;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.ktind.cgm.bgscout.*;
+import com.ktind.cgm.bgscout.BitTools;
+import com.ktind.cgm.bgscout.CGMTransportAbstract;
+import com.ktind.cgm.bgscout.Constants;
+import com.ktind.cgm.bgscout.DeviceException;
+import com.ktind.cgm.bgscout.DeviceIOException;
+import com.ktind.cgm.bgscout.GlucoseUnit;
+import com.ktind.cgm.bgscout.NoDeviceFoundException;
+import com.ktind.cgm.bgscout.OperationNotSupportedException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -60,10 +65,17 @@ public class G4 {
     CGMTransportAbstract cgmTransport;
     protected GlucoseUnit unit;
     protected Context context;
+//    TimeZone tz;
+//    long timeZoneOffset;
 
     public G4(Context context){
         this.context=context;
         cgmTransport=new G4USBSerialTransport(context);
+//        Calendar cal = Calendar.getInstance();
+//        tz = cal.getTimeZone();
+//        timeZoneOffset=tz.getRawOffset()/1000;
+//        if (tz.inDaylightTime(new Date()))
+//            timeZoneOffset+=3600; // 1 hour for daylight time if it is observed
     }
 
     public int getDeviceBattery() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
@@ -84,7 +96,7 @@ public class G4 {
     public void setup() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
         if (cgmTransport.isOpen()) {
             unit = getUnit();
-            serialNum = getRcvrSerial();
+//            serialNum = getRcvrSerial();
             cgmBattery=getBatteryLevel();
         }else{
             Log.e(TAG,"Unable to setup device that I am not connected to");
@@ -252,11 +264,11 @@ public class G4 {
     }
 
     public long getDisplayTimeLong() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {
-        Calendar mCalendar = new GregorianCalendar();
-        TimeZone mTimeZone = mCalendar.getTimeZone();
+//        Calendar mCalendar = new GregorianCalendar();
+//        TimeZone mTimeZone = mCalendar.getTimeZone();
         long dispTime=G4Constants.RECEIVERBASEDATE+getDisplayTimeOffsetLong()*1000L+getSystemTimeLong()*1000L;
-        if (mTimeZone.inDaylightTime(new Date()))
-            dispTime-=3600000L;
+//        if (mTimeZone.inDaylightTime(new Date()))
+//            dispTime-=3600000L;
         Log.v(TAG,"getDisplayTimeLong: "+dispTime);
         return dispTime;
     }
@@ -591,7 +603,7 @@ public class G4 {
         for (G4DBPage page:pages){
             int i;
             // Ugly code to capture the null terminated string
-            for (i = 0; i < page.PageData.length && page.PageData[i] != 0x00; i++) { }
+            for (i = 1; i < page.PageData.length && page.PageData[i] != 0x00; i++) { }
             if (i<8)
                 throw new DeviceIOException("Expected larger page data in getParam for " + recType.toString() + " parameter: " + param);
             // Strip the header and reduce the size of the string by the header length
