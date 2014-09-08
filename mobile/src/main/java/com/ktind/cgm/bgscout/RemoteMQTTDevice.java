@@ -104,6 +104,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
     public void stop() {
         super.stop();
         disconnect();
+        state=State.STOPPED;
     }
 
     @Override

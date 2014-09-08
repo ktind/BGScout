@@ -26,10 +26,6 @@
 
 package com.ktind.cgm.bgscout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
 /**
  * Created by klee24 on 8/28/14.
  */
@@ -50,5 +46,7 @@ public abstract class AbstractDownloadAnalyzer implements DownloadAnalyzerInterf
     public AnalyzedDownload analyze() {
         return this.downloadObject;
     }
+
+    abstract protected void correlateMessages();
 
 }

@@ -28,14 +28,15 @@ package com.ktind.cgm.bgscout;
 
 import android.content.Context;
 
+import com.ktind.cgm.bgscout.DexcomG4.G4Constants;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
 
 /**
  * Created by klee24 on 8/28/14.
  */
 public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
-    protected final int MINEGV=39;
-    protected final int MAXEGV=401;
+//    protected final int MINEGV=39;
+//    protected final int MAXEGV=401;
 
 
     G4DownloadAnalyzer(DownloadObject dl, Context context) {
@@ -46,6 +47,7 @@ public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
     public AnalyzedDownload analyze() {
         super.analyze();
         checkSpecialValues();
+//        correlateMessages();
         return this.downloadObject;
     }
 
@@ -58,28 +60,45 @@ public class G4DownloadAnalyzer extends CGMDownloadAnalyzer {
             return;
         }
 
-        if (egvValue<MINEGV){
+        if (egvValue< G4Constants.MINEGV){
             G4EGVSpecialValue specialValue=G4EGVSpecialValue.getEGVSpecialValue(egvValue);
             AlertMessage alertMessage;
             if (specialValue!=null) {
-                alertMessage=new AlertMessage(AlertLevels.WARN, specialValue.toString());
+                alertMessage=new AlertMessage(AlertLevels.WARN, specialValue.toString(),Conditions.SPECIALVALUE);
             }else{
-                alertMessage=new AlertMessage(AlertLevels.WARN,"Unknown special value received from G4");
+                alertMessage=new AlertMessage(AlertLevels.WARN,"Unknown special value received from G4",Conditions.DEVICEMSGS);
             }
-            downloadObject.addMessage(alertMessage,Conditions.SPECIALVALUE);
+            downloadObject.addMessage(alertMessage);
         }
     }
 
     @Override
-    protected void checkThresholdholds() throws NoDataException {
-        int egv=downloadObject.getLastReading();
-        if (egv>=MAXEGV) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "EGV is too high to read"),Conditions.CRITICALHIGH);
-            return;
-        } else if (egv<=MINEGV && ! G4EGVSpecialValue.isSpecialValue(egv)) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "EGV is too low to read"),Conditions.CRITICALLOW);
-            return;
+    protected void checkThresholdholds(){
+        int egv=0;
+        try {
+            egv = downloadObject.getLastReading();
+            if (egv>=G4Constants.MAXEGV) {
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "EGV is too high to read",Conditions.CRITICALHIGH));
+                return;
+            } else if (egv<=G4Constants.MINEGV && ! G4EGVSpecialValue.isSpecialValue(egv)) {
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "EGV is too low to read",Conditions.CRITICALLOW));
+                return;
+            }
+        } catch (NoDataException e) {
+//            e.printStackTrace();
         }
+
         super.checkThresholdholds();
     }
+
+    @Override
+    protected void correlateMessages(){
+        // Special values are < 39.
+        Conditions[] conditions={Conditions.CRITICALLOW,Conditions.WARNLOW};
+        if (downloadObject.getConditions().contains(Conditions.SPECIALVALUE)){
+            downloadObject.removeMessageByCondition(Conditions.CRITICALLOW,Conditions.WARNLOW);
+        }
+        super.correlateMessages();
+    }
+
 }

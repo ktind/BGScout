@@ -26,63 +26,34 @@
 
 package com.ktind.cgm.bgscout;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
- * Created by klee24 on 8/28/14.
+ * Created by klee24 on 9/7/14.
  */
-public class AlertMessage {
-    public AlertLevels alertLevel;
-    public String message;
-    public Conditions condition;
+public class TimeTools {
 
-    public AlertMessage(AlertLevels aL,String msg,Conditions condition){
-        this.alertLevel=aL;
-        this.message=msg;
-        this.condition=condition;
-    }
-
-    public AlertLevels getAlertLevel() {
-        return alertLevel;
-    }
-
-    public void setAlertLevel(AlertLevels alertLevel) {
-        this.alertLevel = alertLevel;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Conditions getCondition() {
-        return condition;
-    }
-
-    public void setCondition(Conditions condition) {
-        this.condition = condition;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AlertMessage that = (AlertMessage) o;
-
-        if (alertLevel != that.alertLevel) return false;
-        if (condition != that.condition) return false;
-        if (!message.equals(that.message)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = alertLevel.hashCode();
-        result = 31 * result + message.hashCode();
-        result = 31 * result + condition.hashCode();
-        return result;
+    static public String getTimeDiffStr(Date start,Date end){
+        long timeDiff = (int) (end.getTime()-start.getTime());
+        String msg="~";
+//        Log.d("XXX", "Start: " + start);
+//        Log.d("XXX","End: "+end);
+//        Log.d("XXX","Time difference: "+timeDiff);
+        if (timeDiff<60000) {
+            msg += "Now";
+        }else if (timeDiff>60000 && timeDiff<3600000){
+            msg += String.valueOf((timeDiff/1000)/60);
+            msg += "m";
+        }else if (timeDiff>3600000 && timeDiff<86400000){
+            msg += String.valueOf(((timeDiff/1000)/60)/60);
+            msg += "h";
+        }else if (timeDiff>86400000 && timeDiff<604800000){
+            msg += String.valueOf((((timeDiff/1000)/60)/60)/24);
+            msg += "d";
+        }else {
+            msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(start);
+        }
+        return msg;
     }
 }

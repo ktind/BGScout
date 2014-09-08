@@ -193,7 +193,6 @@ abstract public class AbstractPollDevice extends AbstractDevice {
                     Intent pIntent = new Intent(Constants.DEVICE_POLL);
                     pIntent.putExtra("device",deviceIDStr);
                     alarmIntent = PendingIntent.getBroadcast(AbstractPollDevice.this.context, deviceID, pIntent, 0);
-                    // FIXME - Needs to use setExact on Kitkat devices otherwise the alarm gets batched
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                         alarmMgr.setExact(AlarmManager.RTC_WAKEUP,getNextReadingTime().getTime(),alarmIntent);
                     else

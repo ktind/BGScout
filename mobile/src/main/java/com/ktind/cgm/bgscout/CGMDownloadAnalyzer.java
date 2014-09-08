@@ -32,7 +32,6 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -45,8 +44,6 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
     protected final int DEVICEBATTERYCRITICAL =20;
     protected final int MAXRECORDAGE=310000;
     protected EGVLimits egvLimits=new EGVLimits();
-//    protected EGVThresholdsEnum conditions=EGVThresholdsEnum.INRANGE;
-    
 
     CGMDownloadAnalyzer(DownloadObject dl,Context context) {
         super(dl);
@@ -70,133 +67,127 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
     }
 
     public AnalyzedDownload analyze() {
-        try {
-            super.analyze();
-            checkDownloadStatus();
-            checkUploaderBattery();
-            checkCGMBattery();
-            checkRecordAge();
-            checkThresholdholds();
-            checkLastRecordTime();
-        } catch (NoDataException e) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data"),Conditions.NODATA);
-//            e.printStackTrace();
-        }
+        super.analyze();
+        checkDownloadStatus();
+        checkRecordAge();
+        checkUploaderBattery();
+        checkCGMBattery();
+        checkThresholdholds();
+        checkLastRecordTime();
+        correlateMessages();
+//        downloadObject.deDup();
         return this.downloadObject;
     }
 
     protected void checkUploaderBattery(){
-        if (downloadObject.getUploaderBattery() < UPLOADERBATTERYWARN) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "Uploader battery is low: "+(int) downloadObject.getUploaderBattery()),Conditions.UPLOADERLOW);
-        } else if (downloadObject.getUploaderBattery() < UPLOADERBATTERYCRITICAL) {
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "Uploader battery is critically low: "+(int) downloadObject.getUploaderBattery()),Conditions.UPLOADERCRITICALLOW);
+        // FIXME this breaks i18n possibilties
+        String verb=(downloadObject.getConditions().contains(Conditions.STALEDATA))?"was":"is";
+        if (downloadObject.getUploaderBattery() < UPLOADERBATTERYCRITICAL){
+            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "Uploader battery " + verb + " critically low: " + (int) downloadObject.getUploaderBattery(), Conditions.UPLOADERCRITICALLOW));
+        }else if (downloadObject.getUploaderBattery() < UPLOADERBATTERYWARN) {
+            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "Uploader battery "+verb+" low: "+(int) downloadObject.getUploaderBattery(),Conditions.UPLOADERLOW));
         }
     }
 
     protected void checkCGMBattery(){
         if (downloadObject.getStatus()==DownloadStatus.SUCCESS) {
-            if (downloadObject.getDeviceBattery() < DEVICEBATTERYWARN) {
-                downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "CGM battery is low: "+downloadObject.getDeviceBattery()),Conditions.DEVICELOW);
-            } else if (downloadObject.getDeviceBattery() < DEVICEBATTERYCRITICAL) {
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM battery is critically low"+downloadObject.getDeviceBattery()),Conditions.DEVICECRITICALLOW);
+            String verb=(downloadObject.getConditions().contains(Conditions.STALEDATA))?"was":"is";
+            if (downloadObject.getDeviceBattery() < DEVICEBATTERYCRITICAL) {
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM battery " + verb + " critically low" + downloadObject.getDeviceBattery(), Conditions.DEVICECRITICALLOW));
+            }else if (downloadObject.getDeviceBattery() < DEVICEBATTERYWARN) {
+                downloadObject.addMessage(new AlertMessage(AlertLevels.WARN, "CGM battery "+verb+" low: "+downloadObject.getDeviceBattery(),Conditions.DEVICELOW));
             }
         }
     }
 
-    protected void checkRecordAge() throws NoDataException {
-        Long recordAge=new Date().getTime() - downloadObject.getLastRecordReadingDate().getTime();
-        if (recordAge > MAXRECORDAGE)
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Last record is greater than "+((recordAge/1000)/60)+" minutes old"),Conditions.STALEDATA);
+    protected void checkRecordAge(){
+        Long recordAge= null;
         Long downloadAge=new Date().getTime() - downloadObject.getDownloadDate().getTime();
+        try {
+            recordAge = new Date().getTime() - downloadObject.getLastRecordReadingDate().getTime();
+            // Cutdown on clutter in the notification bar...
+            // Only show the message for a missed reading or that the uploader isn't communicating
+            if (recordAge > MAXRECORDAGE && downloadAge <= MAXRECORDAGE) {
+                //FIXME if the record is over a month old then it will only show the date and it won't make sense to the user. Need to add a special condition.
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM out of range/missed reading for " + TimeTools.getTimeDiffStr(downloadObject.getLastRecordReadingDate(),new Date()), Conditions.MISSEDREADING));
+//                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL, "CGM out of range or missed reading for more than " + ((recordAge / 1000) / 60) + " minutes old", Conditions.MISSEDREADING));
+            }
+        } catch (NoDataException e) {
+            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data",Conditions.NODATA));
+        }
         if (downloadAge > MAXRECORDAGE)
-            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Have not heard from remote CGM for more than "+((downloadAge/1000)/60)+" minutes"),Conditions.STALEDATA);
+            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Uploader inactive for "+TimeTools.getTimeDiffStr(downloadObject.getDownloadDate(),new Date()),Conditions.STALEDATA));
     }
 
     protected void checkDownloadStatus(){
         DownloadStatus status=downloadObject.getStatus();
         switch (status){
             case DEVICENOTFOUND:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No CGM device found"),Conditions.DEVICEDISCONNECTED);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No CGM device found",Conditions.DEVICEDISCONNECTED));
                 break;
             case IOERROR:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to read or write to the CGM"),Conditions.DOWNLOADFAILED);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to read or write to the CGM",Conditions.DOWNLOADFAILED));
                 break;
             case NODATA:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No data in download"),Conditions.NODATA);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"No data in download",Conditions.NODATA));
                 break;
             case APPLICATIONERROR:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown application error"),Conditions.UNKNOWN);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown application error",Conditions.UNKNOWN));
                 break;
             case UNKNOWN:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown error while trying to retrieve data from CGM"),Conditions.UNKNOWN);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unknown error while trying to retrieve data from CGM",Conditions.UNKNOWN));
                 break;
             case REMOTEDISCONNECTED:
-                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to connect to remote devices"),Conditions.REMOTEDISCONNECTED);
+                downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,"Unable to connect to remote devices",Conditions.REMOTEDISCONNECTED));
             default:
                 break;
         }
     }
 
-    protected void checkThresholdholds() throws NoDataException {
-        int egv=downloadObject.getLastReading();
-        Trend trend=downloadObject.getLastTrend();
-        GlucoseUnit unit=downloadObject.getUnit();
-        AlertLevels alertLevel=AlertLevels.INFO;
-        Conditions condition= Conditions.INRANGE;
-        if (egv > egvLimits.getCriticalHigh()) {
-            condition=Conditions.CRITICALHIGH;
-            alertLevel = AlertLevels.CRITICAL;
-        }else if (egv < egvLimits.getCriticalLow()) {
-            condition=Conditions.CRITICALLOW;
-            alertLevel = AlertLevels.CRITICAL;
-        }else if (egv > egvLimits.getWarnHigh()) {
-            condition=Conditions.WARNHIGH;
-            alertLevel = AlertLevels.WARN;
-        }else if (egv < egvLimits.getWarnLow()) {
-            condition=Conditions.WARNLOW;
-            alertLevel = AlertLevels.WARN;
+    protected void checkThresholdholds(){
+        try {
+            int egv=0;
+            egv = downloadObject.getLastReading();
+            Trend trend=downloadObject.getLastTrend();
+            GlucoseUnit unit=downloadObject.getUnit();
+            AlertLevels alertLevel=AlertLevels.INFO;
+            Conditions condition=Conditions.INRANGE;
+            if (egv > egvLimits.getCriticalHigh()) {
+                condition=Conditions.CRITICALHIGH;
+                alertLevel = AlertLevels.CRITICAL;
+            }else if (egv < egvLimits.getCriticalLow()) {
+                condition=Conditions.CRITICALLOW;
+                alertLevel = AlertLevels.CRITICAL;
+            }else if (egv > egvLimits.getWarnHigh()) {
+                condition=Conditions.WARNHIGH;
+                alertLevel = AlertLevels.WARN;
+            }else if (egv < egvLimits.getWarnLow()) {
+                condition=Conditions.WARNLOW;
+                alertLevel = AlertLevels.WARN;
+            }
+            String preamble=(downloadObject.getConditions().contains(Conditions.MISSEDREADING) || downloadObject.getConditions().contains(Conditions.STALEDATA))?"Last reading: ":"";
+            downloadObject.addMessage(new AlertMessage(alertLevel,preamble+egv+" "+unit+" "+trend,condition));
+        } catch (NoDataException e) {
+            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data",Conditions.NODATA));
         }
-        downloadObject.addMessage(new AlertMessage(alertLevel,egv+" "+unit+" "+trend),condition);
     }
 
-    protected void checkLastRecordTime() throws NoDataException {
-//        String msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
-        String msg="~";
-        int timeDiff=(int) (new Date().getTime()-downloadObject.getLastRecordReadingDate().getTime());
-        Log.d("XXX","Time difference: "+timeDiff);
-        if (timeDiff<60000) {
-            msg += "Now";
-        }else if (timeDiff>60000 && timeDiff<3600000){
-            msg += String.valueOf((timeDiff/1000)/60);
-            msg += "m";
-        }else if (timeDiff>3600000 && timeDiff<86400000){
-            msg += String.valueOf(((timeDiff/1000)/60)/24);
-            msg += "h";
-        }else if (timeDiff>86400000 && timeDiff<604800000){
-            msg += String.valueOf((((timeDiff/1000)/60)/24)/7);
-            msg += "w";
-        }else {
-            msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
+    protected void checkLastRecordTime(){
+        String msg;
+        try {
+            msg=TimeTools.getTimeDiffStr(downloadObject.getLastRecordReadingDate(),new Date());
+            downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,msg,Conditions.READINGTIME));
+        } catch (NoDataException e) {
+            downloadObject.addMessage(new AlertMessage(AlertLevels.WARN,"Download did not contain any data",Conditions.NODATA));
         }
-        msg+="\n"+new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
-        downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,msg),Conditions.NONE);
-//        msg="Download: ~";
-//        timeDiff=(int) (new Date().getTime()-downloadObject.getDownloadDate().getTime());
-//        Log.d("XXX","Time difference: "+timeDiff);
-//        if (timeDiff<60000) {
-//            msg += "Now";
-//        }else if (timeDiff>60000 && timeDiff<3600000){
-//            msg += String.valueOf((timeDiff/1000)/60);
-//            msg += "m";
-//        }else if (timeDiff>3600000 && timeDiff<86400000){
-//            msg += String.valueOf(((timeDiff/1000)/60)/24);
-//            msg += "h";
-//        }else if (timeDiff>86400000 && timeDiff<604800000){
-//            msg += String.valueOf((((timeDiff/1000)/60)/24)/7);
-//            msg += "w";
-//        }else {
-//            msg=new SimpleDateFormat("HH:mm:ss MM/dd").format(downloadObject.getLastRecordReadingDate());
-//        }
-//        downloadObject.addMessage(new AlertMessage(AlertLevels.CRITICAL,msg),Conditions.NONE);
     }
+
+    @Override
+    protected void correlateMessages(){
+        if (downloadObject.getConditions().contains(Conditions.NODATA) && downloadObject.getConditions().contains(Conditions.DEVICEDISCONNECTED))
+            downloadObject.removeMessageByCondition(Conditions.NODATA);
+        if (downloadObject.getConditions().contains(Conditions.MISSEDREADING))
+            downloadObject.removeMessageByCondition(Conditions.READINGTIME);
+    }
+
 }

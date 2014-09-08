@@ -47,8 +47,8 @@
     <string name="device_ns">Nightscout API settings</string>
     <string name="prefs_cat_threshold">Thresholds</string>
     <string name="last_g4_download">lastG4Download</string>
-    <string name="uploader_battery_default">-%</string>
-    <string name="device_battery_default">-%</string>
+    <string name="uploader_battery_default">%</string>
+    <string name="device_battery_default">%</string>
     <string name="default_bg_text">---</string>
     <string name="default_name_text">---</string>
     <string name="device_g4">G4 Options</string>

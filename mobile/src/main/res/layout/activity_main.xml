@@ -55,7 +55,7 @@
                 android:gravity="center"
                 android:layout_alignRight="@+id/direction_image"
                 android:layout_alignLeft="@+id/direction_image"
-                android:textSize="40sp"
+                android:textSize="35sp"
                 android:textStyle="bold" />
 
             <ImageView

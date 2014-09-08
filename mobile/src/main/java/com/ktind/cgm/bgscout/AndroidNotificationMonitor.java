@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.ktind.cgm.bgscout.DexcomG4.G4Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,9 +151,13 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         }
         if (dl.getEgvArrayListRecords().size()>0)
             lastKnownGood = dl;
-        // TODO add devicetype to the download object so that we can instantiate the proper analyzer
-        AbstractDownloadAnalyzer downloadAnalyzer=new G4DownloadAnalyzer(dl, context);
-        analyzedDownload=downloadAnalyzer.analyze();
+        // FIXME violates the open/closed principle... have to change this class if any new devices are added. Look into DI
+        if (dl.getDriver().equals(G4Constants.DRIVER)) {
+            AbstractDownloadAnalyzer downloadAnalyzer = new G4DownloadAnalyzer(dl, context);
+            analyzedDownload = downloadAnalyzer.analyze();
+        } else {
+            Log.w(TAG,"Driver unknown by the analyzer: "+dl.getDriver());
+        }
 
         if (isSilenced){
             long duration=new Date().getTime()-timeSilenced.getTime();
@@ -189,7 +194,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 Log.d(TAG, "Setting tickCounter to " + tickCounter);
             }
         } catch (NoDataException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -269,7 +274,6 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 break;
         }
         notifBuilder.setSound(uri);
-
     }
     
     public void setTicker(AnalyzedDownload dl){
@@ -504,16 +508,9 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 updateNotification();
                 isScreenOn=true;
-//                tickReceiver=new tickReceiver();
-//                IntentFilter intentFilter = new IntentFilter("android.intent.action.TIME_TICK");
-//                context.registerReceiver(tickReceiver, intentFilter);
                 Log.d(TAG, "Kicking off tick timer");
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-//                IntentFilter intentFilter = new IntentFilter("android.intent.action.TIME_TICK");
-//                context.unregisterReceiver(tickReceiver);
-//                tickReceiver=null;
                 isScreenOn=false;
-//                Log.d(TAG, "Canceling tick timer");
             }
         }
     }
@@ -546,7 +543,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                     }
                     tickCounter+=1;
                 } catch (NoDataException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
 
             }
@@ -555,13 +552,6 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
 
     private Bitmap getThumbnailByPhoneDataUri(Uri phoneDataUri){
         String id=phoneDataUri.getLastPathSegment();
-//        Cursor cursor = getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
-//        int rawContactIdx=cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID);
-//        String rawContactId=null;
-//        if (cursor.moveToFirst()){
-//            rawContactId=cursor.getString(rawContactIdx);
-//        }
-//        cursor.close();
         Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,null, ContactsContract.Data._ID+" = ? ",new String[]{id},null);
         int thumbnailUriIdx=cursor.getColumnIndex(ContactsContract.Data.PHOTO_ID);
         String thumbnailId=null;
@@ -579,8 +569,6 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
             }
         }
         cursor.close();
-//        InputStream photoDataStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),uri);
-//        Bitmap photo=BitmapFactory.decodeStream(photoDataStream);
         return thumbnail;
     }
 

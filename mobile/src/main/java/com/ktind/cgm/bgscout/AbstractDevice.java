@@ -8,10 +8,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,10 +74,8 @@ public abstract class AbstractDevice implements DeviceInterface {
         this.driver=driver;
         this.setDeviceID(deviceID);
         this.setContext(context);
-//        this.setHandler(mH);
         this.deviceIDStr = "device_" + String.valueOf(getDeviceID());
         sharedPref=PreferenceManager.getDefaultSharedPreferences(context);
-//        monitors=new ArrayList<AbstractMonitor>();
         state=State.STOPPED;
         String contactDataUri=sharedPref.getString(deviceIDStr+"_contact_data_uri",Uri.EMPTY.toString());
 
@@ -144,16 +143,6 @@ public abstract class AbstractDevice implements DeviceInterface {
         context.registerReceiver(uiQuery,intentFilter);
     }
 
-
-//    public void mainloop(){
-//        while(started){
-//
-//        }
-//    }
-//    public void setHandler(Handler mH){
-//        this.mHandler=mH;
-//    }
-
     public float getUploaderBattery(){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = context.registerReceiver(null, ifilter);
@@ -212,14 +201,8 @@ public abstract class AbstractDevice implements DeviceInterface {
         // FIXME why is monitors set to null here sometimes?
         if (monitors==null)
             return;
-        for (AbstractMonitor monitor:monitors){
-//            try {
-//                monitor.process(getLastDownloadObject());
-                monitor.process(dl);
-//            } catch (DeviceException e) {
-//                Log.w(TAG,e.getMessage());
-//            }
-        }
+        for (AbstractMonitor monitor:monitors)
+            monitor.process(dl);
         stats.stopMonitorTimer();
     }
 
@@ -308,20 +291,12 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     protected void onDownload(DownloadObject dl){
         sendToUI();
-//        try {
-            if (Looper.getMainLooper().getThread()==Thread.currentThread())
-                Log.d(TAG,"ON THE MAIN Thread!!!");
-            else
-                Log.d(TAG, "Not on the MAIN Thread ("+Thread.currentThread().getName()+"/"+Thread.currentThread().getState()+")");
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putLong(deviceIDStr +"_last_"+driver, dl.getLastReadingDate().getTime());
-            editor.apply();
-//        } catch (NoDataException e) {
-//            Log.i(TAG,"No data on download");
-////            e.printStackTrace();
-//        }
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putLong(deviceIDStr +"_last_"+driver, dl.getLastReadingDate().getTime());
+//        editor.apply();
         fireMonitors(dl);
+        GoogleAnalytics.getInstance(context.getApplicationContext()).dispatchLocalHits();
     }
 
     public void sendToUI(){
@@ -334,17 +309,13 @@ public abstract class AbstractDevice implements DeviceInterface {
         } catch (NoDataException e) {
             downloadObject=new DownloadObject();
             Log.e(TAG,"Sending empty DownloadObject",e);
-//            e.printStackTrace();
         } finally {
             if (downloadObject!=null) {
                 downloadObject.setDeviceID(deviceIDStr);
                 downloadObject.setDeviceName(getName());
-//                downloadObject.buildMessage();
                 uiIntent.putExtra("download", downloadObject);
             }
         }
-//        Log.d(TAG,"Sending broadcast to UI: "+uiIntent.getExtras().getString("download",""));
-
         context.sendBroadcast(uiIntent);
     }
 
@@ -354,8 +325,8 @@ public abstract class AbstractDevice implements DeviceInterface {
 
     @Override
     public void stop() {
-        if (state==State.STOPPED) {
-            Log.w(TAG,getName()+"/"+getDeviceType()+" has already been stopped");
+        if (state==State.STOPPED || state==State.STOPPING) {
+            Log.w(TAG,getName()+"/"+getDeviceType()+" has already been stopped or is being stopped");
             return;
         }
         state=State.STOPPING;
@@ -364,13 +335,6 @@ public abstract class AbstractDevice implements DeviceInterface {
             context.unregisterReceiver(uiQuery);
         started=false;
     }
-
-//    public enum State{
-//        STARTING,
-//        STARTED,
-//        STOPPING,
-//        STOPPED
-//    }
 
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
@@ -390,7 +354,6 @@ public abstract class AbstractDevice implements DeviceInterface {
         String id=dataUri.getLastPathSegment();
         Log.d(TAG,"id="+id);
         Log.d(TAG,"URI="+dataUri);
-        // TODO Limit fields returned to specific field that we want? Phone?
         Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data._ID + " = ?", new String[]{id}, null);
         int numIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
         Log.d(TAG, "cursor.getCount(): " + cursor.getCount());

@@ -5,8 +5,9 @@ import android.app.Application;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
-import org.acra.*;
-import org.acra.annotation.*;
+import org.acra.ACRA;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 
 /**
@@ -53,7 +54,6 @@ public class BGScout extends Application {
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
-
     }
 
     synchronized public Tracker getTracker() {

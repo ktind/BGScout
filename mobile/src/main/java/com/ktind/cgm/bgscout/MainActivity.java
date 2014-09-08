@@ -30,21 +30,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.ktind.cgm.bgscout.DexcomG4.G4Constants;
 import com.ktind.cgm.bgscout.model.Battery;
 import com.ktind.cgm.bgscout.model.DownloadDataSource;
 import com.ktind.cgm.bgscout.model.EGV;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -484,6 +482,8 @@ public class MainActivity extends Activity {
             setDeviceBatteryLabel(dbatl);
             deviceBattery.setImageResource(R.drawable.battery);
             uploaderBattery.setImageResource(R.drawable.battery);
+            deviceBattery.setImageLevel(100);
+            uploaderBattery.setImageLevel(100);
         }
 
         public TextView getUploaderBatteryLabel() {
@@ -539,7 +539,15 @@ public class MainActivity extends Activity {
                 }
                 mainBGColor=currentBGColor;
                 main_display.setBackgroundColor(mainBGColor);
-                bg.setText(String.valueOf(r));
+                //FIXME G4 specific code
+                if (r> G4Constants.MINEGV)
+                    bg.setText(String.valueOf(r));
+                else if (r==G4Constants.MINEGV)
+                    bg.setText("Too low");
+                else if (r>G4Constants.MAXEGV)
+                    bg.setText("Too high");
+                else
+                    bg.setText("---");
 
                 int dbat=dl.getDeviceBattery();
                 deviceBatteryLabel.setText(String.valueOf(dbat));
@@ -552,7 +560,7 @@ public class MainActivity extends Activity {
 
 
             } catch (NoDataException e) {
-                Log.d(TAG,"No data in previous download",e);
+                Log.d(TAG,"No data in previous download");
             }
         }
 

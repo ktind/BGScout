@@ -48,5 +48,6 @@ public enum Conditions {
     NONE,
     REMOTEDISCONNECTED,
     MISSEDREADING,
-    SPECIALVALUE
+    SPECIALVALUE,
+    READINGTIME
 }

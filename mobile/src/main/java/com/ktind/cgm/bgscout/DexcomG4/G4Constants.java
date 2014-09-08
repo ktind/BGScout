@@ -28,9 +28,12 @@ import com.ktind.cgm.bgscout.Constants;
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public class G4Constants extends Constants {
-    final static int READING_INTERVAL= 60*5; // 5 minutes in seconds (60 seconds * 5 minutes)
-    final static int defaultReadings=10;
-    final static int defaultReadTimeout=200;
-    final static int defaultWriteTimeout=200;
-    final static long RECEIVERBASEDATE=1230789600000L;
+    public final static int READING_INTERVAL= 60*5; // 5 minutes in seconds (60 seconds * 5 minutes)
+    public final static int defaultReadings=10;
+    public final static int defaultReadTimeout=200;
+    public final static int defaultWriteTimeout=200;
+    public final static long RECEIVERBASEDATE=1230789600000L;
+    public final static int MINEGV=39;
+    public final static int MAXEGV=401;
+    public final static String DRIVER="DexcomG4";
 }

@@ -31,9 +31,7 @@ import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
-import com.ktind.cgm.bgscout.DexcomG4.G4Constants;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -142,7 +140,7 @@ public class PebbleMonitor extends AbstractMonitor {
             data.addString(BATT, String.valueOf((int) dl.getUploaderBattery()));
             data.addString(NAME, dl.getDeviceName());
         } catch (NoDataException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return data;
     }

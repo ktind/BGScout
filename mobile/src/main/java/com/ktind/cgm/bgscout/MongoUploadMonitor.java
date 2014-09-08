@@ -60,19 +60,23 @@ public class MongoUploadMonitor extends AbstractMonitor {
 
         DBCollection deviceData;
 
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        // FIXME there has to be a better way than this?!
-//        String[] device_list={"device_1","device_2","device_3","device_4"};
-        for (String dev:Constants.DEVICES) {
-            if (sharedPref.getString(dev+"_name","").equals(getName())){
-                mongoURI=sharedPref.getString(dev+"_mongo_uri","");
-                collectionName=sharedPref.getString(dev+"_mongo_col","");
-                break;
-            }
-        }
+        mongoURI=sharedPref.getString(deviceIDStr+"_mongo_uri","");
+        collectionName=sharedPref.getString(deviceIDStr+"_mongo_col","");
         MongoClientURI uri=null;
-        if (mongoURI!=null)
+        if (mongoURI!=null && ! mongoURI.equals("")) {
             uri = new MongoClientURI(mongoURI);
+            Log.w(TAG,"Mongo URI not set");
+            NotifHelper.notify(context,"Mongo URI not set");
+        } else {
+            NotifHelper.clearMessage(context,"Mongo URI not set");
+        }
+
+        if (uri==null){
+            NotifHelper.notify(context,"Bad mongo URI");
+            return;
+        } else {
+            NotifHelper.clearMessage(context,"Bad mongo URI");
+        }
 
         DB db;
 
@@ -84,21 +88,19 @@ public class MongoUploadMonitor extends AbstractMonitor {
             int uploadCount=0;
             for (EGVRecord sr:r) {
                 BasicDBObject data = new BasicDBObject();
-//                if (sr.isNew()) {
-                    data.put("name", d.getDeviceName());
-                    data.put("trend", sr.getTrend().getVal());
+                data.put("name", d.getDeviceName());
+                data.put("trend", sr.getTrend().getVal());
 
-                    // NightScout comptability
-                    data.put("device", "dexcom");
-                    data.put("date", sr.getDate().getTime());
-                    data.put("dateString", new SimpleDateFormat("MM/dd/yyy hh:mm:ss aa").format(sr.getDate()));
-                    data.put("sgv", sr.getEgv());
-                    data.put("direction", sr.getTrend().getNsString());
+                // NightScout comptability
+                data.put("device", "dexcom");
+                data.put("date", sr.getDate().getTime());
+                data.put("dateString", new SimpleDateFormat("MM/dd/yyy hh:mm:ss aa").format(sr.getDate()));
+                data.put("sgv", sr.getEgv());
+                data.put("direction", sr.getTrend().getNsString());
 
-                    deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
-                    uploadCount+=1;
-                    Log.v(TAG, "Added Record - EGV: " + sr.getEgv() + " Trend: " + sr.getTrend().getNsString() + " Date: " + new SimpleDateFormat("MM/dd/yyy hh:mm:ss aa").format(sr.getDate()));
-//                }
+                deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
+                uploadCount+=1;
+                Log.v(TAG, "Added Record - EGV: " + sr.getEgv() + " Trend: " + sr.getTrend().getNsString() + " Date: " + new SimpleDateFormat("MM/dd/yyy hh:mm:ss aa").format(sr.getDate()));
             }
             Log.i(TAG,"Records processed: "+r.size()+" Records Uploaded: "+uploadCount);
             if (!d.isRemoteDevice()) {
@@ -112,17 +114,25 @@ public class MongoUploadMonitor extends AbstractMonitor {
                 deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
             }
             mongoClient.close();
+            // Feels like a hack - need to figure out a better way to handle monitor error messages for the user
+            NotifHelper.clearMessage(context,"Unable to upload to mongoDB");
+            NotifHelper.clearMessage(context,"Mongo timeout");
+            NotifHelper.clearMessage(context,"Mongo error");
             try {
                 savelastSuccessDate(d.getLastRecordReadingDate().getTime());
             } catch (NoDataException e) {
                 Log.v(TAG,"No data in download to update last success time");
             }
+            //TODO Alert user when connection to mongo is unsuccessful
         } catch (UnknownHostException e) {
             Log.e(TAG,"Unable to upload to mongoDB",e);
+            NotifHelper.notify(context,"Unable to upload to mongoDB");
         } catch (MongoTimeoutException e){
             Log.w(TAG,"Mongo timeout");
+            NotifHelper.notify(context,"Mongo timeout");
         } catch (MongoException e){
             Log.w(TAG, "Mongo catch all exception: ",e);
+            NotifHelper.notify(context,"Mongo error");
         }
     }
 
@@ -130,4 +140,5 @@ public class MongoUploadMonitor extends AbstractMonitor {
     public void stop() {
         Log.i(TAG, "Stopping monitor " + monitorType + " for " + name);
     }
+
 }

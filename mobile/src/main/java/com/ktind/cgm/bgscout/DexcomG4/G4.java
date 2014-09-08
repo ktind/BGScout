@@ -65,17 +65,10 @@ public class G4 {
     CGMTransportAbstract cgmTransport;
     protected GlucoseUnit unit;
     protected Context context;
-//    TimeZone tz;
-//    long timeZoneOffset;
 
     public G4(Context context){
         this.context=context;
         cgmTransport=new G4USBSerialTransport(context);
-//        Calendar cal = Calendar.getInstance();
-//        tz = cal.getTimeZone();
-//        timeZoneOffset=tz.getRawOffset()/1000;
-//        if (tz.inDaylightTime(new Date()))
-//            timeZoneOffset+=3600; // 1 hour for daylight time if it is observed
     }
 
     public int getDeviceBattery() throws OperationNotSupportedException, NoDeviceFoundException, DeviceIOException {

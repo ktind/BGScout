@@ -8,7 +8,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.ktind.cgm.bgscout.DexcomG4.G4;
 import com.ktind.cgm.bgscout.DexcomG4.G4EGVRecord;
-import com.ktind.cgm.bgscout.DexcomG4.G4EGVSpecialValue;
+
+import org.acra.ACRA;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,8 +43,6 @@ import java.util.HashMap;
 
  */
 public class G4CGMDevice extends AbstractPollDevice {
-//    protected String serialNum;
-//    protected String receiverID;
     protected int cgmBattery=-1;
 
     private static final String TAG = G4CGMDevice.class.getSimpleName();
@@ -53,8 +52,6 @@ public class G4CGMDevice extends AbstractPollDevice {
         super(name,devID,context,"DexcomG4");
         device=new G4(context);
         remote = false;
-//        driver="DexcomG4";
-//        cgmTransport=new G4USBSerialTransport(context);
         this.deviceType="Dexcom G4";
     }
 
@@ -77,7 +74,6 @@ public class G4CGMDevice extends AbstractPollDevice {
 
     @Override
     protected DownloadObject doDownload() {
-//        String specialMessage="";
         int deviceBattery=-1;
         float uploaderBattery=getUploaderBattery()*100.0f;
 
@@ -88,11 +84,13 @@ public class G4CGMDevice extends AbstractPollDevice {
         int unitID=Integer.parseInt(sharedPref.getString(deviceIDStr+"_units","0"));
         GlucoseUnit g_unit;
         g_unit=GlucoseUnit.values()[unitID];
+        Tracker t = ((BGScout) context.getApplicationContext()).getTracker();
         if (g_unit==GlucoseUnit.NONE)
             g_unit=GlucoseUnit.MGDL;
         try {
             device.connect();
             device.setup();
+
             egvList = G4RecordAdapter.convertToEGVRecordArrayList((ArrayList<G4EGVRecord>) device.getLastRecords());
             Log.d(TAG,"Display Time: "+device.getDisplayTime()+ " Current time: "+new Date());
             if (sharedPref.getBoolean(deviceIDStr+"_time_sync",true))
@@ -103,32 +101,31 @@ public class G4CGMDevice extends AbstractPollDevice {
             batteryBalance(deviceBattery, uploaderBattery);
             device.disconnect();
             status = DownloadStatus.SUCCESS;
-
-            if (egvList.size()>0) {
-                int lastBG = egvList.get(egvList.size()-1).getEgv();
-                for (G4EGVSpecialValue specialValue : G4EGVSpecialValue.values()) {
-                    if (lastBG == specialValue.getValue()) {
-                        status = DownloadStatus.SPECIALVALUE;
-//                        specialMessage=G4EGVSpecialValue.getEGVSpecialValue(lastBG).toString();
-                        break;
-                    }
-                }
-            } else {
+            if (egvList.size()==0){
                 status=DownloadStatus.NODATA;
             }
         } catch (OperationNotSupportedException e) {
             Log.e(TAG,"Application error",e);
+            ACRA.getErrorReporter().handleException(e);
+            t.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("Application error: "+e.getMessage())
+                    .setFatal(false)
+                    .build());
             status=DownloadStatus.APPLICATIONERROR;
         } catch (DeviceIOException e) {
             Log.e(TAG,"Unable to read/write to the device",e);
-            Tracker t = ((BGScout) context.getApplicationContext()).getTracker();
+            ACRA.getErrorReporter().handleException(e);
             t.send(new HitBuilders.ExceptionBuilder()
-                    .setDescription("IO Error: "+e.getMessage()+" "+e)
+                    .setDescription("IO error: "+e.getMessage())
                     .setFatal(false)
                     .build());
             status=DownloadStatus.IOERROR;
         } catch (NoDeviceFoundException e) {
             status=DownloadStatus.DEVICENOTFOUND;
+            t.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("Device not found error: "+e.getMessage())
+                    .setFatal(false)
+                    .build());
         }
         DownloadObject ddo=new DownloadObject();
         // Default to the last 2.5 hours at max - it may be less due to the way that the library pulls the data from the
@@ -138,15 +135,13 @@ public class G4CGMDevice extends AbstractPollDevice {
         SharedPreferences.Editor editor = sharedPref.edit();
         // Filter
         Log.d(TAG,"egvList: "+egvList.size());
-//        egvList=filter(lastReadingDate, egvList);
         // Then set the new last reading date
-        if (egvList!=null && egvList.size()>0)
+        if (egvList.size()>0)
             lastReadingDateRecord=egvList.get(egvList.size()-1).getDate().getTime();
         else
             lastReadingDateRecord=new Date().getTime()-9000000L;
-        // FIXME this is an awkward transition from Array to ArrayList. There is too much converting and casting going on.
-        if (egvList==null)
-            egvList=new ArrayList<EGVRecord>();
+//        if (egvList==null)
+//            egvList=new ArrayList<EGVRecord>();
         // ddo => Device Download Object..
         ddo.setDeviceBattery(deviceBattery)
                 .setLastReadingDate(new Date(lastReadingDateRecord))
@@ -157,25 +152,11 @@ public class G4CGMDevice extends AbstractPollDevice {
                 .setEgvRecords(egvList)
                 .setDriver(driver)
                 .setDownloadDate(new Date());
-//                .setSpecialValueMessage(specialMessage);
-//                .addAlertMessages(alerts);
         editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);
         editor.apply();
-//        Log.d("XXX","downloadDate=>"+ddo.getDownloadDate());
         setLastDownloadObject(ddo);
         return ddo;
     }
-
-//    public ArrayList<EGVRecord> filter(Long afterDateLong,ArrayList<EGVRecord> egvRecords){
-//        Log.d(TAG,"in Filter egvList: "+egvRecords.size());
-//        Date afterDate=new Date(afterDateLong);
-//        for (Iterator<EGVRecord> iterator = egvRecords.iterator(); iterator.hasNext(); ) {
-//            EGVRecord record = iterator.next();
-//            if (! record.getDate().after(afterDate))
-//                iterator.remove();
-//        }
-//        return egvRecords;
-//    }
 
     public void syncTime(){
         if (!device.isConnected())

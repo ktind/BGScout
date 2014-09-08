@@ -78,8 +78,8 @@ public class NightScoutUpload extends AbstractMonitor {
         int numRecs=d.getEgvArrayListRecords().size();
         int index=0;
         for (EGVRecord record : d.getEgvArrayListRecords()) {
-            if (!record.isNew())
-                continue;
+//            if (!record.isNew())
+//                continue;
             // hack to only send the last record for now...
             if (index < numRecs)
                 continue;

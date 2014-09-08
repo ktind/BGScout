@@ -43,15 +43,12 @@ abstract public class AbstractMonitor implements MonitorInterface {
     protected String name;
     protected boolean allowVirtual=false;
     protected String monitorType="generic";
-//    protected int highThreshold=180;
-//    protected int lowThreshold=60;
     protected int deviceID;
     protected String deviceIDStr;
     protected Context context;
     protected SharedPreferences sharedPref;
     protected long lastSuccessDate;
     protected State state;
-//    protected EGVLimits egvLimits;
 
     public AbstractMonitor(String n,int devID,Context context, String monitorName){
         this.setName(n);
@@ -61,7 +58,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
         this.monitorType=monitorName;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         // Default to the last 2.5 hours as the "last successful download"
-        this.lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
+        this.lastSuccessDate=sharedPref.getLong("last_"+deviceIDStr+"_"+monitorType,new Date().getTime()-900000L);
         Log.d(TAG,"Setting lastSuccessDate to: "+new Date(lastSuccessDate));
     }
 
@@ -108,7 +105,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
         long startTime=System.currentTimeMillis();
         Log.d(TAG,"Monitor "+name+" has fired for "+monitorType);
         if (isAllowVirtual() || ! d.isRemoteDevice()){
-            lastSuccessDate=sharedPref.getLong(deviceIDStr+monitorType,new Date().getTime()-900000L);
+            lastSuccessDate=sharedPref.getLong("last_"+deviceIDStr+"_"+monitorType,new Date().getTime()-900000L);
             Log.d(TAG, "Trimming data for monitor "+name+"/"+monitorType);
             final DownloadObject dl=new DownloadObject(d);
             dl.setEgvRecords(trimReadingsAfter(getlastSuccessDate(), d.getEgvArrayListRecords()));
@@ -139,7 +136,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
     // It is up to each implementation to save the last successful date.
     public void savelastSuccessDate(long date){
         SharedPreferences.Editor editor=sharedPref.edit();
-        editor.putLong(deviceIDStr+monitorType,date);
+        editor.putLong("last_"+deviceIDStr+"_"+monitorType,date);
         editor.apply();
     }
 
@@ -173,16 +170,4 @@ abstract public class AbstractMonitor implements MonitorInterface {
         Log.d(TAG,"Size after trim: "+recs.size()+" vs original "+egvRecords.size());
         return recs;
     }
-
-
-
-//    public void setHighThreshold(int highThreshold) {
-//        Log.v(TAG,"Setting high threshold to "+highThreshold);
-//        this.highThreshold = highThreshold;
-//    }
-//
-//    public void setLowThreshold(int lowThreshold) {
-//        Log.v(TAG,"Setting low threshold to "+lowThreshold);
-//        this.lowThreshold = lowThreshold;
-//    }
 }

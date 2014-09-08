@@ -32,8 +32,6 @@ abstract public class AbstractPushDevice extends AbstractDevice {
         super(n, deviceID, appContext, driver);
     }
 
-//    abstract void onDataReady(DownloadObject ddo);
-
     @Override
     public void onDownload(DownloadObject dl){
         stats.addDownload();

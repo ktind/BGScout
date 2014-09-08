@@ -12,8 +12,8 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.ktind.cgm.bgscout.BGScout;
+import com.ktind.cgm.bgscout.NotifHelper;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -142,12 +142,13 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             Log.d(TAG, "Connecting to URL: " + url);
             mClient = new MqttClient(url, mDeviceId, mDataStore);
             mClient.connect(mOpts);
+            NotifHelper.clearMessage(context,"Disconnected from MQTT");
 //            connected=true;
             setNextKeepAlive();
+            state=State.CONNECTED;
         } catch (MqttException e) {
             Log.e(TAG, "Error while connecting: ", e);
         }
-        state=State.CONNECTED;
     }
 
     private void setupOpts(String lwt){
@@ -223,7 +224,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             // Likely due to disconnected that wasn't detected earlier? Should not happen unless connect was called without initConnect
             reconnectDelayed();
         }
-        GoogleAnalytics.getInstance(context.getApplicationContext()).dispatchLocalHits();
 //        mClient.publish("/entries/sgv",jsonString.getBytes(),MQTT_QOS_1,true);
     }
 
@@ -261,17 +261,19 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     @Override
     public void notifyDisconnect() {
         Log.d(TAG,"In notifyDisconnect()");
-        for (MQTTMgrObserverInterface observer:observers){
-            Log.v(TAG,"Calling back to registered users");
-            try {
-                observer.onDisconnect();
-            } catch (Exception e){
-                // TODO add more specific error handling here for the exceptions that we do know about. perhaps add a way for clients to define their own exception handlers?
-                // Horrible catch all but I don't want the manager to die and reconnect
-                // and we really know what all exceptions will be thrown
-                Log.e(TAG,"Caught an exception: "+e.getMessage(),e);
-            }
-        }
+        if (state!=State.DISCONNECTED && state!=State.DISCONNECTING)
+            NotifHelper.notify(context,"Disconnected from MQTT");
+//        for (MQTTMgrObserverInterface observer:observers){
+//            Log.v(TAG,"Calling back to registered users");
+//            try {
+//                observer.onDisconnect();
+//            } catch (Exception e){
+//                // TODO add more specific error handling here for the exceptions that we do know about. perhaps add a way for clients to define their own exception handlers?
+//                // Horrible catch all but I don't want the manager to die and reconnect
+//                // and we really know what all exceptions will be thrown
+//                Log.e(TAG,"Caught an exception: "+e.getMessage(),e);
+//            }
+//        }
     }
 
     protected boolean isConnected(){
@@ -285,7 +287,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             return;
         }
         stats.addLostConnections();
-//        notifyDisconnect();
+        notifyDisconnect();
         Log.w(TAG,"The connection was lost");
         if (mqttUrl==null || mqTopics==null){
             Log.e(TAG,"Somehow lost the connection and mqttUrl and/or mqTopics have not been set. Make sure to use connect() and subscribe() methods of this class");
@@ -319,6 +321,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     }
 
     private void setNextKeepAlive() {
+        if (state!=State.CONNECTED)
+            return;
         Log.d(TAG,"Canceling previous alarm");
         alarmMgr.cancel(keepAlivePendingIntent);
         Log.d(TAG,"Setting next keep alive to trigger in "+(KEEPALIVE_INTERVAL-3000)/1000+" seconds");
@@ -350,10 +354,10 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         } catch (MqttException e) {
             Log.wtf(TAG,"Exception during ping",e);
             Log.wtf(TAG,"Reason code:"+e.getReasonCode());
-//            notifyDisconnect();
+            notifyDisconnect();
             reconnectDelayed(5000);
         }
-        setNextKeepAlive();
+//        setNextKeepAlive();
     }
 
     public void reconnectDelayed(){
@@ -362,6 +366,11 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 
     public void reconnectDelayed(long delay_ms){
         Log.i(TAG, "Attempting to reconnect again in "+delay_ms/1000+" seconds");
+//        reconnectReceiver=new ReconnectReceiver();
+        reconnectIntent = new Intent(RECONNECT_INTENT_FILTER);
+        reconnectIntent.putExtra("device",deviceIDStr);
+        reconnectPendingIntent=PendingIntent.getBroadcast(context, 61, reconnectIntent, 0);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             alarmMgr.setExact(AlarmManager.RTC_WAKEUP,new Date().getTime()+delay_ms,reconnectPendingIntent);
         else
@@ -370,6 +379,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 
     private void reconnect(){
         if (isOnline()) {
+            state=State.RECONNECTING;
             Log.d(TAG, "Reconnecting");
             alarmMgr.cancel(reconnectPendingIntent);
             stats.addReconnect();
@@ -389,11 +399,13 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
         CONNECTING,
         CONNECTED,
         DISCONNECTING,
-        DISCONNECTED
+        DISCONNECTED,
+        RECONNECTING
     }
 
     public void disconnect(){
-
+        if (state==State.DISCONNECTING || state==State.DISCONNECTED)
+            return;
         stats.addDisconnect();
         try {
             if (mClient!=null && mClient.isConnected()) {

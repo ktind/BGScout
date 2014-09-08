@@ -182,7 +182,7 @@ public class MockDevice extends AbstractPollDevice {
         Trend trend=this.generateNextTrend(lastTrend);
         record.setTrend(trend);
         record.setDate(date);
-        record.setNew(isNew);
+//        record.setNew(isNew);
         int changeRate=1;
         boolean negTrend=false;
         switch (lastTrend){

@@ -32,7 +32,7 @@ public enum DownloadStatus {
     DEVICENOTFOUND("Device does not appear to be connected.",2),
     IOERROR("Read or write error",3),
     APPLICATIONERROR("Encountered an unknown error in application",4),
-    SPECIALVALUE("Has a special value",5),
+//    SPECIALVALUE("Has a special value",5),
     NONE("No download has been performed",6),
     UNKNOWN("Unknown error",7),
     REMOTEDISCONNECTED("Disconnected from device",8);

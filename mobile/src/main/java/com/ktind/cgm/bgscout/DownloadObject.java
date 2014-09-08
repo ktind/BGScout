@@ -58,9 +58,6 @@ public class DownloadObject implements Parcelable {
         return new Date(downloadDate);
     }
 
-//    private Date adjustForLocal(Date date){
-//    }
-
     private long adjustForLocal(long date){
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();
