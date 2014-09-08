@@ -65,9 +65,8 @@ public class MongoUploadMonitor extends AbstractMonitor {
         MongoClientURI uri=null;
         if (mongoURI!=null && ! mongoURI.equals("")) {
             uri = new MongoClientURI(mongoURI);
-            Log.w(TAG,"Mongo URI not set");
-            NotifHelper.notify(context,"Mongo URI not set");
         } else {
+            Log.w(TAG,"Mongo URI not set");
             NotifHelper.clearMessage(context,"Mongo URI not set");
         }
 

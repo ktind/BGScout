@@ -1,7 +1,6 @@
 package com.ktind.cgm.bgscout;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -130,9 +129,9 @@ public class G4CGMDevice extends AbstractPollDevice {
         DownloadObject ddo=new DownloadObject();
         // Default to the last 2.5 hours at max - it may be less due to the way that the library pulls the data from the
         // device. The reason for this is the way the device stores the records it depends on the timing and page boundaries
-        Long lastReadingDate=sharedPref.getLong(deviceIDStr+"_lastG4Download",new Date(new Date().getTime()-9000000L).getTime());
+//        Long lastReadingDate=sharedPref.getLong(deviceIDStr+"_lastG4Download",new Date(new Date().getTime()-9000000L).getTime());
         Long lastReadingDateRecord;
-        SharedPreferences.Editor editor = sharedPref.edit();
+//        SharedPreferences.Editor editor = sharedPref.edit();
         // Filter
         Log.d(TAG,"egvList: "+egvList.size());
         // Then set the new last reading date
@@ -152,8 +151,8 @@ public class G4CGMDevice extends AbstractPollDevice {
                 .setEgvRecords(egvList)
                 .setDriver(driver)
                 .setDownloadDate(new Date());
-        editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);
-        editor.apply();
+//        editor.putLong(deviceIDStr+"_lastG4Download",lastReadingDateRecord);
+//        editor.apply();
         setLastDownloadObject(ddo);
         return ddo;
     }
