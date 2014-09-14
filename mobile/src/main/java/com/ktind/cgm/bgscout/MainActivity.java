@@ -647,6 +647,7 @@ public class MainActivity extends Activity {
                 thumbnail= BitmapFactory.decodeByteArray(thumbnailBytes,0,thumbnailBytes.length);
             }
         }
+        cursor.close();
 //        InputStream photoDataStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),uri);
 //        Bitmap photo=BitmapFactory.decodeStream(photoDataStream);
         return thumbnail;

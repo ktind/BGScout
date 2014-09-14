@@ -13,6 +13,8 @@ import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.WearableExtender;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 public class DeviceDownloadService extends Service {
     private static final String TAG = DeviceDownloadService.class.getSimpleName();
     private ArrayList<AbstractDevice> cgms=new ArrayList<AbstractDevice>();
-    private Notification.Builder notificationBuilder;
+    private NotificationCompat.Builder notificationBuilder;
     IBinder mBinder=new LocalBinder();
     private commandReceiver cr;
     private ServiceState state=ServiceState.STOPPED;
@@ -54,12 +56,6 @@ public class DeviceDownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // autostart
-//        Intent mIntent = new Intent(DeviceDownloadService.this, DeviceDownloadService.class);
-//        startService(mIntent);
-//        Intent uiIntent = new Intent("com.ktind.cgm.SERVICE_READY");
-//        sendBroadcast(uiIntent);
     }
 
     public AbstractDevice findDevice(String deviceID){
@@ -144,17 +140,20 @@ public class DeviceDownloadService extends Service {
             cr=new commandReceiver();
             IntentFilter intentFilter=new IntentFilter(Constants.STOP_DOWNLOAD_SVC);
             registerReceiver(cr,intentFilter);
-            notificationBuilder = new Notification.Builder(getApplicationContext())
+            WearableExtender wearableExtender =
+                    new WearableExtender();
+            notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
                     .setContentTitle(getText(R.string.cgm_service_title))
                     .setContentIntent(contentIntent)
                     .setSmallIcon(R.drawable.sandclock)
+                    .extend(wearableExtender)
                     .setLargeIcon(bm);
             Notification notification = notificationBuilder.build();
             threads=new ArrayList<Thread>();
             for (final AbstractDevice cgm : cgms) {
                 cgm.start();
             }
-            startForeground(0, notification);
+            startForeground(24, notification);
             super.onStartCommand(intent, flags, startId);
             state = ServiceState.STARTED;
         }

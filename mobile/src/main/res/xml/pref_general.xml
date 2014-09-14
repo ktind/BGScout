@@ -4,7 +4,7 @@
         android:title="@string/device_1"
         android:persistent="false">
         <SwitchPreference
-            android:title="Enable this device"
+            android:title="@string/prefs_enable_device"
             android:key="device_1_enable"
             android:disableDependentsState="false"
             android:summary="Enable collection of data from this device">
@@ -36,18 +36,18 @@
             android:title="@string/device_g4"
             android:persistent="false">
             <CheckBoxPreference
-                android:title="Battery balancing"
+                android:title="@string/prefs_batt_balance_title"
                 android:dependency="device_1_enable"
                 android:key="device_1_bat_bal"
                 android:defaultValue="true"
-                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+                android:summary="@string/battery_balance_summary">
             </CheckBoxPreference>
             <CheckBoxPreference
                 android:title="Time sync"
                 android:dependency="device_1_enable"
                 android:key="device_1_time_sync"
                 android:defaultValue="true"
-                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+                android:summary="@string/pref_time_sync_summary">
             </CheckBoxPreference>
             <ListPreference
                 android:key="device_1_units"
@@ -125,32 +125,32 @@
             <CheckBoxPreference
                 android:key="device_1_pebble_monitor"
                 android:dependency="device_1_enable"
-                android:title="Enable Pebble notification"
+                android:title="@string/prefs_enable_pebble"
                 android:checked="true"/>
             <PreferenceScreen
                 android:key="device_1_ns"
                 android:title="@string/device_ns"
                 android:persistent="false">
                 <CheckBoxPreference
-                    android:title="Nightscout API Upload"
+                    android:title="@string/prefs_nightscout_title"
                     android:dependency="device_1_enable"
                     android:key="device_1_nsapi_enable"
                     android:defaultValue="false"
-                    android:summary="The REST API is an alternative to direct mongodb upload">
+                    android:summary="@string/rest_api_summary">
                 </CheckBoxPreference>
                 <EditTextPreference
-                    android:title="API Base URL"
+                    android:title="@string/prefs_api_title"
                     android:dependency="device_1_nsapi_enable"
                     android:key="device_1_nsapi"
-                    android:dialogTitle="Enter Base API URL"
-                    android:defaultValue="http://{YOUR-API-SERVER}/api"
-                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                    android:dialogTitle="@string/prefs_api_diaglog_title"
+                    android:defaultValue="@string/prefs_default_api_value"
+                    android:dialogMessage="@string/prefs_api_dialog_message">
                 </EditTextPreference>
                 <EditTextPreference
-                    android:title="API Secret key"
+                    android:title="@string/prefs_api_secret_title"
                     android:dependency="device_1_nsapi_enable"
                     android:key="device_1_nskey"
-                    android:dialogTitle="Enter your API key"
+                    android:dialogTitle="@string/prefs_api_dialog_title"
                     android:password="true">
                 </EditTextPreference>
             </PreferenceScreen>
@@ -161,7 +161,7 @@
                 <CheckBoxPreference
                     android:key="device_1_push_upload"
                     android:dependency="device_1_enable"
-                    android:title="Enable Push upload"
+                    android:title="@string/pref_enable_push_notifications"
                     android:checked="false"/>
                 <EditTextPreference
                     android:key="device_1_mqtt_endpoint"
@@ -217,10 +217,10 @@
         android:title="@string/device_2"
         android:persistent="false">
         <SwitchPreference
-            android:title="Enable this device"
+            android:title="@string/prefs_enable_device"
             android:key="device_2_enable"
             android:disableDependentsState="false"
-            android:summary="Enable collection of data from this device">
+            android:summary="@string/device_enable_summary">
         </SwitchPreference>
         <EditTextPreference
             android:key="device_2_name"
@@ -247,18 +247,18 @@
             android:title="@string/device_g4"
             android:persistent="false">
             <CheckBoxPreference
-                android:title="Battery balancing"
+                android:title="@string/prefs_batt_balance_title"
                 android:dependency="device_2_enable"
                 android:key="device_2_bat_bal"
                 android:defaultValue="true"
-                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+                android:summary="@string/battery_balance_summary">
             </CheckBoxPreference>
             <CheckBoxPreference
                 android:title="Time sync"
                 android:dependency="device_2_enable"
                 android:key="device_2_time_sync"
                 android:defaultValue="true"
-                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+                android:summary="@string/pref_time_sync_summary">
             </CheckBoxPreference>
             <ListPreference
                 android:key="device_2_units"
@@ -336,32 +336,32 @@
             <CheckBoxPreference
                 android:key="device_2_pebble_monitor"
                 android:dependency="device_2_enable"
-                android:title="Enable Pebble notification"
+                android:title="@string/prefs_enable_pebble"
                 android:checked="true"/>
             <PreferenceScreen
                 android:key="device_2_ns"
                 android:title="@string/device_ns"
                 android:persistent="false">
                 <CheckBoxPreference
-                    android:title="Nightscout API Upload"
+                    android:title="@string/prefs_nightscout_title"
                     android:dependency="device_2_enable"
                     android:key="device_2_nsapi_enable"
                     android:defaultValue="false"
-                    android:summary="The REST API is an alternative to direct mongodb upload">
+                    android:summary="@string/rest_api_summary">
                 </CheckBoxPreference>
                 <EditTextPreference
-                    android:title="API Base URL"
+                    android:title="@string/prefs_api_title"
                     android:dependency="device_2_nsapi_enable"
                     android:key="device_2_nsapi"
-                    android:dialogTitle="Enter Base API URL"
-                    android:defaultValue="http://{YOUR-API-SERVER}/api"
-                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                    android:dialogTitle="@string/prefs_api_diaglog_title"
+                    android:defaultValue="@string/prefs_default_api_value"
+                    android:dialogMessage="@string/prefs_api_dialog_message">
                 </EditTextPreference>
                 <EditTextPreference
-                    android:title="API Secret key"
+                    android:title="@string/prefs_api_secret_title"
                     android:dependency="device_2_nsapi_enable"
                     android:key="device_2_nskey"
-                    android:dialogTitle="Enter your API key"
+                    android:dialogTitle="@string/prefs_api_dialog_title"
                     android:password="true"/>
             </PreferenceScreen>
             <PreferenceScreen
@@ -371,7 +371,7 @@
                 <CheckBoxPreference
                     android:key="device_2_push_upload"
                     android:dependency="device_2_enable"
-                    android:title="Enable Push upload"
+                    android:title="@string/pref_enable_push_notifications"
                     android:checked="false"/>
                 <EditTextPreference
                     android:key="device_2_mqtt_endpoint"
@@ -426,10 +426,10 @@
         android:title="@string/device_3"
         android:persistent="false">
         <SwitchPreference
-            android:title="Enable this device"
+            android:title="@string/prefs_enable_device"
             android:key="device_3_enable"
             android:disableDependentsState="false"
-            android:summary="Enable collection of data from this device">
+            android:summary="@string/device_enable_summary">
         </SwitchPreference>
         <EditTextPreference
             android:key="device_3_name"
@@ -456,18 +456,18 @@
             android:title="@string/device_g4"
             android:persistent="false">
             <CheckBoxPreference
-                android:title="Battery balancing"
+                android:title="@string/prefs_batt_balance_title"
                 android:dependency="device_3_enable"
                 android:key="device_3_bat_bal"
                 android:defaultValue="true"
-                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+                android:summary="@string/battery_balance_summary">
             </CheckBoxPreference>
             <CheckBoxPreference
                 android:title="Time sync"
                 android:dependency="device_3_enable"
                 android:key="device_3_time_sync"
                 android:defaultValue="true"
-                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+                android:summary="@string/pref_time_sync_summary">
             </CheckBoxPreference>
             <ListPreference
                 android:key="device_3_units"
@@ -545,32 +545,32 @@
             <CheckBoxPreference
                 android:key="device_3_pebble_monitor"
                 android:dependency="device_3_enable"
-                android:title="Enable Pebble notification"
+                android:title="@string/prefs_enable_pebble"
                 android:checked="true"/>
             <PreferenceScreen
                 android:key="device_3_ns"
                 android:title="@string/device_ns"
                 android:persistent="false">
                 <CheckBoxPreference
-                    android:title="Nightscout API Upload"
+                    android:title="@string/prefs_nightscout_title"
                     android:dependency="device_3_enable"
                     android:key="device_3_nsapi_enable"
                     android:defaultValue="false"
-                    android:summary="The REST API is an alternative to direct mongodb upload">
+                    android:summary="@string/rest_api_summary">
                 </CheckBoxPreference>
                 <EditTextPreference
-                    android:title="API Base URL"
+                    android:title="@string/prefs_api_title"
                     android:dependency="device_3_nsapi_enable"
                     android:key="device_3_nsapi"
-                    android:dialogTitle="Enter Base API URL"
-                    android:defaultValue="http://{YOUR-API-SERVER}/api"
-                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                    android:dialogTitle="@string/prefs_api_diaglog_title"
+                    android:defaultValue="@string/prefs_default_api_value"
+                    android:dialogMessage="@string/prefs_api_dialog_message">
                 </EditTextPreference>
                 <EditTextPreference
-                    android:title="API Secret key"
+                    android:title="@string/prefs_api_secret_title"
                     android:dependency="device_3_nsapi_enable"
                     android:key="device_3_nskey"
-                    android:dialogTitle="Enter your API key"
+                    android:dialogTitle="@string/prefs_api_dialog_title"
                     android:password="true"/>
             </PreferenceScreen>
             <PreferenceScreen
@@ -580,7 +580,7 @@
                 <CheckBoxPreference
                     android:key="device_3_push_upload"
                     android:dependency="device_3_enable"
-                    android:title="Enable Push upload"
+                    android:title="@string/pref_enable_push_notifications"
                     android:checked="false"/>
                 <EditTextPreference
                     android:key="device_3_mqtt_endpoint"
@@ -635,10 +635,10 @@
         android:title="@string/device_4"
         android:persistent="false">
         <SwitchPreference
-            android:title="Enable this device"
+            android:title="@string/prefs_enable_device"
             android:key="device_4_enable"
             android:disableDependentsState="false"
-            android:summary="Enable collection of data from this device">
+            android:summary="@string/device_enable_summary">
         </SwitchPreference>
         <EditTextPreference
             android:key="device_4_name"
@@ -665,18 +665,18 @@
             android:title="@string/device_g4"
             android:persistent="false">
             <CheckBoxPreference
-                android:title="Battery balancing"
+                android:title="@string/prefs_batt_balance_title"
                 android:dependency="device_4_enable"
                 android:key="device_4_bat_bal"
                 android:defaultValue="false"
-                android:summary="If the Dexcom G4 drops below 40% battery and the uploader has more than 40% batter it will charge the CGM.">
+                android:summary="@string/battery_balance_summary">
             </CheckBoxPreference>
             <CheckBoxPreference
                 android:title="Time sync"
                 android:dependency="device_4_enable"
                 android:key="device_4_time_sync"
                 android:defaultValue="true"
-                android:summary="Synchronizes the Dexcom G4 clock with the phone clock">
+                android:summary="@string/pref_time_sync_summary">
             </CheckBoxPreference>
             <ListPreference
                 android:key="device_4_units"
@@ -754,32 +754,32 @@
             <CheckBoxPreference
                 android:key="device_4_pebble_monitor"
                 android:dependency="device_4_enable"
-                android:title="Enable Pebble notification"
+                android:title="@string/prefs_enable_pebble"
                 android:checked="true"/>
             <PreferenceScreen
                 android:key="device_4_ns"
                 android:title="@string/device_ns"
                 android:persistent="false">
                 <CheckBoxPreference
-                    android:title="Nightscout API Upload"
+                    android:title="@string/prefs_nightscout_title"
                     android:dependency="device_4_enable"
                     android:key="device_4_nsapi_enable"
                     android:defaultValue="false"
-                    android:summary="The REST API is an alternative to direct mongodb upload">
+                    android:summary="@string/rest_api_summary">
                 </CheckBoxPreference>
                 <EditTextPreference
-                    android:title="API Base URL"
+                    android:title="@string/prefs_api_title"
                     android:dependency="device_4_nsapi_enable"
                     android:key="device_4_nsapi"
-                    android:dialogTitle="Enter Base API URL"
-                    android:defaultValue="http://{YOUR-API-SERVER}/api"
-                    android:dialogMessage="This only the base URL, the uploader will automatically append /entries for the POST">
+                    android:dialogTitle="@string/prefs_api_diaglog_title"
+                    android:defaultValue="@string/prefs_default_api_value"
+                    android:dialogMessage="@string/prefs_api_dialog_message">
                 </EditTextPreference>
                 <EditTextPreference
-                    android:title="API Secret key"
+                    android:title="@string/prefs_api_secret_title"
                     android:dependency="device_4_nsapi"
                     android:key="device_4_nskey"
-                    android:dialogTitle="Enter your API key"
+                    android:dialogTitle="@string/prefs_api_dialog_title"
                     android:password="true"/>
             </PreferenceScreen>
             <PreferenceScreen
@@ -789,7 +789,7 @@
                 <CheckBoxPreference
                     android:key="device_4_push_upload"
                     android:dependency="device_4_enable"
-                    android:title="Enable Push upload"
+                    android:title="@string/pref_enable_push_notifications"
                     android:checked="false"/>
                 <EditTextPreference
                     android:key="device_4_mqtt_endpoint"
@@ -841,7 +841,7 @@
     <PreferenceCategory
         android:title="@string/privacy_title"
         android:key="privacy_prefs"
-        android:summary="Privacy settings. No private information will be collected">
+        android:summary="@string/prefs_category_privacy_summary">
         <CheckBoxPreference android:key="acra.enable"
             android:title="@string/pref_disable_acra"
             android:summaryOn="@string/pref_acra_disabled"

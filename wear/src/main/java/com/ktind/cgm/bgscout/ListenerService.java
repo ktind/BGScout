@@ -26,29 +26,32 @@
 
 package com.ktind.cgm.bgscout;
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.WearableListenerService;
+
 /**
- * Created by klee24 on 8/28/14.
+ * Created by klee24 on 9/13/14.
  */
-public enum Conditions {
-    CRITICALHIGH,
-    WARNHIGH,
-    INRANGE,
-    WARNLOW,
-    CRITICALLOW,
-    DOWNLOADFAILED,
-    DEVICEDISCONNECTED,
-    NODATA,
-    STALEDATA,
-    UPLOADERCRITICALLOW,
-    UPLOADERLOW,
-    DEVICECRITICALLOW,
-    DEVICELOW,
-    DEVICEMSGS,
-    UNKNOWN,
-    NONE,
-    REMOTEDISCONNECTED,
-    MISSEDREADING,
-    SPECIALVALUE,
-    READINGTIME,
-    MONGONOTCONNECTED
+public class ListenerService extends WearableListenerService {
+    private static final String TAG = ListenerService.class.getSimpleName();
+    private static final String MESSAGE_RECEIVED_PATH = "/entries/sgv";
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+
+        if (messageEvent.getPath().equals(MESSAGE_RECEIVED_PATH)) {
+            final String message = new String(messageEvent.getData());
+            Log.v("myTag", "Message received on watch is: " + message);
+            Intent intent = new Intent("com.ktind.cgm.SHOW_MSG");
+            intent.putExtra("msg",message);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
+        else {
+            super.onMessageReceived(messageEvent);
+        }
+    }
 }

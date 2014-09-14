@@ -107,7 +107,7 @@ abstract public class AbstractMonitor implements MonitorInterface {
         if (isAllowVirtual() || ! d.isRemoteDevice()){
             lastSuccessDate=sharedPref.getLong("last_"+deviceIDStr+"_"+monitorType,new Date().getTime()-900000L);
             Log.d(TAG, "Trimming data for monitor "+name+"/"+monitorType);
-            final DownloadObject dl=new DownloadObject(d);
+            final AnalyzedDownload dl=new AnalyzedDownload(d);
             dl.setEgvRecords(trimReadingsAfter(getlastSuccessDate(), d.getEgvArrayListRecords()));
             Log.d(TAG, "Processing monitor "+name+" for "+monitorType);
             new Thread(new Runnable() {

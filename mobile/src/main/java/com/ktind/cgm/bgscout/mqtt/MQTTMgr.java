@@ -12,8 +12,11 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.ktind.cgm.bgscout.AlertLevels;
+import com.ktind.cgm.bgscout.AlertMessage;
 import com.ktind.cgm.bgscout.BGScout;
-import com.ktind.cgm.bgscout.NotifHelper;
+import com.ktind.cgm.bgscout.Conditions;
+import com.ktind.cgm.bgscout.StaticAlertMessages;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -26,6 +29,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+//import com.ktind.cgm.bgscout.NotifHelper;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -94,6 +99,7 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
 //    protected boolean connected=false;
     protected boolean initialCallbackSetup=false;
     protected State state;
+    protected final AlertMessage MQTTDISCONNECT=new AlertMessage(AlertLevels.CRITICAL, "Disconnected from MQTT", Conditions.MONGONOTCONNECTED);
 
 
     public MQTTMgr(Context context, String user, String pass, String deviceIDStr) {
@@ -142,7 +148,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             Log.d(TAG, "Connecting to URL: " + url);
             mClient = new MqttClient(url, mDeviceId, mDataStore);
             mClient.connect(mOpts);
-            NotifHelper.clearMessage(context,"Disconnected from MQTT");
+            StaticAlertMessages.removeMessage(MQTTDISCONNECT);
+//            NotifHelper.clearMessage(context,"Disconnected from MQTT");
 //            connected=true;
             setNextKeepAlive();
             state=State.CONNECTED;
@@ -262,7 +269,8 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     public void notifyDisconnect() {
         Log.d(TAG,"In notifyDisconnect()");
         if (state!=State.DISCONNECTED && state!=State.DISCONNECTING)
-            NotifHelper.notify(context,"Disconnected from MQTT");
+            StaticAlertMessages.addMessage(MQTTDISCONNECT);
+//            NotifHelper.notify(context,"Disconnected from MQTT");
 //        for (MQTTMgrObserverInterface observer:observers){
 //            Log.v(TAG,"Calling back to registered users");
 //            try {

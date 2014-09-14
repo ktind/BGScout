@@ -74,9 +74,16 @@ public abstract class CGMDownloadAnalyzer extends AbstractDownloadAnalyzer {
         checkCGMBattery();
         checkThresholdholds();
         checkLastRecordTime();
+        checkGlobalAlerts();
         correlateMessages();
 //        downloadObject.deDup();
         return this.downloadObject;
+    }
+
+    protected void checkGlobalAlerts(){
+        for (AlertMessage alertMessage:StaticAlertMessages.getAlertMessages()){
+            downloadObject.addMessage(alertMessage);
+        }
     }
 
     protected void checkUploaderBattery(){

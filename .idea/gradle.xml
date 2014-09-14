@@ -8,8 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/PEBBLE_KIT" />
             <option value="$PROJECT_DIR$/mobile" />
-            <option value="$PROJECT_DIR$/pEBBLE_KIT" />
             <option value="$PROJECT_DIR$/wear" />
           </set>
         </option>

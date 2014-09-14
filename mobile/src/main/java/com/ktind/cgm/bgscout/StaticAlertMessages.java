@@ -26,29 +26,29 @@
 
 package com.ktind.cgm.bgscout;
 
+import java.util.ArrayList;
+
 /**
- * Created by klee24 on 8/28/14.
+ * Created by klee24 on 9/13/14.
  */
-public enum Conditions {
-    CRITICALHIGH,
-    WARNHIGH,
-    INRANGE,
-    WARNLOW,
-    CRITICALLOW,
-    DOWNLOADFAILED,
-    DEVICEDISCONNECTED,
-    NODATA,
-    STALEDATA,
-    UPLOADERCRITICALLOW,
-    UPLOADERLOW,
-    DEVICECRITICALLOW,
-    DEVICELOW,
-    DEVICEMSGS,
-    UNKNOWN,
-    NONE,
-    REMOTEDISCONNECTED,
-    MISSEDREADING,
-    SPECIALVALUE,
-    READINGTIME,
-    MONGONOTCONNECTED
+public class StaticAlertMessages {
+    static protected ArrayList<AlertMessage> alertMessages=new ArrayList<AlertMessage>();
+
+    synchronized static public void addMessage(AlertMessage msg){
+        if (! alertMessages.contains(msg))
+            alertMessages.add(msg);
+    }
+
+    synchronized static public void clearMessages(){
+        alertMessages=new ArrayList<AlertMessage>();
+    }
+
+    synchronized static public void removeMessage(AlertMessage msg){
+        if (alertMessages.contains(msg))
+            alertMessages.remove(msg);
+    }
+
+    static public ArrayList<AlertMessage> getAlertMessages(){
+        return alertMessages;
+    }
 }

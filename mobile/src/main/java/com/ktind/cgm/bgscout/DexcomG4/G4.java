@@ -171,8 +171,10 @@ public class G4 {
         G4Partition response=new G4Partition();
         writeCmd(G4RcvrCmd.READDATABASEPAGERANGE,recordType.getValue());
         byte[] responseBuff = readResponse();
-        if (responseBuff==null || responseBuff.length!=8)
-            throw new DeviceIOException("Problem reading response while trying to read record type "+recordType.toString());
+        if (responseBuff==null)
+            throw new DeviceIOException("Null response while trying to read record type: "+recordType.toString());
+        if ( responseBuff.length!=8)
+            throw new DeviceIOException("Problem reading response while trying to read record type "+recordType.toString()+" response size="+responseBuff.length+" response: "+String.valueOf(responseBuff));
         byte[] firstPage = {responseBuff[0],responseBuff[1],responseBuff[2],responseBuff[3]};
         byte[] lastPage = {responseBuff[4],responseBuff[5],responseBuff[6],responseBuff[7]};
         response.Partition=recordType;

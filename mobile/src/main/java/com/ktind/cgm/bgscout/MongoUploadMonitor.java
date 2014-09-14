@@ -12,6 +12,8 @@ import com.mongodb.MongoException;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.WriteConcern;
 
+import org.acra.ACRA;
+
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,13 +46,16 @@ import java.util.Date;
  */
 public class MongoUploadMonitor extends AbstractMonitor {
     private static final String TAG = MongoUploadMonitor.class.getSimpleName();
-//    Context context;
+    final private AlertMessage URINOTSET=new AlertMessage(AlertLevels.CRITICAL, "Mongo URI not set", Conditions.MONGONOTCONNECTED);
+    final private AlertMessage BADURI=new AlertMessage(AlertLevels.CRITICAL,"Check mongo URI",Conditions.MONGONOTCONNECTED);
+    final private AlertMessage BADHOSTNAME=new AlertMessage(AlertLevels.CRITICAL,"Unable to resolve Mongo URI hostname",Conditions.MONGONOTCONNECTED);
+    final private AlertMessage MONGOTIMEOUT=new AlertMessage(AlertLevels.CRITICAL,"Timeout occurred while trying to upload to MongoDB",Conditions.MONGONOTCONNECTED);
+    final private AlertMessage UNHANDLEDEXCEPTION=new AlertMessage(AlertLevels.CRITICAL, "Unhandled mongo exception. Exception reported", Conditions.MONGONOTCONNECTED);
 
 
     MongoUploadMonitor(String name,int devID,Context c) {
         super(name,devID,c,"mongo_uploader");
         this.setAllowVirtual(false);
-//        this.setMonitorType("mongo uploader");
     }
 
     @Override
@@ -65,16 +70,19 @@ public class MongoUploadMonitor extends AbstractMonitor {
         MongoClientURI uri=null;
         if (mongoURI!=null && ! mongoURI.equals("")) {
             uri = new MongoClientURI(mongoURI);
+            StaticAlertMessages.removeMessage(URINOTSET);
         } else {
             Log.w(TAG,"Mongo URI not set");
-            NotifHelper.clearMessage(context,"Mongo URI not set");
+            StaticAlertMessages.addMessage(URINOTSET);
+//            NotifHelper.clearMessage(context,"Mongo URI not set");
         }
 
         if (uri==null){
-            NotifHelper.notify(context,"Bad mongo URI");
+//            NotifHelper.notify(context,"Bad mongo URI");
+            StaticAlertMessages.addMessage(BADURI);
             return;
         } else {
-            NotifHelper.clearMessage(context,"Bad mongo URI");
+            StaticAlertMessages.removeMessage(BADURI);
         }
 
         DB db;
@@ -87,7 +95,7 @@ public class MongoUploadMonitor extends AbstractMonitor {
             int uploadCount=0;
             for (EGVRecord sr:r) {
                 BasicDBObject data = new BasicDBObject();
-                data.put("name", d.getDeviceName());
+//                data.put("name", d.getDeviceName());
                 data.put("trend", sr.getTrend().getVal());
 
                 // NightScout comptability
@@ -103,20 +111,22 @@ public class MongoUploadMonitor extends AbstractMonitor {
             }
             Log.i(TAG,"Records processed: "+r.size()+" Records Uploaded: "+uploadCount);
             if (!d.isRemoteDevice()) {
+                DBCollection deviceStatus = db.getCollection("devicestatus");
                 BasicDBObject data = new BasicDBObject();
-                data.put("name", d.getDeviceName());
-                data.put("deviceCheckinDate", new Date().getTime());
+//                data.put("name", d.getDeviceName());
+//                data.put("deviceCheckinDate", new Date().getTime());
+                data.put("created_at", new Date());
                 data.put("uploaderBattery", d.getUploaderBattery());
                 data.put("cgmbattery", d.getDeviceBattery());
-                data.put("units", d.getUnit().getValue());
+//                data.put("units", d.getUnit().getValue());
                 data.put("downloadStatus", d.getStatus().toString());
-                deviceData.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
+                deviceStatus.update(data, data, true, false, WriteConcern.UNACKNOWLEDGED);
             }
             mongoClient.close();
             // Feels like a hack - need to figure out a better way to handle monitor error messages for the user
-            NotifHelper.clearMessage(context,"Unable to upload to mongoDB");
-            NotifHelper.clearMessage(context,"Mongo timeout");
-            NotifHelper.clearMessage(context,"Mongo error");
+//            NotifHelper.clearMessage(context,"Unable to upload to mongoDB");
+//            NotifHelper.clearMessage(context,"Mongo timeout");
+//            NotifHelper.clearMessage(context,"Mongo error");
             try {
                 savelastSuccessDate(d.getLastRecordReadingDate().getTime());
             } catch (NoDataException e) {
@@ -125,13 +135,15 @@ public class MongoUploadMonitor extends AbstractMonitor {
             //TODO Alert user when connection to mongo is unsuccessful
         } catch (UnknownHostException e) {
             Log.e(TAG,"Unable to upload to mongoDB",e);
-            NotifHelper.notify(context,"Unable to upload to mongoDB");
+            StaticAlertMessages.addMessage(BADHOSTNAME);
+//            NotifHelper.notify(context,"Unable to upload to mongoDB");
         } catch (MongoTimeoutException e){
             Log.w(TAG,"Mongo timeout");
-            NotifHelper.notify(context,"Mongo timeout");
+            StaticAlertMessages.addMessage(MONGOTIMEOUT);
         } catch (MongoException e){
-            Log.w(TAG, "Mongo catch all exception: ",e);
-            NotifHelper.notify(context,"Mongo error");
+            StaticAlertMessages.addMessage(UNHANDLEDEXCEPTION);
+            ACRA.getErrorReporter().handleException(e);
+//            NotifHelper.notify(context,"Mongo error");
         }
     }
 

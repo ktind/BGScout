@@ -1,7 +1,6 @@
 package com.ktind.cgm.bgscout;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentUris;
@@ -17,6 +16,9 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.WearableExtender;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -56,8 +58,8 @@ import java.util.Date;
  */
 public class AndroidNotificationMonitor extends AbstractMonitor {
     private static final String TAG = AndroidNotificationMonitor.class.getSimpleName();
-    protected Notification.Builder notifBuilder;
-    protected NotificationManager mNotifyMgr;
+    protected NotificationCompat.Builder notifBuilder;
+    protected NotificationManagerCompat mNotifyMgr;
     final protected String monitorType="android notification";
     protected boolean isSilenced=false;
     protected Date timeSilenced;
@@ -79,18 +81,21 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected int tickCounter=0;
     protected boolean isTickCounterSyncd=false;
     protected boolean isScreenOn=true;
+    protected WearableExtender wearableExtender;
+//    protected NotificationCompat.WearableExtender wearableExtender;
 
 
-    public void setNotifBuilder(Notification.Builder notifBuilder) {
+    public void setNotifBuilder(NotificationCompat.Builder notifBuilder) {
         this.notifBuilder = notifBuilder;
     }
 
     AndroidNotificationMonitor(String name,int devID,Context contxt){
         super(name, devID, contxt, "android_notification");
-        init();
-
+        wearableExtender =
+                new WearableExtender();
 
         Uri uri=Uri.parse(sharedPref.getString(deviceIDStr+Constants.CONTACTDATAURISUFFIX,Uri.EMPTY.toString()));
+
         if (! uri.equals(Uri.EMPTY)) {
             InputStream inputStream = openDisplayPhoto(uri);
             bm = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(inputStream),200,200,true);
@@ -98,19 +103,24 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         else {
             bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
         }
+        wearableExtender.setBackground(bm)
+                .setHintHideIcon(true);
+        init();
     }
 
     public void init(){
         Log.d(TAG,"Android notification monitor init called");
-        mNotifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyMgr = NotificationManagerCompat.from(context);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
-        this.setNotifBuilder(new Notification.Builder(context)
+        this.setNotifBuilder(new NotificationCompat.Builder(context)
                 .setContentTitle(name)
                 .setContentText("Monitor started. No data yet")
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.sandclock)
+                .extend(wearableExtender)
                 .setLargeIcon(bm));
         Notification notification = notifBuilder.build();
         mNotifyMgr.notify(deviceID, notification);
@@ -151,7 +161,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         }
         if (dl.getEgvArrayListRecords().size()>0)
             lastKnownGood = dl;
-        // FIXME violates the open/closed principle... have to change this class if any new devices are added. Look into DI
+        // FIXME think this violates the open/closed principle... have to change this class if any new devices are added. Look into DI
         if (dl.getDriver().equals(G4Constants.DRIVER)) {
             AbstractDownloadAnalyzer downloadAnalyzer = new G4DownloadAnalyzer(dl, context);
             analyzedDownload = downloadAnalyzer.analyze();
@@ -205,6 +215,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         setActions(dl);
         setContent(dl);
         setIcon(dl);
+//        notifBuilder.extend(wearableExtender);
 
         return notifBuilder.build();
     }
@@ -355,11 +366,12 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     }
 
     private void setDefaults(){
-        this.notifBuilder=new Notification.Builder(context)
+        this.notifBuilder=new NotificationCompat.Builder(context)
                 .setContentTitle(name)
                 .setContentText("Default text")
                 .setContentIntent(contentIntent)
-                .setOngoing(true)
+//                .setOngoing(true)
+                .extend(wearableExtender)
                 .setSmallIcon(R.drawable.sandclock)
                 .setLargeIcon(bm);
     }
@@ -404,7 +416,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
                 msg+="\n";
             msg+=message.getMessage();
         }
-        notifBuilder.setStyle(new Notification.BigTextStyle().bigText(msg))
+        notifBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentText(msg);
     }
 
@@ -414,24 +426,17 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         int range=0;
 
         ArrayList<Conditions> conditions=dl.getConditions();
-        if (conditions.contains(Conditions.DEVICELOW) ||
-                conditions.contains(Conditions.DEVICECRITICALLOW) ||
-                conditions.contains(Conditions.UPLOADERLOW) ||
-                conditions.contains(Conditions.UPLOADERCRITICALLOW) ||
-                conditions.contains(Conditions.DOWNLOADFAILED) ||
-                conditions.contains(Conditions.DEVICEDISCONNECTED) ||
-                conditions.contains(Conditions.NODATA) ||
-                conditions.contains(Conditions.STALEDATA) ||
-                conditions.contains(Conditions.UNKNOWN) ||
-                conditions.contains(Conditions.REMOTEDISCONNECTED)){
+        if (conditions.contains(Conditions.DEVICELOW) || conditions.contains(Conditions.DEVICECRITICALLOW) ||
+                conditions.contains(Conditions.UPLOADERLOW) || conditions.contains(Conditions.UPLOADERCRITICALLOW) ||
+                conditions.contains(Conditions.DOWNLOADFAILED) || conditions.contains(Conditions.DEVICEDISCONNECTED) ||
+                conditions.contains(Conditions.NODATA) || conditions.contains(Conditions.STALEDATA) ||
+                conditions.contains(Conditions.UNKNOWN) || conditions.contains(Conditions.REMOTEDISCONNECTED)){
             state=1;
         }
-        if (conditions.contains(Conditions.CRITICALHIGH) ||
-                conditions.contains(Conditions.WARNHIGH)){
+        if (conditions.contains(Conditions.CRITICALHIGH) || conditions.contains(Conditions.WARNHIGH)){
             range=1;
         }
-        if (conditions.contains(Conditions.CRITICALLOW) ||
-                conditions.contains(Conditions.WARNLOW)){
+        if (conditions.contains(Conditions.CRITICALLOW) || conditions.contains(Conditions.WARNLOW)){
             range=2;
         }
         try {
@@ -440,7 +445,198 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         } catch (NoDataException e) {
             iconLevel=60;
         }
-        notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
+        int icon;
+        switch (iconLevel){
+            case (0):
+                icon=R.drawable.smnoneinrange;
+                break;
+            case (1):
+                icon=R.drawable.smdoubleupinrange;
+                break;
+            case (2):
+                icon=R.drawable.smnoneinrange;
+                break;
+            case (3):
+                icon=R.drawable.smfortyfiveupinrange;
+                break;
+            case (4):
+                icon=R.drawable.smflatinrange;
+                break;
+            case (5):
+                icon=R.drawable.smfortyfivedowninrange;
+                break;
+            case (6):
+                icon=R.drawable.smdowninrange;
+                break;
+            case (7):
+                icon=R.drawable.smdoubledowninrange;
+                break;
+            case (8):
+                icon=R.drawable.smnoneinrange;
+                break;
+            case (9):
+                icon=R.drawable.smnoneinrange;
+                break;
+            case (10):
+                icon=R.drawable.smnoneerrorinrange;
+                break;
+            case (11):
+                icon=R.drawable.smdoubleuperrorinrange;
+                break;
+            case (12):
+                icon=R.drawable.smuperrorinrange;
+                break;
+            case (13):
+                icon=R.drawable.smfortyfiveuperrorinrange;
+                break;
+            case (14):
+                icon=R.drawable.smflaterrorinrange;
+                break;
+            case (15):
+                icon=R.drawable.smfortyfivedownerrorinrange;
+                break;
+            case (16):
+                icon=R.drawable.smdownerrorinrange;
+                break;
+            case (17):
+                icon=R.drawable.smdoubledownerrorinrange;
+                break;
+            case (18):
+                icon=R.drawable.smnoneerrorinrange;
+                break;
+            case (19):
+                icon=R.drawable.smnoneerrorinrange;
+                break;
+            case (20):
+                icon=R.drawable.smnonehigh;
+                break;
+            case (21):
+                icon=R.drawable.smdoubleuphigh;
+                break;
+            case (22):
+                icon=R.drawable.smuphigh;
+                break;
+            case (23):
+                icon=R.drawable.smfortyfiveuphigh;
+                break;
+            case (24):
+                icon=R.drawable.smflathigh;
+                break;
+            case (25):
+                icon=R.drawable.smfortyfivedownhigh;
+                break;
+            case (26):
+                icon=R.drawable.smdownhigh;
+                break;
+            case (27):
+                icon=R.drawable.smdoubledownhigh;
+                break;
+            case (28):
+                icon=R.drawable.smnonehigh;
+                break;
+            case (29):
+                icon=R.drawable.smnonehigh;
+                break;
+            case (30):
+                icon=R.drawable.smnoneerrorhigh;
+                break;
+            case (31):
+                icon=R.drawable.smdoubleuperrorhigh;
+                break;
+            case (32):
+                icon=R.drawable.smuperrorhigh;
+                break;
+            case (33):
+                icon=R.drawable.smfortyfiveuperrorhigh;
+                break;
+            case (34):
+                icon=R.drawable.smflaterrorhigh;
+                break;
+            case (35):
+                icon=R.drawable.smfortyfivedownerrorhigh;
+                break;
+            case (36):
+                icon=R.drawable.smdownerrorhigh;
+                break;
+            case (37):
+                icon=R.drawable.smdoubledownerrorhigh;
+                break;
+            case (38):
+                icon=R.drawable.smnoneerrorhigh;
+                break;
+            case (39):
+                icon=R.drawable.smnoneerrorhigh;
+                break;
+            case (40):
+                icon=R.drawable.smnonelow;
+                break;
+            case (41):
+                icon=R.drawable.smdoubleuplow;
+                break;
+            case (42):
+                icon=R.drawable.smuplow;
+                break;
+            case (43):
+                icon=R.drawable.smfortyfiveuplow;
+                break;
+            case (44):
+                icon=R.drawable.smflatlow;
+                break;
+            case (45):
+                icon=R.drawable.smfortyfivedownlow;
+                break;
+            case (46):
+                icon=R.drawable.smdownlow;
+                break;
+            case (47):
+                icon=R.drawable.smdoubledownlow;
+                break;
+            case (48):
+                icon=R.drawable.smnonelow;
+                break;
+            case (49):
+                icon=R.drawable.smnonelow;
+                break;
+            case (50):
+                icon=R.drawable.smnoneerrorlow;
+                break;
+            case (51):
+                icon=R.drawable.smdoubleuperrorlow;
+                break;
+            case (52):
+                icon=R.drawable.smuperrorlow;
+                break;
+            case (53):
+                icon=R.drawable.smfortyfiveuperrorlow;
+                break;
+            case (54):
+                icon=R.drawable.smflaterrorlow;
+                break;
+            case (55):
+                icon=R.drawable.smfortyfivedownerrorlow;
+                break;
+            case (56):
+                icon=R.drawable.smdownerrorlow;
+                break;
+            case (57):
+                icon=R.drawable.smdoubledownerrorlow;
+                break;
+            case (58):
+                icon=R.drawable.smnoneerrorlow;
+                break;
+            case (59):
+                icon=R.drawable.smnoneerrorlow;
+                break;
+            default:
+                icon=R.drawable.questionmarkicon;
+                break;
+        }
+        wearableExtender.setBackground(bm)
+                .setContentIcon(icon)
+                .setHintHideIcon(true);
+        notifBuilder.extend(wearableExtender);
+        notifBuilder.setSmallIcon(icon);
+//        notifBuilder.setSmallIcon(R.drawable.smicons, iconLevel);
     }
 
     @Override

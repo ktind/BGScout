@@ -1,2 +1,1 @@
-include ':mobile', ':wear'
-include ':pEBBLE_KIT'
+include ':mobile', ':wear', 'PEBBLE_KIT'

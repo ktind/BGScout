@@ -109,14 +109,14 @@ public abstract class AbstractDevice implements DeviceInterface {
             monitors.add(new PebbleMonitor(getName(),deviceID, getContext()));
         }
 
-        if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
-            Log.i(TAG, "Adding a local android monitor");
-            mon = new AndroidNotificationMonitor(getName(), deviceID, getContext());
-            if (phoneNum!=null) {
-                ((AndroidNotificationMonitor) mon).setPhoneNum(phoneNum);
-            }
-            monitors.add(mon);
-        }
+//        if (sharedPref.getBoolean(deviceIDStr + "_android_monitor", false)) {
+//            Log.i(TAG, "Adding a local android monitor");
+//            mon = new AndroidNotificationMonitor(getName(), deviceID, getContext());
+//            if (phoneNum!=null) {
+//                ((AndroidNotificationMonitor) mon).setPhoneNum(phoneNum);
+//            }
+//            monitors.add(mon);
+//        }
         if (!isRemote()) {
             if (sharedPref.getBoolean(deviceIDStr + "_mongo_upload", false)) {
                 Log.i(TAG, "Adding a mongo upload monitor");
@@ -136,6 +136,16 @@ public abstract class AbstractDevice implements DeviceInterface {
         } else {
             Log.i(TAG, "Ignoring monitors that do not allow remote devices");
         }
+//        mon=new WearMonitor(getName(),deviceID,getContext());
+//        monitors.add(mon);
+
+        // TODO Remove option since it longer does anything
+        Log.i(TAG, "Adding a local android monitor");
+        mon = new AndroidNotificationMonitor(getName(), deviceID, getContext());
+        if (phoneNum!=null) {
+            ((AndroidNotificationMonitor) mon).setPhoneNum(phoneNum);
+        }
+        monitors.add(mon);
         Log.d(TAG, "Number of monitors created: " + monitors.size());
         started=true;
         IntentFilter intentFilter=new IntentFilter(Constants.UIDO_QUERY);
@@ -198,7 +208,6 @@ public abstract class AbstractDevice implements DeviceInterface {
     public void fireMonitors(DownloadObject dl) {
         stats.startMonitorTimer();
         Log.d(TAG,"Firing monitors");
-        // FIXME why is monitors set to null here sometimes?
         if (monitors==null)
             return;
         for (AbstractMonitor monitor:monitors)
