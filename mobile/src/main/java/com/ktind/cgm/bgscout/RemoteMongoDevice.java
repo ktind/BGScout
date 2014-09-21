@@ -111,10 +111,10 @@ public class RemoteMongoDevice extends AbstractPollDevice {
                     EGVRecord record;
                     if (recQueryDate>lastQueryDate){
                         lastQueryDate=recQueryDate;
-                        record=new EGVRecord(bgValue,recQueryDate,trend,true);
+                        record=new EGVRecord(bgValue,recQueryDate,trend);
                         lastRecord=record;
                     }else{
-                        record=new EGVRecord(bgValue,recQueryDate,trend,false);
+                        record=new EGVRecord(bgValue,recQueryDate,trend);
                     }
                     egvRecords.add(record);
                     ddo.setEgvRecords(egvRecords);

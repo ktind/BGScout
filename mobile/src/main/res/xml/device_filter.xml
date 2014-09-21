@@ -15,4 +15,5 @@
 -->
 <resources>
     <usb-device class="2" subclass="0" protocol="0" />
+    <usb-device vendor-id="0A21" product-id="8001" />
 </resources>

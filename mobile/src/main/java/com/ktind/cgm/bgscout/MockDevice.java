@@ -73,7 +73,7 @@ public class MockDevice extends AbstractPollDevice {
         DownloadStatus downloadStatus=generateStatus();
         ArrayList<EGVRecord> egvArray=new ArrayList<EGVRecord>();
         Random rand=new Random();
-        EGVRecord egvRecord=new EGVRecord(rand.nextInt(362)+39,new Date().getTime(),Trend.values()[rand.nextInt(Trend.values().length)],true);
+        EGVRecord egvRecord=new EGVRecord(rand.nextInt(362)+39,new Date().getTime(),Trend.values()[rand.nextInt(Trend.values().length)]);
         egvArray.add(egvRecord);
         egvHistory.add(egvRecord);
 

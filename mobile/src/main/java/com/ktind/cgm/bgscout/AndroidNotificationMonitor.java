@@ -82,6 +82,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     protected boolean isTickCounterSyncd=false;
     protected boolean isScreenOn=true;
     protected WearableExtender wearableExtender;
+    protected boolean runInit =true;
+//    protected boolean firstReading = true;
 //    protected NotificationCompat.WearableExtender wearableExtender;
 
 
@@ -133,6 +135,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         context.registerReceiver(screenStateReceiver,new IntentFilter(Intent.ACTION_SCREEN_ON));
         context.registerReceiver(screenStateReceiver,new IntentFilter(Intent.ACTION_SCREEN_OFF));
         context.registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        runInit =false;
     }
 
     public String getPhoneNum() {
@@ -209,7 +212,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
     }
 
     private Notification buildNotification(AnalyzedDownload dl){
-        setDefaults();
+        setDefaults(dl);
         setSound(dl);
         setTicker(dl);
         setActions(dl);
@@ -223,6 +226,13 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         if (isSilenced)
             return;
         ArrayList<Conditions> conditions=dl.getConditions();
+        if ( !conditions.contains(Conditions.CRITICALHIGH)
+                && !conditions.contains(Conditions.WARNHIGH)
+                && !conditions.contains(Conditions.WARNLOW)
+                && !conditions.contains(Conditions.CRITICALLOW)) {
+            return;
+        }
+
         Uri uri = Uri.EMPTY;
         // allows us to give some sounds higher precedence than others
         // I'm thinking I'll need to set a priority to the enums to break ties but this should work for now
@@ -365,8 +375,21 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         
     }
 
-    private void setDefaults(){
-        this.notifBuilder=new NotificationCompat.Builder(context)
+    private void setDefaults(AnalyzedDownload dl){
+//        this.notifBuilder=new NotificationCompat.Builder(context)
+        ArrayList<Conditions> conditions=dl.getConditions();
+        notifBuilder = new NotificationCompat.Builder(context);
+        if ( conditions.contains(Conditions.CRITICALHIGH)
+                || conditions.contains(Conditions.WARNHIGH)
+                || conditions.contains(Conditions.WARNLOW)
+                || conditions.contains(Conditions.CRITICALLOW)) {
+
+            notifBuilder.setPriority(Notification.PRIORITY_MAX);
+//            firstReading=false;
+        } else {
+            notifBuilder.setPriority(Notification.PRIORITY_DEFAULT);
+        }
+        notifBuilder
                 .setContentTitle(name)
                 .setContentText("Default text")
                 .setContentIntent(contentIntent)
@@ -687,7 +710,7 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         if (previousDownloads.size() > 0) {
             AbstractDownloadAnalyzer downloadAnalyzer = new G4DownloadAnalyzer(previousDownloads.get(previousDownloads.size() - 1), context);
             analyzedDownload = downloadAnalyzer.analyze();
-            setDefaults();
+            setDefaults(analyzedDownload);
             setActions(analyzedDownload);
             setContent(analyzedDownload);
             setIcon(analyzedDownload);
@@ -715,6 +738,8 @@ public class AndroidNotificationMonitor extends AbstractMonitor {
         @Override
         public void onReceive(Context mContext, Intent intent) {
             if (intent.getAction().equals("android.intent.action.TIME_TICK")) {
+                if (analyzedDownload==null)
+                    return;
                 try {
                     Log.d(TAG, "Comparing "+(new Date().getTime()-analyzedDownload.getLastRecordReadingDate().getTime()));
                     if (new Date().getTime()-analyzedDownload.getLastRecordReadingDate().getTime()< 310000 && ! isScreenOn) {

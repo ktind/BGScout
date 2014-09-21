@@ -153,7 +153,7 @@ public class DeviceDownloadService extends Service {
             for (final AbstractDevice cgm : cgms) {
                 cgm.start();
             }
-            startForeground(24, notification);
+            startForeground(0, notification);
             super.onStartCommand(intent, flags, startId);
             state = ServiceState.STARTED;
         }

@@ -40,14 +40,12 @@ public class EGVRecord implements Parcelable {
     protected Long date;
     protected Trend trend=Trend.NONE;
     protected GlucoseUnit unit=GlucoseUnit.MGDL;
-//    protected boolean isNew=true;
 
-    EGVRecord(int egv,long date,Trend trend,boolean isNew){
+    EGVRecord(int egv,long date,Trend trend){
         super();
         this.setEgv(egv);
         this.setDate(date);
         this.setTrend(trend);
-//        this.setNew(isNew);
     }
 
     EGVRecord(EGVRecord record){
@@ -55,7 +53,6 @@ public class EGVRecord implements Parcelable {
         this.date=record.date;
         this.trend=record.getTrend();
         this.unit=record.getUnit();
-//        this.isNew=record.isNew;
     }
 
     public EGVRecord(){
@@ -98,14 +95,6 @@ public class EGVRecord implements Parcelable {
         this.trend = trend;
     }
 
-//    public boolean isNew() {
-//        return isNew;
-//    }
-
-//    public void setNew(boolean isNew) {
-//        this.isNew = isNew;
-//    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -117,7 +106,6 @@ public class EGVRecord implements Parcelable {
         dest.writeLong(date);
         dest.writeInt(trend.getVal());
         dest.writeInt(unit.getValue());
-//        dest.writeByte((byte) (isNew ? 1 : 0));
     }
 
     public static final Parcelable.Creator<EGVRecord> CREATOR
@@ -136,7 +124,6 @@ public class EGVRecord implements Parcelable {
         date=in.readLong();
         trend=Trend.values()[in.readInt()];
         unit=GlucoseUnit.values()[in.readInt()];
-//        isNew = in.readByte() != 0;
     }
 
     @Override
@@ -150,14 +137,6 @@ public class EGVRecord implements Parcelable {
             Log.d(TAG, "EGV Record failed on comparison egv");
             return false;
         }
-//        if (isNew != record.isNew){
-//            Log.d(TAG, "EGV Record failed on comparison isNew");
-//            return false;
-//        }
-//        if (!date.equals(record.date)){
-//            Log.d(TAG, "EGV Record failed on comparison date");
-//            return false;
-//        }
         if (date==record.date){
             Log.d(TAG, "EGV Record failed on comparison date");
             return false;
@@ -171,8 +150,6 @@ public class EGVRecord implements Parcelable {
             Log.d(TAG, "EGV Record failed on comparison unit");
             return false;
         }
-//        return (unit != record.unit);
-
         return true;
     }
 
@@ -182,7 +159,6 @@ public class EGVRecord implements Parcelable {
         result = 31 * result + date.hashCode();
         result = 31 * result + trend.hashCode();
         result = 31 * result + unit.hashCode();
-//        result = 31 * result + (isNew ? 1 : 0);
         return result;
     }
 }

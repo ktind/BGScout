@@ -7,12 +7,15 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgrObserverInterface;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -82,7 +85,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                 mqttMgr.initConnect(url);
                 Log.d(TAG, "Subscribe start");
 //        mqttMgr.subscribe("/entries/sgv", "/uploader");
-                mqttMgr.subscribe("/entries/sgv");
+                mqttMgr.subscribe("/entries/sgv","/protobuf/test2");
                 Log.d(TAG,"Connect ended");
             }
         }).start();
@@ -123,6 +126,38 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
             Log.d(TAG,"Message from device: "+ddo.getDeviceName());
             setLastDownloadObject(ddo);
             onDownload(ddo);
+        }
+        if (topic.equals("/protobuf/test2")){
+            try {
+                SGV.ProposedCookieMonsterG4Download protoBufDownload=SGV.ProposedCookieMonsterG4Download.parseFrom(msg.getPayload());
+                Log.d("XXX", "SGV Download status: "+protoBufDownload.getDownloadStatus().name());
+                Log.d("XXX", "SGV Units: " + protoBufDownload.getUnits().name());
+                Log.d("XXX", "SGV Download timestamp: "+new Date(protoBufDownload.getDownloadTimestamp()));
+                Log.d("XXX", "SGV Uploader battery: " + protoBufDownload.getUploaderBattery());
+                Log.d("XXX", "SGV BG: "+protoBufDownload.getSgv(0).getSgv());
+                Log.d("XXX", "SGV direction: "+protoBufDownload.getSgv(0).getDirection().name());
+                Log.d("XXX", "SGV timestamp: "+new Date(protoBufDownload.getSgv(0).getTimestamp()));
+
+                ArrayList<EGVRecord> egvRecords = new ArrayList<EGVRecord>();
+                for (SGV.ProposeCookieMonsterSGVG4 sgv: protoBufDownload.getSgvList()){
+                    egvRecords.add(new EGVRecord(sgv.getSgv(),sgv.getTimestamp(),Trend.values()[sgv.getDirection().getNumber()]));
+                }
+                DownloadObject downloadObject=new DownloadObject();
+                // TODO: once more CGMS are decoded we should consider adding some of these to the Protobuf definition.
+                downloadObject.setUploaderBattery(protoBufDownload.getUploaderBattery())
+                        .setDownloadDate(new Date(protoBufDownload.getDownloadTimestamp()))
+                        .setEgvRecords(egvRecords)
+                        .setRemoteDevice(false)
+                        .setDeviceName("dexcom")
+                        .setUnit(GlucoseUnit.values()[protoBufDownload.getUnits().getNumber()])
+                        .setDeviceID("device_1")
+                        .setLastReadingDate(egvRecords.get(egvRecords.size()-1).getDate())
+                        .setDriver("DexcomG4");
+                setLastDownloadObject(downloadObject);
+                onDownload(downloadObject);
+            } catch (InvalidProtocolBufferException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -8,98 +8,163 @@ public final class SGV {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface SGVUsedOrBuilder
+  public interface ProposedCookieMonsterG4DownloadOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string dateString = 1;
+    // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
     /**
-     * <code>required string dateString = 1;</code>
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
      */
-    boolean hasDateString();
+    java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> 
+        getSgvList();
     /**
-     * <code>required string dateString = 1;</code>
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
      */
-    java.lang.String getDateString();
+    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index);
     /**
-     * <code>required string dateString = 1;</code>
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
      */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
+    int getSgvCount();
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+        getSgvOrBuilderList();
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+        int index);
 
-    // required string sgv = 2;
+    // optional .ProposedCookieMonsterG4Download.Unit units = 2;
     /**
-     * <code>required string sgv = 2;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     *
+     * <pre>
+     * Units reported by the device
+     * </pre>
      */
-    boolean hasSgv();
+    boolean hasUnits();
     /**
-     * <code>required string sgv = 2;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     *
+     * <pre>
+     * Units reported by the device
+     * </pre>
      */
-    java.lang.String getSgv();
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getSgvBytes();
+    com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits();
 
-    // required uint32 date = 3;
+    // required uint64 download_timestamp = 3;
     /**
-     * <code>required uint32 date = 3;</code>
+     * <code>required uint64 download_timestamp = 3;</code>
+     *
+     * <pre>
+     * Timestamp of the download - should be UTC
+     * </pre>
      */
-    boolean hasDate();
+    boolean hasDownloadTimestamp();
     /**
-     * <code>required uint32 date = 3;</code>
+     * <code>required uint64 download_timestamp = 3;</code>
+     *
+     * <pre>
+     * Timestamp of the download - should be UTC
+     * </pre>
      */
-    int getDate();
+    long getDownloadTimestamp();
 
-    // optional string direction = 4;
+    // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
     /**
-     * <code>optional string direction = 4;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     *
+     * <pre>
+     * Status of the download
+     * </pre>
      */
-    boolean hasDirection();
+    boolean hasDownloadStatus();
     /**
-     * <code>optional string direction = 4;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     *
+     * <pre>
+     * Status of the download
+     * </pre>
      */
-    java.lang.String getDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDirectionBytes();
+    com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus();
 
-    // optional string device = 5;
+    // optional uint32 receiver_battery = 5;
     /**
-     * <code>optional string device = 5;</code>
+     * <code>optional uint32 receiver_battery = 5;</code>
+     *
+     * <pre>
+     * Battery level as reported by the receiver
+     * </pre>
      */
-    boolean hasDevice();
+    boolean hasReceiverBattery();
     /**
-     * <code>optional string device = 5;</code>
+     * <code>optional uint32 receiver_battery = 5;</code>
+     *
+     * <pre>
+     * Battery level as reported by the receiver
+     * </pre>
      */
-    java.lang.String getDevice();
+    int getReceiverBattery();
+
+    // optional uint32 uploader_battery = 6;
     /**
-     * <code>optional string device = 5;</code>
+     * <code>optional uint32 uploader_battery = 6;</code>
+     *
+     * <pre>
+     * Battery level as reported by the uploader
+     * </pre>
      */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
+    boolean hasUploaderBattery();
+    /**
+     * <code>optional uint32 uploader_battery = 6;</code>
+     *
+     * <pre>
+     * Battery level as reported by the uploader
+     * </pre>
+     */
+    int getUploaderBattery();
   }
   /**
-   * Protobuf type {@code SGVUsed}
+   * Protobuf type {@code ProposedCookieMonsterG4Download}
    */
-  public static final class SGVUsed extends
+  public static final class ProposedCookieMonsterG4Download extends
       com.google.protobuf.GeneratedMessage
-      implements SGVUsedOrBuilder {
-    // Use SGVUsed.newBuilder() to construct.
-    private SGVUsed(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements ProposedCookieMonsterG4DownloadOrBuilder {
+    // Use ProposedCookieMonsterG4Download.newBuilder() to construct.
+    private ProposedCookieMonsterG4Download(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private SGVUsed(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ProposedCookieMonsterG4Download(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final SGVUsed defaultInstance;
-    public static SGVUsed getDefaultInstance() {
+    private static final ProposedCookieMonsterG4Download defaultInstance;
+    public static ProposedCookieMonsterG4Download getDefaultInstance() {
       return defaultInstance;
     }
 
-    public SGVUsed getDefaultInstanceForType() {
+    public ProposedCookieMonsterG4Download getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -109,7 +174,7 @@ public final class SGV {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private SGVUsed(
+    private ProposedCookieMonsterG4Download(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -133,28 +198,48 @@ public final class SGV {
               break;
             }
             case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              sgv_.add(input.readMessage(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.PARSER, extensionRegistry));
               break;
             }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readBytes();
+            case 16: {
+              int rawValue = input.readEnum();
+              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit value = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                units_ = value;
+              }
               break;
             }
             case 24: {
-              bitField0_ |= 0x00000004;
-              date_ = input.readUInt32();
+              bitField0_ |= 0x00000002;
+              downloadTimestamp_ = input.readUInt64();
               break;
             }
-            case 34: {
+            case 32: {
+              int rawValue = input.readEnum();
+              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus value = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(4, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                downloadStatus_ = value;
+              }
+              break;
+            }
+            case 40: {
               bitField0_ |= 0x00000008;
-              direction_ = input.readBytes();
+              receiverBattery_ = input.readUInt32();
               break;
             }
-            case 42: {
+            case 48: {
               bitField0_ |= 0x00000010;
-              device_ = input.readBytes();
+              uploaderBattery_ = input.readUInt32();
               break;
             }
           }
@@ -165,249 +250,448 @@ public final class SGV {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          sgv_ = java.util.Collections.unmodifiableList(sgv_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_descriptor;
+      return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_fieldAccessorTable
+      return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.SGVUsed.class, com.ktind.cgm.bgscout.SGV.SGVUsed.Builder.class);
+              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<SGVUsed> PARSER =
-        new com.google.protobuf.AbstractParser<SGVUsed>() {
-      public SGVUsed parsePartialFrom(
+    public static com.google.protobuf.Parser<ProposedCookieMonsterG4Download> PARSER =
+        new com.google.protobuf.AbstractParser<ProposedCookieMonsterG4Download>() {
+      public ProposedCookieMonsterG4Download parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SGVUsed(input, extensionRegistry);
+        return new ProposedCookieMonsterG4Download(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SGVUsed> getParserForType() {
+    public com.google.protobuf.Parser<ProposedCookieMonsterG4Download> getParserForType() {
       return PARSER;
     }
 
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
     /**
-     * <code>required string dateString = 1;</code>
+     * Protobuf enum {@code ProposedCookieMonsterG4Download.Unit}
      */
-    public boolean hasDateString() {
+    public enum Unit
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>MGDL = 0;</code>
+       */
+      MGDL(0, 0),
+      /**
+       * <code>MMOL = 1;</code>
+       */
+      MMOL(1, 1),
+      ;
+
+      /**
+       * <code>MGDL = 0;</code>
+       */
+      public static final int MGDL_VALUE = 0;
+      /**
+       * <code>MMOL = 1;</code>
+       */
+      public static final int MMOL_VALUE = 1;
+
+
+      public final int getNumber() { return value; }
+
+      public static Unit valueOf(int value) {
+        switch (value) {
+          case 0: return MGDL;
+          case 1: return MMOL;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Unit>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Unit>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Unit>() {
+              public Unit findValueByNumber(int number) {
+                return Unit.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Unit[] VALUES = values();
+
+      public static Unit valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Unit(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:ProposedCookieMonsterG4Download.Unit)
+    }
+
+    /**
+     * Protobuf enum {@code ProposedCookieMonsterG4Download.DownloadStatus}
+     */
+    public enum DownloadStatus
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>SUCCESS = 0;</code>
+       */
+      SUCCESS(0, 0),
+      /**
+       * <code>NO_DATA = 1;</code>
+       */
+      NO_DATA(1, 1),
+      /**
+       * <code>DEVICE_NOT_FOUND = 2;</code>
+       */
+      DEVICE_NOT_FOUND(2, 2),
+      /**
+       * <code>IO_ERROR = 3;</code>
+       */
+      IO_ERROR(3, 3),
+      /**
+       * <code>APPLICATION_ERROR = 4;</code>
+       */
+      APPLICATION_ERROR(4, 4),
+      /**
+       * <code>NONE = 6;</code>
+       */
+      NONE(5, 6),
+      /**
+       * <code>UNKNOWN = 7;</code>
+       */
+      UNKNOWN(6, 7),
+      ;
+
+      /**
+       * <code>SUCCESS = 0;</code>
+       */
+      public static final int SUCCESS_VALUE = 0;
+      /**
+       * <code>NO_DATA = 1;</code>
+       */
+      public static final int NO_DATA_VALUE = 1;
+      /**
+       * <code>DEVICE_NOT_FOUND = 2;</code>
+       */
+      public static final int DEVICE_NOT_FOUND_VALUE = 2;
+      /**
+       * <code>IO_ERROR = 3;</code>
+       */
+      public static final int IO_ERROR_VALUE = 3;
+      /**
+       * <code>APPLICATION_ERROR = 4;</code>
+       */
+      public static final int APPLICATION_ERROR_VALUE = 4;
+      /**
+       * <code>NONE = 6;</code>
+       */
+      public static final int NONE_VALUE = 6;
+      /**
+       * <code>UNKNOWN = 7;</code>
+       */
+      public static final int UNKNOWN_VALUE = 7;
+
+
+      public final int getNumber() { return value; }
+
+      public static DownloadStatus valueOf(int value) {
+        switch (value) {
+          case 0: return SUCCESS;
+          case 1: return NO_DATA;
+          case 2: return DEVICE_NOT_FOUND;
+          case 3: return IO_ERROR;
+          case 4: return APPLICATION_ERROR;
+          case 6: return NONE;
+          case 7: return UNKNOWN;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<DownloadStatus>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<DownloadStatus>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<DownloadStatus>() {
+              public DownloadStatus findValueByNumber(int number) {
+                return DownloadStatus.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDescriptor().getEnumTypes().get(1);
+      }
+
+      private static final DownloadStatus[] VALUES = values();
+
+      public static DownloadStatus valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private DownloadStatus(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:ProposedCookieMonsterG4Download.DownloadStatus)
+    }
+
+    private int bitField0_;
+    // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
+    public static final int SGV_FIELD_NUMBER = 1;
+    private java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> sgv_;
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> getSgvList() {
+      return sgv_;
+    }
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    public java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+        getSgvOrBuilderList() {
+      return sgv_;
+    }
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    public int getSgvCount() {
+      return sgv_.size();
+    }
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index) {
+      return sgv_.get(index);
+    }
+    /**
+     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose records as reported by the G4
+     * </pre>
+     */
+    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+        int index) {
+      return sgv_.get(index);
+    }
+
+    // optional .ProposedCookieMonsterG4Download.Unit units = 2;
+    public static final int UNITS_FIELD_NUMBER = 2;
+    private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit units_;
+    /**
+     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     *
+     * <pre>
+     * Units reported by the device
+     * </pre>
+     */
+    public boolean hasUnits() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string dateString = 1;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     *
+     * <pre>
+     * Units reported by the device
+     * </pre>
      */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits() {
+      return units_;
     }
 
-    // required string sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private java.lang.Object sgv_;
+    // required uint64 download_timestamp = 3;
+    public static final int DOWNLOAD_TIMESTAMP_FIELD_NUMBER = 3;
+    private long downloadTimestamp_;
     /**
-     * <code>required string sgv = 2;</code>
+     * <code>required uint64 download_timestamp = 3;</code>
+     *
+     * <pre>
+     * Timestamp of the download - should be UTC
+     * </pre>
      */
-    public boolean hasSgv() {
+    public boolean hasDownloadTimestamp() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string sgv = 2;</code>
+     * <code>required uint64 download_timestamp = 3;</code>
+     *
+     * <pre>
+     * Timestamp of the download - should be UTC
+     * </pre>
      */
-    public java.lang.String getSgv() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          sgv_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSgvBytes() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        sgv_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getDownloadTimestamp() {
+      return downloadTimestamp_;
     }
 
-    // required uint32 date = 3;
-    public static final int DATE_FIELD_NUMBER = 3;
-    private int date_;
+    // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
+    public static final int DOWNLOAD_STATUS_FIELD_NUMBER = 4;
+    private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus downloadStatus_;
     /**
-     * <code>required uint32 date = 3;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     *
+     * <pre>
+     * Status of the download
+     * </pre>
      */
-    public boolean hasDate() {
+    public boolean hasDownloadStatus() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required uint32 date = 3;</code>
+     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     *
+     * <pre>
+     * Status of the download
+     * </pre>
      */
-    public int getDate() {
-      return date_;
+    public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus() {
+      return downloadStatus_;
     }
 
-    // optional string direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private java.lang.Object direction_;
+    // optional uint32 receiver_battery = 5;
+    public static final int RECEIVER_BATTERY_FIELD_NUMBER = 5;
+    private int receiverBattery_;
     /**
-     * <code>optional string direction = 4;</code>
+     * <code>optional uint32 receiver_battery = 5;</code>
+     *
+     * <pre>
+     * Battery level as reported by the receiver
+     * </pre>
      */
-    public boolean hasDirection() {
+    public boolean hasReceiverBattery() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string direction = 4;</code>
+     * <code>optional uint32 receiver_battery = 5;</code>
+     *
+     * <pre>
+     * Battery level as reported by the receiver
+     * </pre>
      */
-    public java.lang.String getDirection() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          direction_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDirectionBytes() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        direction_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getReceiverBattery() {
+      return receiverBattery_;
     }
 
-    // optional string device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private java.lang.Object device_;
+    // optional uint32 uploader_battery = 6;
+    public static final int UPLOADER_BATTERY_FIELD_NUMBER = 6;
+    private int uploaderBattery_;
     /**
-     * <code>optional string device = 5;</code>
+     * <code>optional uint32 uploader_battery = 6;</code>
+     *
+     * <pre>
+     * Battery level as reported by the uploader
+     * </pre>
      */
-    public boolean hasDevice() {
+    public boolean hasUploaderBattery() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional string device = 5;</code>
+     * <code>optional uint32 uploader_battery = 6;</code>
+     *
+     * <pre>
+     * Battery level as reported by the uploader
+     * </pre>
      */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getUploaderBattery() {
+      return uploaderBattery_;
     }
 
     private void initFields() {
-      dateString_ = "";
-      sgv_ = "";
-      date_ = 0;
-      direction_ = "";
-      device_ = "";
+      sgv_ = java.util.Collections.emptyList();
+      units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+      downloadTimestamp_ = 0L;
+      downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
+      receiverBattery_ = 0;
+      uploaderBattery_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasDateString()) {
+      if (!hasDownloadTimestamp()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasDate()) {
-        memoizedIsInitialized = 0;
-        return false;
+      for (int i = 0; i < getSgvCount(); i++) {
+        if (!getSgv(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -416,20 +700,23 @@ public final class SGV {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      for (int i = 0; i < sgv_.size(); i++) {
+        output.writeMessage(1, sgv_.get(i));
+      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
+        output.writeEnum(2, units_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getSgvBytes());
+        output.writeUInt64(3, downloadTimestamp_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt32(3, date_);
+        output.writeEnum(4, downloadStatus_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getDirectionBytes());
+        output.writeUInt32(5, receiverBattery_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getDeviceBytes());
+        output.writeUInt32(6, uploaderBattery_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -440,25 +727,29 @@ public final class SGV {
       if (size != -1) return size;
 
       size = 0;
+      for (int i = 0; i < sgv_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, sgv_.get(i));
+      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
+          .computeEnumSize(2, units_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getSgvBytes());
+          .computeUInt64Size(3, downloadTimestamp_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, date_);
+          .computeEnumSize(4, downloadStatus_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDirectionBytes());
+          .computeUInt32Size(5, receiverBattery_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getDeviceBytes());
+          .computeUInt32Size(6, uploaderBattery_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -472,53 +763,53 @@ public final class SGV {
       return super.writeReplace();
     }
 
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(byte[] data)
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseDelimitedFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseDelimitedFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -527,7 +818,7 @@ public final class SGV {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.SGVUsed prototype) {
+    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -539,24 +830,24 @@ public final class SGV {
       return builder;
     }
     /**
-     * Protobuf type {@code SGVUsed}
+     * Protobuf type {@code ProposedCookieMonsterG4Download}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.SGVUsedOrBuilder {
+       implements com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4DownloadOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_fieldAccessorTable
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.SGVUsed.class, com.ktind.cgm.bgscout.SGV.SGVUsed.Builder.class);
+                com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Builder.class);
       }
 
-      // Construct using com.ktind.cgm.bgscout.SGV.SGVUsed.newBuilder()
+      // Construct using com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -568,6 +859,7 @@ public final class SGV {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getSgvFieldBuilder();
         }
       }
       private static Builder create() {
@@ -576,16 +868,22 @@ public final class SGV {
 
       public Builder clear() {
         super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = "";
+        if (sgvBuilder_ == null) {
+          sgv_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          sgvBuilder_.clear();
+        }
+        units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
         bitField0_ = (bitField0_ & ~0x00000002);
-        date_ = 0;
+        downloadTimestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = "";
+        downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
         bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = "";
+        receiverBattery_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        uploaderBattery_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -595,100 +893,125 @@ public final class SGV {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
       }
 
-      public com.ktind.cgm.bgscout.SGV.SGVUsed getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.SGVUsed.getDefaultInstance();
+      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download getDefaultInstanceForType() {
+        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDefaultInstance();
       }
 
-      public com.ktind.cgm.bgscout.SGV.SGVUsed build() {
-        com.ktind.cgm.bgscout.SGV.SGVUsed result = buildPartial();
+      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download build() {
+        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ktind.cgm.bgscout.SGV.SGVUsed buildPartial() {
-        com.ktind.cgm.bgscout.SGV.SGVUsed result = new com.ktind.cgm.bgscout.SGV.SGVUsed(this);
+      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download buildPartial() {
+        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download result = new com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+        if (sgvBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            sgv_ = java.util.Collections.unmodifiableList(sgv_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.sgv_ = sgv_;
+        } else {
+          result.sgv_ = sgvBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+        result.units_ = units_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+        result.downloadTimestamp_ = downloadTimestamp_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.date_ = date_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        result.downloadStatus_ = downloadStatus_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        result.receiverBattery_ = receiverBattery_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.device_ = device_;
+        result.uploaderBattery_ = uploaderBattery_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.SGVUsed) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.SGVUsed)other);
+        if (other instanceof com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download) {
+          return mergeFrom((com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.SGVUsed other) {
-        if (other == com.ktind.cgm.bgscout.SGV.SGVUsed.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
+      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download other) {
+        if (other == com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDefaultInstance()) return this;
+        if (sgvBuilder_ == null) {
+          if (!other.sgv_.isEmpty()) {
+            if (sgv_.isEmpty()) {
+              sgv_ = other.sgv_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureSgvIsMutable();
+              sgv_.addAll(other.sgv_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.sgv_.isEmpty()) {
+            if (sgvBuilder_.isEmpty()) {
+              sgvBuilder_.dispose();
+              sgvBuilder_ = null;
+              sgv_ = other.sgv_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              sgvBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSgvFieldBuilder() : null;
+            } else {
+              sgvBuilder_.addAllMessages(other.sgv_);
+            }
+          }
         }
-        if (other.hasSgv()) {
-          bitField0_ |= 0x00000002;
-          sgv_ = other.sgv_;
-          onChanged();
+        if (other.hasUnits()) {
+          setUnits(other.getUnits());
         }
-        if (other.hasDate()) {
-          setDate(other.getDate());
+        if (other.hasDownloadTimestamp()) {
+          setDownloadTimestamp(other.getDownloadTimestamp());
         }
-        if (other.hasDirection()) {
-          bitField0_ |= 0x00000008;
-          direction_ = other.direction_;
-          onChanged();
+        if (other.hasDownloadStatus()) {
+          setDownloadStatus(other.getDownloadStatus());
         }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000010;
-          device_ = other.device_;
-          onChanged();
+        if (other.hasReceiverBattery()) {
+          setReceiverBattery(other.getReceiverBattery());
+        }
+        if (other.hasUploaderBattery()) {
+          setUploaderBattery(other.getUploaderBattery());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasDateString()) {
+        if (!hasDownloadTimestamp()) {
           
           return false;
         }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        if (!hasDate()) {
-          
-          return false;
+        for (int i = 0; i < getSgvCount(); i++) {
+          if (!getSgv(i).isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -697,11 +1020,11 @@ public final class SGV {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.SGVUsed parsedMessage = null;
+        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.SGVUsed) e.getUnfinishedMessage();
+          parsedMessage = (com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -712,413 +1035,656 @@ public final class SGV {
       }
       private int bitField0_;
 
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
+      // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
+      private java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> sgv_ =
+        java.util.Collections.emptyList();
+      private void ensureSgvIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4>(sgv_);
+          bitField0_ |= 0x00000001;
+         }
       }
 
-      // required string sgv = 2;
-      private java.lang.Object sgv_ = "";
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> sgvBuilder_;
+
       /**
-       * <code>required string sgv = 2;</code>
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
        */
-      public boolean hasSgv() {
+      public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> getSgvList() {
+        if (sgvBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(sgv_);
+        } else {
+          return sgvBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public int getSgvCount() {
+        if (sgvBuilder_ == null) {
+          return sgv_.size();
+        } else {
+          return sgvBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index) {
+        if (sgvBuilder_ == null) {
+          return sgv_.get(index);
+        } else {
+          return sgvBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder setSgv(
+          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+        if (sgvBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSgvIsMutable();
+          sgv_.set(index, value);
+          onChanged();
+        } else {
+          sgvBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder setSgv(
+          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+        if (sgvBuilder_ == null) {
+          ensureSgvIsMutable();
+          sgv_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          sgvBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder addSgv(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+        if (sgvBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSgvIsMutable();
+          sgv_.add(value);
+          onChanged();
+        } else {
+          sgvBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder addSgv(
+          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+        if (sgvBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSgvIsMutable();
+          sgv_.add(index, value);
+          onChanged();
+        } else {
+          sgvBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder addSgv(
+          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+        if (sgvBuilder_ == null) {
+          ensureSgvIsMutable();
+          sgv_.add(builderForValue.build());
+          onChanged();
+        } else {
+          sgvBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder addSgv(
+          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+        if (sgvBuilder_ == null) {
+          ensureSgvIsMutable();
+          sgv_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          sgvBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder addAllSgv(
+          java.lang.Iterable<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> values) {
+        if (sgvBuilder_ == null) {
+          ensureSgvIsMutable();
+          super.addAll(values, sgv_);
+          onChanged();
+        } else {
+          sgvBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder clearSgv() {
+        if (sgvBuilder_ == null) {
+          sgv_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          sgvBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public Builder removeSgv(int index) {
+        if (sgvBuilder_ == null) {
+          ensureSgvIsMutable();
+          sgv_.remove(index);
+          onChanged();
+        } else {
+          sgvBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder getSgvBuilder(
+          int index) {
+        return getSgvFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+          int index) {
+        if (sgvBuilder_ == null) {
+          return sgv_.get(index);  } else {
+          return sgvBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+           getSgvOrBuilderList() {
+        if (sgvBuilder_ != null) {
+          return sgvBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(sgv_);
+        }
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder addSgvBuilder() {
+        return getSgvFieldBuilder().addBuilder(
+            com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder addSgvBuilder(
+          int index) {
+        return getSgvFieldBuilder().addBuilder(
+            index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose records as reported by the G4
+       * </pre>
+       */
+      public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder> 
+           getSgvBuilderList() {
+        return getSgvFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+          getSgvFieldBuilder() {
+        if (sgvBuilder_ == null) {
+          sgvBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder>(
+                  sgv_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          sgv_ = null;
+        }
+        return sgvBuilder_;
+      }
+
+      // optional .ProposedCookieMonsterG4Download.Unit units = 2;
+      private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+      /**
+       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       *
+       * <pre>
+       * Units reported by the device
+       * </pre>
+       */
+      public boolean hasUnits() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string sgv = 2;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       *
+       * <pre>
+       * Units reported by the device
+       * </pre>
        */
-      public java.lang.String getSgv() {
-        java.lang.Object ref = sgv_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          sgv_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits() {
+        return units_;
       }
       /**
-       * <code>required string sgv = 2;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       *
+       * <pre>
+       * Units reported by the device
+       * </pre>
        */
-      public com.google.protobuf.ByteString
-          getSgvBytes() {
-        java.lang.Object ref = sgv_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          sgv_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgv(
-          java.lang.String value) {
+      public Builder setUnits(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
+        units_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string sgv = 2;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       *
+       * <pre>
+       * Units reported by the device
+       * </pre>
        */
-      public Builder clearSgv() {
+      public Builder clearUnits() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = getDefaultInstance().getSgv();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgvBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
+        units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
         onChanged();
         return this;
       }
 
-      // required uint32 date = 3;
-      private int date_ ;
+      // required uint64 download_timestamp = 3;
+      private long downloadTimestamp_ ;
       /**
-       * <code>required uint32 date = 3;</code>
+       * <code>required uint64 download_timestamp = 3;</code>
+       *
+       * <pre>
+       * Timestamp of the download - should be UTC
+       * </pre>
        */
-      public boolean hasDate() {
+      public boolean hasDownloadTimestamp() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required uint32 date = 3;</code>
+       * <code>required uint64 download_timestamp = 3;</code>
+       *
+       * <pre>
+       * Timestamp of the download - should be UTC
+       * </pre>
        */
-      public int getDate() {
-        return date_;
+      public long getDownloadTimestamp() {
+        return downloadTimestamp_;
       }
       /**
-       * <code>required uint32 date = 3;</code>
+       * <code>required uint64 download_timestamp = 3;</code>
+       *
+       * <pre>
+       * Timestamp of the download - should be UTC
+       * </pre>
        */
-      public Builder setDate(int value) {
+      public Builder setDownloadTimestamp(long value) {
         bitField0_ |= 0x00000004;
-        date_ = value;
+        downloadTimestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint32 date = 3;</code>
+       * <code>required uint64 download_timestamp = 3;</code>
+       *
+       * <pre>
+       * Timestamp of the download - should be UTC
+       * </pre>
        */
-      public Builder clearDate() {
+      public Builder clearDownloadTimestamp() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        date_ = 0;
+        downloadTimestamp_ = 0L;
         onChanged();
         return this;
       }
 
-      // optional string direction = 4;
-      private java.lang.Object direction_ = "";
+      // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
+      private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
       /**
-       * <code>optional string direction = 4;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       *
+       * <pre>
+       * Status of the download
+       * </pre>
        */
-      public boolean hasDirection() {
+      public boolean hasDownloadStatus() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional string direction = 4;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       *
+       * <pre>
+       * Status of the download
+       * </pre>
        */
-      public java.lang.String getDirection() {
-        java.lang.Object ref = direction_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          direction_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus() {
+        return downloadStatus_;
       }
       /**
-       * <code>optional string direction = 4;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       *
+       * <pre>
+       * Status of the download
+       * </pre>
        */
-      public com.google.protobuf.ByteString
-          getDirectionBytes() {
-        java.lang.Object ref = direction_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          direction_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirection(
-          java.lang.String value) {
+      public Builder setDownloadStatus(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        direction_ = value;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000008;
+        downloadStatus_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string direction = 4;</code>
+       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       *
+       * <pre>
+       * Status of the download
+       * </pre>
        */
-      public Builder clearDirection() {
+      public Builder clearDownloadStatus() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = getDefaultInstance().getDirection();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirectionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        direction_ = value;
+        downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
         onChanged();
         return this;
       }
 
-      // optional string device = 5;
-      private java.lang.Object device_ = "";
+      // optional uint32 receiver_battery = 5;
+      private int receiverBattery_ ;
       /**
-       * <code>optional string device = 5;</code>
+       * <code>optional uint32 receiver_battery = 5;</code>
+       *
+       * <pre>
+       * Battery level as reported by the receiver
+       * </pre>
        */
-      public boolean hasDevice() {
+      public boolean hasReceiverBattery() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional string device = 5;</code>
+       * <code>optional uint32 receiver_battery = 5;</code>
+       *
+       * <pre>
+       * Battery level as reported by the receiver
+       * </pre>
        */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getReceiverBattery() {
+        return receiverBattery_;
       }
       /**
-       * <code>optional string device = 5;</code>
+       * <code>optional uint32 receiver_battery = 5;</code>
+       *
+       * <pre>
+       * Battery level as reported by the receiver
+       * </pre>
        */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        device_ = value;
+      public Builder setReceiverBattery(int value) {
+        bitField0_ |= 0x00000010;
+        receiverBattery_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string device = 5;</code>
+       * <code>optional uint32 receiver_battery = 5;</code>
+       *
+       * <pre>
+       * Battery level as reported by the receiver
+       * </pre>
        */
-      public Builder clearDevice() {
+      public Builder clearReceiverBattery() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        device_ = value;
+        receiverBattery_ = 0;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:SGVUsed)
+      // optional uint32 uploader_battery = 6;
+      private int uploaderBattery_ ;
+      /**
+       * <code>optional uint32 uploader_battery = 6;</code>
+       *
+       * <pre>
+       * Battery level as reported by the uploader
+       * </pre>
+       */
+      public boolean hasUploaderBattery() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional uint32 uploader_battery = 6;</code>
+       *
+       * <pre>
+       * Battery level as reported by the uploader
+       * </pre>
+       */
+      public int getUploaderBattery() {
+        return uploaderBattery_;
+      }
+      /**
+       * <code>optional uint32 uploader_battery = 6;</code>
+       *
+       * <pre>
+       * Battery level as reported by the uploader
+       * </pre>
+       */
+      public Builder setUploaderBattery(int value) {
+        bitField0_ |= 0x00000020;
+        uploaderBattery_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint32 uploader_battery = 6;</code>
+       *
+       * <pre>
+       * Battery level as reported by the uploader
+       * </pre>
+       */
+      public Builder clearUploaderBattery() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        uploaderBattery_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:ProposedCookieMonsterG4Download)
     }
 
     static {
-      defaultInstance = new SGVUsed(true);
+      defaultInstance = new ProposedCookieMonsterG4Download(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:SGVUsed)
+    // @@protoc_insertion_point(class_scope:ProposedCookieMonsterG4Download)
   }
 
-  public interface Practical8601OrBuilder
+  public interface ProposeCookieMonsterSGVG4OrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional string timestamp = 1;
+    // required uint32 sgv = 1;
     /**
-     * <code>optional string timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>optional string timestamp = 1;</code>
-     */
-    java.lang.String getTimestamp();
-    /**
-     * <code>optional string timestamp = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getTimestampBytes();
-
-    // optional uint32 sgv = 2;
-    /**
-     * <code>optional uint32 sgv = 2;</code>
+     * <code>required uint32 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose value
+     * </pre>
      */
     boolean hasSgv();
     /**
-     * <code>optional uint32 sgv = 2;</code>
+     * <code>required uint32 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose value
+     * </pre>
      */
     int getSgv();
 
-    // optional .Practical8601.Direction direction = 3;
+    // optional uint64 timestamp = 2;
     /**
-     * <code>optional .Practical8601.Direction direction = 3;</code>
+     * <code>optional uint64 timestamp = 2;</code>
+     *
+     * <pre>
+     * timestamp of the record
+     * </pre>
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>optional uint64 timestamp = 2;</code>
+     *
+     * <pre>
+     * timestamp of the record
+     * </pre>
+     */
+    long getTimestamp();
+
+    // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
+    /**
+     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     *
+     * <pre>
+     * Trend arrow
+     * </pre>
      */
     boolean hasDirection();
     /**
-     * <code>optional .Practical8601.Direction direction = 3;</code>
+     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     *
+     * <pre>
+     * Trend arrow
+     * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.Practical8601.Direction getDirection();
-
-    // optional .Practical8601.Device device = 4;
-    /**
-     * <code>optional .Practical8601.Device device = 4;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional .Practical8601.Device device = 4;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.Practical8601.Device getDevice();
+    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection();
   }
   /**
-   * Protobuf type {@code Practical8601}
+   * Protobuf type {@code ProposeCookieMonsterSGVG4}
    */
-  public static final class Practical8601 extends
+  public static final class ProposeCookieMonsterSGVG4 extends
       com.google.protobuf.GeneratedMessage
-      implements Practical8601OrBuilder {
-    // Use Practical8601.newBuilder() to construct.
-    private Practical8601(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements ProposeCookieMonsterSGVG4OrBuilder {
+    // Use ProposeCookieMonsterSGVG4.newBuilder() to construct.
+    private ProposeCookieMonsterSGVG4(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private Practical8601(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ProposeCookieMonsterSGVG4(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final Practical8601 defaultInstance;
-    public static Practical8601 getDefaultInstance() {
+    private static final ProposeCookieMonsterSGVG4 defaultInstance;
+    public static ProposeCookieMonsterSGVG4 getDefaultInstance() {
       return defaultInstance;
     }
 
-    public Practical8601 getDefaultInstanceForType() {
+    public ProposeCookieMonsterSGVG4 getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -1128,7 +1694,7 @@ public final class SGV {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private Practical8601(
+    private ProposeCookieMonsterSGVG4(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1151,19 +1717,19 @@ public final class SGV {
               }
               break;
             }
-            case 10: {
+            case 8: {
               bitField0_ |= 0x00000001;
-              timestamp_ = input.readBytes();
+              sgv_ = input.readUInt32();
               break;
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
+              timestamp_ = input.readUInt64();
               break;
             }
             case 24: {
               int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.Practical8601.Direction value = com.ktind.cgm.bgscout.SGV.Practical8601.Direction.valueOf(rawValue);
+              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction value = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(3, rawValue);
               } else {
@@ -1172,17 +1738,6 @@ public final class SGV {
               }
               break;
             }
-            case 32: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.Practical8601.Device value = com.ktind.cgm.bgscout.SGV.Practical8601.Device.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(4, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                device_ = value;
-              }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1197,106 +1752,33 @@ public final class SGV {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_Practical8601_descriptor;
+      return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_Practical8601_fieldAccessorTable
+      return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.Practical8601.class, com.ktind.cgm.bgscout.SGV.Practical8601.Builder.class);
+              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<Practical8601> PARSER =
-        new com.google.protobuf.AbstractParser<Practical8601>() {
-      public Practical8601 parsePartialFrom(
+    public static com.google.protobuf.Parser<ProposeCookieMonsterSGVG4> PARSER =
+        new com.google.protobuf.AbstractParser<ProposeCookieMonsterSGVG4>() {
+      public ProposeCookieMonsterSGVG4 parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Practical8601(input, extensionRegistry);
+        return new ProposeCookieMonsterSGVG4(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Practical8601> getParserForType() {
+    public com.google.protobuf.Parser<ProposeCookieMonsterSGVG4> getParserForType() {
       return PARSER;
     }
 
     /**
-     * Protobuf enum {@code Practical8601.Device}
-     */
-    public enum Device
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>dexcom = 1;</code>
-       */
-      dexcom(0, 1),
-      ;
-
-      /**
-       * <code>dexcom = 1;</code>
-       */
-      public static final int dexcom_VALUE = 1;
-
-
-      public final int getNumber() { return value; }
-
-      public static Device valueOf(int value) {
-        switch (value) {
-          case 1: return dexcom;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Device>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Device>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Device>() {
-              public Device findValueByNumber(int number) {
-                return Device.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.Practical8601.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Device[] VALUES = values();
-
-      public static Device valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Device(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:Practical8601.Device)
-    }
-
-    /**
-     * Protobuf enum {@code Practical8601.Direction}
+     * Protobuf enum {@code ProposeCookieMonsterSGVG4.Direction}
      */
     public enum Direction
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -1305,33 +1787,33 @@ public final class SGV {
        */
       NONE(0, 0),
       /**
-       * <code>DoubleUp = 1;</code>
+       * <code>DOUBLE_UP = 1;</code>
        */
-      DoubleUp(1, 1),
+      DOUBLE_UP(1, 1),
       /**
-       * <code>SingleUp = 2;</code>
+       * <code>SINGLE_UP = 2;</code>
        */
-      SingleUp(2, 2),
+      SINGLE_UP(2, 2),
       /**
-       * <code>FortyFiveUp = 3;</code>
+       * <code>FORTY_FIVE_UP = 3;</code>
        */
-      FortyFiveUp(3, 3),
+      FORTY_FIVE_UP(3, 3),
       /**
-       * <code>Flat = 4;</code>
+       * <code>FLAT = 4;</code>
        */
-      Flat(4, 4),
+      FLAT(4, 4),
       /**
-       * <code>FortyFiveDown = 5;</code>
+       * <code>FORTY_FIVE_DOWN = 5;</code>
        */
-      FortyFiveDown(5, 5),
+      FORTY_FIVE_DOWN(5, 5),
       /**
-       * <code>SingleDown = 6;</code>
+       * <code>SINGLE_DOWN = 6;</code>
        */
-      SingleDown(6, 6),
+      SINGLE_DOWN(6, 6),
       /**
-       * <code>DoubleDown = 7;</code>
+       * <code>DOUBLE_DOWN = 7;</code>
        */
-      DoubleDown(7, 7),
+      DOUBLE_DOWN(7, 7),
       /**
        * <code>NOT_COMPUTABLE = 8;</code>
        */
@@ -1347,33 +1829,33 @@ public final class SGV {
        */
       public static final int NONE_VALUE = 0;
       /**
-       * <code>DoubleUp = 1;</code>
+       * <code>DOUBLE_UP = 1;</code>
        */
-      public static final int DoubleUp_VALUE = 1;
+      public static final int DOUBLE_UP_VALUE = 1;
       /**
-       * <code>SingleUp = 2;</code>
+       * <code>SINGLE_UP = 2;</code>
        */
-      public static final int SingleUp_VALUE = 2;
+      public static final int SINGLE_UP_VALUE = 2;
       /**
-       * <code>FortyFiveUp = 3;</code>
+       * <code>FORTY_FIVE_UP = 3;</code>
        */
-      public static final int FortyFiveUp_VALUE = 3;
+      public static final int FORTY_FIVE_UP_VALUE = 3;
       /**
-       * <code>Flat = 4;</code>
+       * <code>FLAT = 4;</code>
        */
-      public static final int Flat_VALUE = 4;
+      public static final int FLAT_VALUE = 4;
       /**
-       * <code>FortyFiveDown = 5;</code>
+       * <code>FORTY_FIVE_DOWN = 5;</code>
        */
-      public static final int FortyFiveDown_VALUE = 5;
+      public static final int FORTY_FIVE_DOWN_VALUE = 5;
       /**
-       * <code>SingleDown = 6;</code>
+       * <code>SINGLE_DOWN = 6;</code>
        */
-      public static final int SingleDown_VALUE = 6;
+      public static final int SINGLE_DOWN_VALUE = 6;
       /**
-       * <code>DoubleDown = 7;</code>
+       * <code>DOUBLE_DOWN = 7;</code>
        */
-      public static final int DoubleDown_VALUE = 7;
+      public static final int DOUBLE_DOWN_VALUE = 7;
       /**
        * <code>NOT_COMPUTABLE = 8;</code>
        */
@@ -1389,13 +1871,13 @@ public final class SGV {
       public static Direction valueOf(int value) {
         switch (value) {
           case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
+          case 1: return DOUBLE_UP;
+          case 2: return SINGLE_UP;
+          case 3: return FORTY_FIVE_UP;
+          case 4: return FLAT;
+          case 5: return FORTY_FIVE_DOWN;
+          case 6: return SINGLE_DOWN;
+          case 7: return DOUBLE_DOWN;
           case 8: return NOT_COMPUTABLE;
           case 9: return RATE_OUT_OF_RANGE;
           default: return null;
@@ -1424,7 +1906,7 @@ public final class SGV {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.Practical8601.getDescriptor().getEnumTypes().get(1);
+        return com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Direction[] VALUES = values();
@@ -1446,112 +1928,96 @@ public final class SGV {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:Practical8601.Direction)
+      // @@protoc_insertion_point(enum_scope:ProposeCookieMonsterSGVG4.Direction)
     }
 
     private int bitField0_;
-    // optional string timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private java.lang.Object timestamp_;
+    // required uint32 sgv = 1;
+    public static final int SGV_FIELD_NUMBER = 1;
+    private int sgv_;
     /**
-     * <code>optional string timestamp = 1;</code>
+     * <code>required uint32 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose value
+     * </pre>
      */
-    public boolean hasTimestamp() {
+    public boolean hasSgv() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional string timestamp = 1;</code>
-     */
-    public java.lang.String getTimestamp() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          timestamp_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string timestamp = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTimestampBytes() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        timestamp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>optional uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional uint32 sgv = 2;</code>
+     * <code>required uint32 sgv = 1;</code>
+     *
+     * <pre>
+     * Glucose value
+     * </pre>
      */
     public int getSgv() {
       return sgv_;
     }
 
-    // optional .Practical8601.Direction direction = 3;
-    public static final int DIRECTION_FIELD_NUMBER = 3;
-    private com.ktind.cgm.bgscout.SGV.Practical8601.Direction direction_;
+    // optional uint64 timestamp = 2;
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
     /**
-     * <code>optional .Practical8601.Direction direction = 3;</code>
+     * <code>optional uint64 timestamp = 2;</code>
+     *
+     * <pre>
+     * timestamp of the record
+     * </pre>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional uint64 timestamp = 2;</code>
+     *
+     * <pre>
+     * timestamp of the record
+     * </pre>
+     */
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
+    public static final int DIRECTION_FIELD_NUMBER = 3;
+    private com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction direction_;
+    /**
+     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     *
+     * <pre>
+     * Trend arrow
+     * </pre>
      */
     public boolean hasDirection() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .Practical8601.Direction direction = 3;</code>
+     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     *
+     * <pre>
+     * Trend arrow
+     * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.Practical8601.Direction getDirection() {
+    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection() {
       return direction_;
     }
 
-    // optional .Practical8601.Device device = 4;
-    public static final int DEVICE_FIELD_NUMBER = 4;
-    private com.ktind.cgm.bgscout.SGV.Practical8601.Device device_;
-    /**
-     * <code>optional .Practical8601.Device device = 4;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .Practical8601.Device device = 4;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.Practical8601.Device getDevice() {
-      return device_;
-    }
-
     private void initFields() {
-      timestamp_ = "";
       sgv_ = 0;
-      direction_ = com.ktind.cgm.bgscout.SGV.Practical8601.Direction.NONE;
-      device_ = com.ktind.cgm.bgscout.SGV.Practical8601.Device.dexcom;
+      timestamp_ = 0L;
+      direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
+      if (!hasSgv()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1560,16 +2026,13 @@ public final class SGV {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getTimestampBytes());
+        output.writeUInt32(1, sgv_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
+        output.writeUInt64(2, timestamp_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(3, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(4, device_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1582,20 +2045,16 @@ public final class SGV {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getTimestampBytes());
+          .computeUInt32Size(1, sgv_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
+          .computeUInt64Size(2, timestamp_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, direction_.getNumber());
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, device_.getNumber());
-      }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -1608,53 +2067,53 @@ public final class SGV {
       return super.writeReplace();
     }
 
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(byte[] data)
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseDelimitedFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseDelimitedFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.Practical8601 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1663,7 +2122,7 @@ public final class SGV {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.Practical8601 prototype) {
+    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1675,24 +2134,24 @@ public final class SGV {
       return builder;
     }
     /**
-     * Protobuf type {@code Practical8601}
+     * Protobuf type {@code ProposeCookieMonsterSGVG4}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.Practical8601OrBuilder {
+       implements com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_Practical8601_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_Practical8601_fieldAccessorTable
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.Practical8601.class, com.ktind.cgm.bgscout.SGV.Practical8601.Builder.class);
+                com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder.class);
       }
 
-      // Construct using com.ktind.cgm.bgscout.SGV.Practical8601.newBuilder()
+      // Construct using com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1712,14 +2171,12 @@ public final class SGV {
 
       public Builder clear() {
         super.clear();
-        timestamp_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         sgv_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
-        direction_ = com.ktind.cgm.bgscout.SGV.Practical8601.Direction.NONE;
+        direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
         bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = com.ktind.cgm.bgscout.SGV.Practical8601.Device.dexcom;
-        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -1729,76 +2186,71 @@ public final class SGV {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_Practical8601_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
       }
 
-      public com.ktind.cgm.bgscout.SGV.Practical8601 getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.Practical8601.getDefaultInstance();
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getDefaultInstanceForType() {
+        return com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance();
       }
 
-      public com.ktind.cgm.bgscout.SGV.Practical8601 build() {
-        com.ktind.cgm.bgscout.SGV.Practical8601 result = buildPartial();
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 build() {
+        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ktind.cgm.bgscout.SGV.Practical8601 buildPartial() {
-        com.ktind.cgm.bgscout.SGV.Practical8601 result = new com.ktind.cgm.bgscout.SGV.Practical8601(this);
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 buildPartial() {
+        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 result = new com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.timestamp_ = timestamp_;
+        result.sgv_ = sgv_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.sgv_ = sgv_;
+        result.timestamp_ = timestamp_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
         result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.device_ = device_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.Practical8601) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.Practical8601)other);
+        if (other instanceof com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4) {
+          return mergeFrom((com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.Practical8601 other) {
-        if (other == com.ktind.cgm.bgscout.SGV.Practical8601.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          bitField0_ |= 0x00000001;
-          timestamp_ = other.timestamp_;
-          onChanged();
-        }
+      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 other) {
+        if (other == com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance()) return this;
         if (other.hasSgv()) {
           setSgv(other.getSgv());
         }
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
+        }
         if (other.hasDirection()) {
           setDirection(other.getDirection());
-        }
-        if (other.hasDevice()) {
-          setDevice(other.getDevice());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
+        if (!hasSgv()) {
+          
+          return false;
+        }
         return true;
       }
 
@@ -1806,11 +2258,11 @@ public final class SGV {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.Practical8601 parsedMessage = null;
+        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.Practical8601) e.getUnfinishedMessage();
+          parsedMessage = (com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1821,131 +2273,134 @@ public final class SGV {
       }
       private int bitField0_;
 
-      // optional string timestamp = 1;
-      private java.lang.Object timestamp_ = "";
+      // required uint32 sgv = 1;
+      private int sgv_ ;
       /**
-       * <code>optional string timestamp = 1;</code>
+       * <code>required uint32 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose value
+       * </pre>
        */
-      public boolean hasTimestamp() {
+      public boolean hasSgv() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional string timestamp = 1;</code>
-       */
-      public java.lang.String getTimestamp() {
-        java.lang.Object ref = timestamp_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          timestamp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string timestamp = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTimestampBytes() {
-        java.lang.Object ref = timestamp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          timestamp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string timestamp = 1;</code>
-       */
-      public Builder setTimestamp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = getDefaultInstance().getTimestamp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string timestamp = 1;</code>
-       */
-      public Builder setTimestampBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>optional uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional uint32 sgv = 2;</code>
+       * <code>required uint32 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose value
+       * </pre>
        */
       public int getSgv() {
         return sgv_;
       }
       /**
-       * <code>optional uint32 sgv = 2;</code>
+       * <code>required uint32 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose value
+       * </pre>
        */
       public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
         sgv_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint32 sgv = 2;</code>
+       * <code>required uint32 sgv = 1;</code>
+       *
+       * <pre>
+       * Glucose value
+       * </pre>
        */
       public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         sgv_ = 0;
         onChanged();
         return this;
       }
 
-      // optional .Practical8601.Direction direction = 3;
-      private com.ktind.cgm.bgscout.SGV.Practical8601.Direction direction_ = com.ktind.cgm.bgscout.SGV.Practical8601.Direction.NONE;
+      // optional uint64 timestamp = 2;
+      private long timestamp_ ;
       /**
-       * <code>optional .Practical8601.Direction direction = 3;</code>
+       * <code>optional uint64 timestamp = 2;</code>
+       *
+       * <pre>
+       * timestamp of the record
+       * </pre>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional uint64 timestamp = 2;</code>
+       *
+       * <pre>
+       * timestamp of the record
+       * </pre>
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>optional uint64 timestamp = 2;</code>
+       *
+       * <pre>
+       * timestamp of the record
+       * </pre>
+       */
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00000002;
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 timestamp = 2;</code>
+       *
+       * <pre>
+       * timestamp of the record
+       * </pre>
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
+      private com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
+      /**
+       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       *
+       * <pre>
+       * Trend arrow
+       * </pre>
        */
       public boolean hasDirection() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .Practical8601.Direction direction = 3;</code>
+       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       *
+       * <pre>
+       * Trend arrow
+       * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.Practical8601.Direction getDirection() {
+      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection() {
         return direction_;
       }
       /**
-       * <code>optional .Practical8601.Direction direction = 3;</code>
+       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       *
+       * <pre>
+       * Trend arrow
+       * </pre>
        */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.Practical8601.Direction value) {
+      public Builder setDirection(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1955,9665 +2410,40 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>optional .Practical8601.Direction direction = 3;</code>
+       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       *
+       * <pre>
+       * Trend arrow
+       * </pre>
        */
       public Builder clearDirection() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.Practical8601.Direction.NONE;
+        direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
         onChanged();
         return this;
       }
 
-      // optional .Practical8601.Device device = 4;
-      private com.ktind.cgm.bgscout.SGV.Practical8601.Device device_ = com.ktind.cgm.bgscout.SGV.Practical8601.Device.dexcom;
-      /**
-       * <code>optional .Practical8601.Device device = 4;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .Practical8601.Device device = 4;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.Practical8601.Device getDevice() {
-        return device_;
-      }
-      /**
-       * <code>optional .Practical8601.Device device = 4;</code>
-       */
-      public Builder setDevice(com.ktind.cgm.bgscout.SGV.Practical8601.Device value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .Practical8601.Device device = 4;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = com.ktind.cgm.bgscout.SGV.Practical8601.Device.dexcom;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:Practical8601)
+      // @@protoc_insertion_point(builder_scope:ProposeCookieMonsterSGVG4)
     }
 
     static {
-      defaultInstance = new Practical8601(true);
+      defaultInstance = new ProposeCookieMonsterSGVG4(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:Practical8601)
-  }
-
-  public interface propose_1OrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string dateString = 1;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    boolean hasDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    java.lang.String getDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
-
-    // required string sgv = 2;
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    java.lang.String getSgv();
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getSgvBytes();
-
-    // optional string direction = 4;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    java.lang.String getDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDirectionBytes();
-
-    // optional string device = 5;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-  }
-  /**
-   * Protobuf type {@code propose_1}
-   */
-  public static final class propose_1 extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_1OrBuilder {
-    // Use propose_1.newBuilder() to construct.
-    private propose_1(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_1(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_1 defaultInstance;
-    public static propose_1 getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_1 getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_1(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              direction_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000008;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_1_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_1_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_1.class, com.ktind.cgm.bgscout.SGV.propose_1.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_1> PARSER =
-        new com.google.protobuf.AbstractParser<propose_1>() {
-      public propose_1 parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_1(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_1> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public boolean hasDateString() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private java.lang.Object sgv_;
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public java.lang.String getSgv() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          sgv_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSgvBytes() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        sgv_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private java.lang.Object direction_;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public java.lang.String getDirection() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          direction_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDirectionBytes() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        direction_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private void initFields() {
-      dateString_ = "";
-      sgv_ = "";
-      direction_ = "";
-      device_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasDateString()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getSgvBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(5, getDeviceBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getSgvBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getDeviceBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_1 parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_1 prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_1}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_1OrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_1_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_1_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_1.class, com.ktind.cgm.bgscout.SGV.propose_1.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_1.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        direction_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_1_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_1 getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_1.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_1 build() {
-        com.ktind.cgm.bgscout.SGV.propose_1 result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_1 buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_1 result = new com.ktind.cgm.bgscout.SGV.propose_1(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.device_ = device_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_1) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_1)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_1 other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_1.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          bitField0_ |= 0x00000002;
-          sgv_ = other.sgv_;
-          onChanged();
-        }
-        if (other.hasDirection()) {
-          bitField0_ |= 0x00000004;
-          direction_ = other.direction_;
-          onChanged();
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000008;
-          device_ = other.device_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasDateString()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_1 parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_1) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string sgv = 2;
-      private java.lang.Object sgv_ = "";
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public java.lang.String getSgv() {
-        java.lang.Object ref = sgv_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          sgv_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSgvBytes() {
-        java.lang.Object ref = sgv_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          sgv_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgv(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = getDefaultInstance().getSgv();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgvBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string direction = 4;
-      private java.lang.Object direction_ = "";
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public java.lang.String getDirection() {
-        java.lang.Object ref = direction_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          direction_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDirectionBytes() {
-        java.lang.Object ref = direction_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          direction_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirection(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = getDefaultInstance().getDirection();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirectionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 5;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_1)
-    }
-
-    static {
-      defaultInstance = new propose_1(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_1)
-  }
-
-  public interface propose_2_timestampOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string timestamp = 1;
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    java.lang.String getTimestamp();
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getTimestampBytes();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional string direction = 4;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    java.lang.String getDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDirectionBytes();
-
-    // optional string device = 5;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-  }
-  /**
-   * Protobuf type {@code propose_2_timestamp}
-   */
-  public static final class propose_2_timestamp extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_2_timestampOrBuilder {
-    // Use propose_2_timestamp.newBuilder() to construct.
-    private propose_2_timestamp(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_2_timestamp(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_2_timestamp defaultInstance;
-    public static propose_2_timestamp getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_2_timestamp getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_2_timestamp(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              timestamp_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              direction_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000008;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_2_timestamp.class, com.ktind.cgm.bgscout.SGV.propose_2_timestamp.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_2_timestamp> PARSER =
-        new com.google.protobuf.AbstractParser<propose_2_timestamp>() {
-      public propose_2_timestamp parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_2_timestamp(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_2_timestamp> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required string timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private java.lang.Object timestamp_;
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public java.lang.String getTimestamp() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          timestamp_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTimestampBytes() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        timestamp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional string direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private java.lang.Object direction_;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public java.lang.String getDirection() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          direction_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDirectionBytes() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        direction_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private void initFields() {
-      timestamp_ = "";
-      sgv_ = 0;
-      direction_ = "";
-      device_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getTimestampBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(5, getDeviceBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getTimestampBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getDeviceBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_2_timestamp prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_2_timestamp}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_2_timestampOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_2_timestamp.class, com.ktind.cgm.bgscout.SGV.propose_2_timestamp.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_2_timestamp.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timestamp_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        direction_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_2_timestamp.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp build() {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp result = new com.ktind.cgm.bgscout.SGV.propose_2_timestamp(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.device_ = device_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_2_timestamp) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_2_timestamp)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_2_timestamp other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_2_timestamp.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          bitField0_ |= 0x00000001;
-          timestamp_ = other.timestamp_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDirection()) {
-          bitField0_ |= 0x00000004;
-          direction_ = other.direction_;
-          onChanged();
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000008;
-          device_ = other.device_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_2_timestamp) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string timestamp = 1;
-      private java.lang.Object timestamp_ = "";
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public java.lang.String getTimestamp() {
-        java.lang.Object ref = timestamp_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          timestamp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTimestampBytes() {
-        java.lang.Object ref = timestamp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          timestamp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder setTimestamp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = getDefaultInstance().getTimestamp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder setTimestampBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string direction = 4;
-      private java.lang.Object direction_ = "";
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public java.lang.String getDirection() {
-        java.lang.Object ref = direction_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          direction_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDirectionBytes() {
-        java.lang.Object ref = direction_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          direction_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirection(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = getDefaultInstance().getDirection();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirectionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 5;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_2_timestamp)
-    }
-
-    static {
-      defaultInstance = new propose_2_timestamp(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_2_timestamp)
-  }
-
-  public interface propose_2_timestamp_directionOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string timestamp = 1;
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    java.lang.String getTimestamp();
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getTimestampBytes();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional string device = 4;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-
-    // optional .propose_2_timestamp_direction.Direction direction = 3;
-    /**
-     * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction getDirection();
-  }
-  /**
-   * Protobuf type {@code propose_2_timestamp_direction}
-   */
-  public static final class propose_2_timestamp_direction extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_2_timestamp_directionOrBuilder {
-    // Use propose_2_timestamp_direction.newBuilder() to construct.
-    private propose_2_timestamp_direction(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_2_timestamp_direction(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_2_timestamp_direction defaultInstance;
-    public static propose_2_timestamp_direction getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_2_timestamp_direction getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_2_timestamp_direction(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              timestamp_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction value = com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                direction_ = value;
-              }
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_direction_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_direction_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.class, com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_2_timestamp_direction> PARSER =
-        new com.google.protobuf.AbstractParser<propose_2_timestamp_direction>() {
-      public propose_2_timestamp_direction parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_2_timestamp_direction(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_2_timestamp_direction> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_2_timestamp_direction.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_2_timestamp_direction.Direction)
-    }
-
-    private int bitField0_;
-    // required string timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private java.lang.Object timestamp_;
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public java.lang.String getTimestamp() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          timestamp_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string timestamp = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTimestampBytes() {
-      java.lang.Object ref = timestamp_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        timestamp_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional string device = 4;
-    public static final int DEVICE_FIELD_NUMBER = 4;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional .propose_2_timestamp_direction.Direction direction = 3;
-    public static final int DIRECTION_FIELD_NUMBER = 3;
-    private com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction direction_;
-    /**
-     * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction getDirection() {
-      return direction_;
-    }
-
-    private void initFields() {
-      timestamp_ = "";
-      sgv_ = 0;
-      device_ = "";
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction.NONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getTimestampBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(3, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDeviceBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getTimestampBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDeviceBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_2_timestamp_direction}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_2_timestamp_directionOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_direction_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_direction_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.class, com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timestamp_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_2_timestamp_direction_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction build() {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction result = new com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.device_ = device_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.direction_ = direction_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          bitField0_ |= 0x00000001;
-          timestamp_ = other.timestamp_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000004;
-          device_ = other.device_;
-          onChanged();
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string timestamp = 1;
-      private java.lang.Object timestamp_ = "";
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public java.lang.String getTimestamp() {
-        java.lang.Object ref = timestamp_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          timestamp_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTimestampBytes() {
-        java.lang.Object ref = timestamp_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          timestamp_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder setTimestamp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = getDefaultInstance().getTimestamp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string timestamp = 1;</code>
-       */
-      public Builder setTimestampBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 4;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_2_timestamp_direction.Direction direction = 3;
-      private com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction.NONE;
-      /**
-       * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_2_timestamp_direction.Direction direction = 3;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_2_timestamp_direction.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_2_timestamp_direction)
-    }
-
-    static {
-      defaultInstance = new propose_2_timestamp_direction(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_2_timestamp_direction)
-  }
-
-  public interface SGVUsed_sgv_intOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string dateString = 1;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    boolean hasDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    java.lang.String getDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // required uint32 date = 3;
-    /**
-     * <code>required uint32 date = 3;</code>
-     */
-    boolean hasDate();
-    /**
-     * <code>required uint32 date = 3;</code>
-     */
-    int getDate();
-
-    // optional string direction = 4;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    java.lang.String getDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDirectionBytes();
-
-    // optional string device = 5;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-  }
-  /**
-   * Protobuf type {@code SGVUsed_sgv_int}
-   */
-  public static final class SGVUsed_sgv_int extends
-      com.google.protobuf.GeneratedMessage
-      implements SGVUsed_sgv_intOrBuilder {
-    // Use SGVUsed_sgv_int.newBuilder() to construct.
-    private SGVUsed_sgv_int(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private SGVUsed_sgv_int(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final SGVUsed_sgv_int defaultInstance;
-    public static SGVUsed_sgv_int getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public SGVUsed_sgv_int getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private SGVUsed_sgv_int(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              date_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              direction_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000010;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_sgv_int_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_sgv_int_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.class, com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<SGVUsed_sgv_int> PARSER =
-        new com.google.protobuf.AbstractParser<SGVUsed_sgv_int>() {
-      public SGVUsed_sgv_int parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SGVUsed_sgv_int(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<SGVUsed_sgv_int> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public boolean hasDateString() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // required uint32 date = 3;
-    public static final int DATE_FIELD_NUMBER = 3;
-    private int date_;
-    /**
-     * <code>required uint32 date = 3;</code>
-     */
-    public boolean hasDate() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required uint32 date = 3;</code>
-     */
-    public int getDate() {
-      return date_;
-    }
-
-    // optional string direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private java.lang.Object direction_;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public java.lang.String getDirection() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          direction_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDirectionBytes() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        direction_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private void initFields() {
-      dateString_ = "";
-      sgv_ = 0;
-      date_ = 0;
-      direction_ = "";
-      device_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasDateString()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasDate()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt32(3, date_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getDeviceBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, date_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getDeviceBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code SGVUsed_sgv_int}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_intOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_sgv_int_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_sgv_int_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.class, com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        date_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_SGVUsed_sgv_int_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int build() {
-        com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int buildPartial() {
-        com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int result = new com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.date_ = date_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.device_ = device_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int other) {
-        if (other == com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDate()) {
-          setDate(other.getDate());
-        }
-        if (other.hasDirection()) {
-          bitField0_ |= 0x00000008;
-          direction_ = other.direction_;
-          onChanged();
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000010;
-          device_ = other.device_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasDateString()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        if (!hasDate()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.SGVUsed_sgv_int) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 date = 3;
-      private int date_ ;
-      /**
-       * <code>required uint32 date = 3;</code>
-       */
-      public boolean hasDate() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>required uint32 date = 3;</code>
-       */
-      public int getDate() {
-        return date_;
-      }
-      /**
-       * <code>required uint32 date = 3;</code>
-       */
-      public Builder setDate(int value) {
-        bitField0_ |= 0x00000004;
-        date_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 date = 3;</code>
-       */
-      public Builder clearDate() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        date_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string direction = 4;
-      private java.lang.Object direction_ = "";
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public java.lang.String getDirection() {
-        java.lang.Object ref = direction_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          direction_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDirectionBytes() {
-        java.lang.Object ref = direction_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          direction_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirection(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = getDefaultInstance().getDirection();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirectionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 5;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:SGVUsed_sgv_int)
-    }
-
-    static {
-      defaultInstance = new SGVUsed_sgv_int(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:SGVUsed_sgv_int)
-  }
-
-  public interface propose_sgv_intOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string dateString = 1;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    boolean hasDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    java.lang.String getDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional string direction = 4;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    java.lang.String getDirection();
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDirectionBytes();
-
-    // optional string device = 5;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-  }
-  /**
-   * Protobuf type {@code propose_sgv_int}
-   */
-  public static final class propose_sgv_int extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_sgv_intOrBuilder {
-    // Use propose_sgv_int.newBuilder() to construct.
-    private propose_sgv_int(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_sgv_int(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_sgv_int defaultInstance;
-    public static propose_sgv_int getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_sgv_int getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_sgv_int(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              direction_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000008;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_sgv_int_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_sgv_int_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_sgv_int.class, com.ktind.cgm.bgscout.SGV.propose_sgv_int.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_sgv_int> PARSER =
-        new com.google.protobuf.AbstractParser<propose_sgv_int>() {
-      public propose_sgv_int parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_sgv_int(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_sgv_int> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public boolean hasDateString() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional string direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private java.lang.Object direction_;
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public java.lang.String getDirection() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          direction_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string direction = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDirectionBytes() {
-      java.lang.Object ref = direction_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        direction_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private void initFields() {
-      dateString_ = "";
-      sgv_ = 0;
-      direction_ = "";
-      device_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasDateString()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(5, getDeviceBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDirectionBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getDeviceBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_sgv_int parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_sgv_int prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_sgv_int}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_sgv_intOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_sgv_int_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_sgv_int_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_sgv_int.class, com.ktind.cgm.bgscout.SGV.propose_sgv_int.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_sgv_int.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        direction_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_sgv_int_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_sgv_int getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_sgv_int.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_sgv_int build() {
-        com.ktind.cgm.bgscout.SGV.propose_sgv_int result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_sgv_int buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_sgv_int result = new com.ktind.cgm.bgscout.SGV.propose_sgv_int(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.device_ = device_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_sgv_int) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_sgv_int)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_sgv_int other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_sgv_int.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDirection()) {
-          bitField0_ |= 0x00000004;
-          direction_ = other.direction_;
-          onChanged();
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000008;
-          device_ = other.device_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasDateString()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_sgv_int parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_sgv_int) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string direction = 4;
-      private java.lang.Object direction_ = "";
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public java.lang.String getDirection() {
-        java.lang.Object ref = direction_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          direction_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDirectionBytes() {
-        java.lang.Object ref = direction_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          direction_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirection(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = getDefaultInstance().getDirection();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string direction = 4;</code>
-       */
-      public Builder setDirectionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 5;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 5;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_sgv_int)
-    }
-
-    static {
-      defaultInstance = new propose_sgv_int(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_sgv_int)
-  }
-
-  public interface propose_direction_enumOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string dateString = 1;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    boolean hasDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    java.lang.String getDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
-
-    // required string sgv = 2;
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    java.lang.String getSgv();
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getSgvBytes();
-
-    // optional string device = 4;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-
-    // optional .propose_direction_enum.Direction direction = 5;
-    /**
-     * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction getDirection();
-  }
-  /**
-   * Protobuf type {@code propose_direction_enum}
-   */
-  public static final class propose_direction_enum extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_direction_enumOrBuilder {
-    // Use propose_direction_enum.newBuilder() to construct.
-    private propose_direction_enum(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_direction_enum(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_direction_enum defaultInstance;
-    public static propose_direction_enum getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_direction_enum getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_direction_enum(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              device_ = input.readBytes();
-              break;
-            }
-            case 40: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction value = com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                direction_ = value;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_enum_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_enum_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_direction_enum.class, com.ktind.cgm.bgscout.SGV.propose_direction_enum.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_direction_enum> PARSER =
-        new com.google.protobuf.AbstractParser<propose_direction_enum>() {
-      public propose_direction_enum parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_direction_enum(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_direction_enum> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_direction_enum.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_enum.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_direction_enum.Direction)
-    }
-
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public boolean hasDateString() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private java.lang.Object sgv_;
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public java.lang.String getSgv() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          sgv_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string sgv = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSgvBytes() {
-      java.lang.Object ref = sgv_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        sgv_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string device = 4;
-    public static final int DEVICE_FIELD_NUMBER = 4;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional .propose_direction_enum.Direction direction = 5;
-    public static final int DIRECTION_FIELD_NUMBER = 5;
-    private com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction direction_;
-    /**
-     * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction getDirection() {
-      return direction_;
-    }
-
-    private void initFields() {
-      dateString_ = "";
-      sgv_ = "";
-      device_ = "";
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction.NONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasDateString()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getSgvBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, direction_.getNumber());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getSgvBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, direction_.getNumber());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_enum parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_direction_enum prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_direction_enum}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_direction_enumOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_enum_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_enum_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_direction_enum.class, com.ktind.cgm.bgscout.SGV.propose_direction_enum.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_direction_enum.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_enum_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_enum getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_enum.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_enum build() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_enum result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_enum buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_enum result = new com.ktind.cgm.bgscout.SGV.propose_direction_enum(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.device_ = device_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.direction_ = direction_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_direction_enum) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_direction_enum)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_direction_enum other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_direction_enum.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          bitField0_ |= 0x00000002;
-          sgv_ = other.sgv_;
-          onChanged();
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000004;
-          device_ = other.device_;
-          onChanged();
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasDateString()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_direction_enum parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_direction_enum) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string sgv = 2;
-      private java.lang.Object sgv_ = "";
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public java.lang.String getSgv() {
-        java.lang.Object ref = sgv_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          sgv_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSgvBytes() {
-        java.lang.Object ref = sgv_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          sgv_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgv(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = getDefaultInstance().getSgv();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string sgv = 2;</code>
-       */
-      public Builder setSgvBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 4;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_direction_enum.Direction direction = 5;
-      private com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction.NONE;
-      /**
-       * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_direction_enum.Direction direction = 5;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_enum.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_direction_enum)
-    }
-
-    static {
-      defaultInstance = new propose_direction_enum(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_direction_enum)
-  }
-
-  public interface propose_direction_sgvOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string dateString = 1;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    boolean hasDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    java.lang.String getDateString();
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDateStringBytes();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional string device = 4;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-
-    // optional .propose_direction_sgv.Direction direction = 5;
-    /**
-     * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction getDirection();
-  }
-  /**
-   * Protobuf type {@code propose_direction_sgv}
-   */
-  public static final class propose_direction_sgv extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_direction_sgvOrBuilder {
-    // Use propose_direction_sgv.newBuilder() to construct.
-    private propose_direction_sgv(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_direction_sgv(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_direction_sgv defaultInstance;
-    public static propose_direction_sgv getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_direction_sgv getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_direction_sgv(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              dateString_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              device_ = input.readBytes();
-              break;
-            }
-            case 40: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction value = com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                direction_ = value;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_direction_sgv> PARSER =
-        new com.google.protobuf.AbstractParser<propose_direction_sgv>() {
-      public propose_direction_sgv parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_direction_sgv(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_direction_sgv> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_direction_sgv.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_direction_sgv.Direction)
-    }
-
-    private int bitField0_;
-    // required string dateString = 1;
-    public static final int DATESTRING_FIELD_NUMBER = 1;
-    private java.lang.Object dateString_;
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public boolean hasDateString() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public java.lang.String getDateString() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dateString_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string dateString = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDateStringBytes() {
-      java.lang.Object ref = dateString_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dateString_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional string device = 4;
-    public static final int DEVICE_FIELD_NUMBER = 4;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional .propose_direction_sgv.Direction direction = 5;
-    public static final int DIRECTION_FIELD_NUMBER = 5;
-    private com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction direction_;
-    /**
-     * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction getDirection() {
-      return direction_;
-    }
-
-    private void initFields() {
-      dateString_ = "";
-      sgv_ = 0;
-      device_ = "";
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction.NONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasDateString()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, direction_.getNumber());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDateStringBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, direction_.getNumber());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_direction_sgv prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_direction_sgv}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_direction_sgvOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_direction_sgv.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_direction_sgv.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        dateString_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv build() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv result = new com.ktind.cgm.bgscout.SGV.propose_direction_sgv(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.dateString_ = dateString_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.device_ = device_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.direction_ = direction_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_direction_sgv) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_direction_sgv)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_direction_sgv other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_direction_sgv.getDefaultInstance()) return this;
-        if (other.hasDateString()) {
-          bitField0_ |= 0x00000001;
-          dateString_ = other.dateString_;
-          onChanged();
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000004;
-          device_ = other.device_;
-          onChanged();
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasDateString()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_direction_sgv) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string dateString = 1;
-      private java.lang.Object dateString_ = "";
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public boolean hasDateString() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public java.lang.String getDateString() {
-        java.lang.Object ref = dateString_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dateString_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDateStringBytes() {
-        java.lang.Object ref = dateString_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dateString_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateString(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder clearDateString() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        dateString_ = getDefaultInstance().getDateString();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string dateString = 1;</code>
-       */
-      public Builder setDateStringBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        dateString_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 4;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_direction_sgv.Direction direction = 5;
-      private com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction.NONE;
-      /**
-       * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_direction_sgv.Direction direction = 5;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_direction_sgv)
-    }
-
-    static {
-      defaultInstance = new propose_direction_sgv(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_direction_sgv)
-  }
-
-  public interface propose_direction_sgv_time_offsetOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required uint32 timestamp = 1;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    int getTimestamp();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional string device = 4;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    java.lang.String getDevice();
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceBytes();
-
-    // optional .propose_direction_sgv_time_offset.Direction direction = 5;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction getDirection();
-
-    // required sint32 offset = 6;
-    /**
-     * <code>required sint32 offset = 6;</code>
-     */
-    boolean hasOffset();
-    /**
-     * <code>required sint32 offset = 6;</code>
-     */
-    int getOffset();
-  }
-  /**
-   * Protobuf type {@code propose_direction_sgv_time_offset}
-   */
-  public static final class propose_direction_sgv_time_offset extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_direction_sgv_time_offsetOrBuilder {
-    // Use propose_direction_sgv_time_offset.newBuilder() to construct.
-    private propose_direction_sgv_time_offset(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_direction_sgv_time_offset(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_direction_sgv_time_offset defaultInstance;
-    public static propose_direction_sgv_time_offset getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_direction_sgv_time_offset getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_direction_sgv_time_offset(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              timestamp_ = input.readUInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              device_ = input.readBytes();
-              break;
-            }
-            case 40: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction value = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                direction_ = value;
-              }
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              offset_ = input.readSInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_direction_sgv_time_offset> PARSER =
-        new com.google.protobuf.AbstractParser<propose_direction_sgv_time_offset>() {
-      public propose_direction_sgv_time_offset parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_direction_sgv_time_offset(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_direction_sgv_time_offset> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_direction_sgv_time_offset.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_direction_sgv_time_offset.Direction)
-    }
-
-    private int bitField0_;
-    // required uint32 timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private int timestamp_;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public int getTimestamp() {
-      return timestamp_;
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional string device = 4;
-    public static final int DEVICE_FIELD_NUMBER = 4;
-    private java.lang.Object device_;
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public java.lang.String getDevice() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          device_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string device = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      java.lang.Object ref = device_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        device_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional .propose_direction_sgv_time_offset.Direction direction = 5;
-    public static final int DIRECTION_FIELD_NUMBER = 5;
-    private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction direction_;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction getDirection() {
-      return direction_;
-    }
-
-    // required sint32 offset = 6;
-    public static final int OFFSET_FIELD_NUMBER = 6;
-    private int offset_;
-    /**
-     * <code>required sint32 offset = 6;</code>
-     */
-    public boolean hasOffset() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>required sint32 offset = 6;</code>
-     */
-    public int getOffset() {
-      return offset_;
-    }
-
-    private void initFields() {
-      timestamp_ = 0;
-      sgv_ = 0;
-      device_ = "";
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction.NONE;
-      offset_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasOffset()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeSInt32(6, offset_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDeviceBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(6, offset_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_direction_sgv_time_offset}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offsetOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timestamp_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        device_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        offset_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset build() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset result = new com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.device_ = device_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.offset_ = offset_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          setTimestamp(other.getTimestamp());
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDevice()) {
-          bitField0_ |= 0x00000004;
-          device_ = other.device_;
-          onChanged();
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        if (other.hasOffset()) {
-          setOffset(other.getOffset());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        if (!hasOffset()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required uint32 timestamp = 1;
-      private int timestamp_ ;
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public int getTimestamp() {
-        return timestamp_;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder setTimestamp(int value) {
-        bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string device = 4;
-      private java.lang.Object device_ = "";
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public java.lang.String getDevice() {
-        java.lang.Object ref = device_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          device_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        java.lang.Object ref = device_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          device_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDevice(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string device = 4;</code>
-       */
-      public Builder setDeviceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_direction_sgv_time_offset.Direction direction = 5;
-      private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction.NONE;
-      /**
-       * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset.Direction direction = 5;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // required sint32 offset = 6;
-      private int offset_ ;
-      /**
-       * <code>required sint32 offset = 6;</code>
-       */
-      public boolean hasOffset() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>required sint32 offset = 6;</code>
-       */
-      public int getOffset() {
-        return offset_;
-      }
-      /**
-       * <code>required sint32 offset = 6;</code>
-       */
-      public Builder setOffset(int value) {
-        bitField0_ |= 0x00000010;
-        offset_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required sint32 offset = 6;</code>
-       */
-      public Builder clearOffset() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        offset_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_direction_sgv_time_offset)
-    }
-
-    static {
-      defaultInstance = new propose_direction_sgv_time_offset(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_direction_sgv_time_offset)
-  }
-
-  public interface propose_direction_sgv_time_offset_deviceOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required uint32 timestamp = 1;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    int getTimestamp();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional fixed32 devhead = 5;
-    /**
-     * <code>optional fixed32 devhead = 5;</code>
-     */
-    boolean hasDevhead();
-    /**
-     * <code>optional fixed32 devhead = 5;</code>
-     */
-    int getDevhead();
-
-    // optional fixed32 devtail = 6;
-    /**
-     * <code>optional fixed32 devtail = 6;</code>
-     */
-    boolean hasDevtail();
-    /**
-     * <code>optional fixed32 devtail = 6;</code>
-     */
-    int getDevtail();
-
-    // required sint32 offset = 3;
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    boolean hasOffset();
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    int getOffset();
-
-    // optional .propose_direction_sgv_time_offset_device.Direction direction = 4;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction getDirection();
-  }
-  /**
-   * Protobuf type {@code propose_direction_sgv_time_offset_device}
-   */
-  public static final class propose_direction_sgv_time_offset_device extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_direction_sgv_time_offset_deviceOrBuilder {
-    // Use propose_direction_sgv_time_offset_device.newBuilder() to construct.
-    private propose_direction_sgv_time_offset_device(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_direction_sgv_time_offset_device(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_direction_sgv_time_offset_device defaultInstance;
-    public static propose_direction_sgv_time_offset_device getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_direction_sgv_time_offset_device getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_direction_sgv_time_offset_device(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              timestamp_ = input.readUInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000010;
-              offset_ = input.readSInt32();
-              break;
-            }
-            case 32: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction value = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(4, rawValue);
-              } else {
-                bitField0_ |= 0x00000020;
-                direction_ = value;
-              }
-              break;
-            }
-            case 45: {
-              bitField0_ |= 0x00000004;
-              devhead_ = input.readFixed32();
-              break;
-            }
-            case 53: {
-              bitField0_ |= 0x00000008;
-              devtail_ = input.readFixed32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_direction_sgv_time_offset_device> PARSER =
-        new com.google.protobuf.AbstractParser<propose_direction_sgv_time_offset_device>() {
-      public propose_direction_sgv_time_offset_device parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_direction_sgv_time_offset_device(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_direction_sgv_time_offset_device> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_direction_sgv_time_offset_device.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_direction_sgv_time_offset_device.Direction)
-    }
-
-    private int bitField0_;
-    // required uint32 timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private int timestamp_;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public int getTimestamp() {
-      return timestamp_;
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional fixed32 devhead = 5;
-    public static final int DEVHEAD_FIELD_NUMBER = 5;
-    private int devhead_;
-    /**
-     * <code>optional fixed32 devhead = 5;</code>
-     */
-    public boolean hasDevhead() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional fixed32 devhead = 5;</code>
-     */
-    public int getDevhead() {
-      return devhead_;
-    }
-
-    // optional fixed32 devtail = 6;
-    public static final int DEVTAIL_FIELD_NUMBER = 6;
-    private int devtail_;
-    /**
-     * <code>optional fixed32 devtail = 6;</code>
-     */
-    public boolean hasDevtail() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional fixed32 devtail = 6;</code>
-     */
-    public int getDevtail() {
-      return devtail_;
-    }
-
-    // required sint32 offset = 3;
-    public static final int OFFSET_FIELD_NUMBER = 3;
-    private int offset_;
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    public boolean hasOffset() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    public int getOffset() {
-      return offset_;
-    }
-
-    // optional .propose_direction_sgv_time_offset_device.Direction direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction direction_;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction getDirection() {
-      return direction_;
-    }
-
-    private void initFields() {
-      timestamp_ = 0;
-      sgv_ = 0;
-      devhead_ = 0;
-      devtail_ = 0;
-      offset_ = 0;
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction.NONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasOffset()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeSInt32(3, offset_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeEnum(4, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeFixed32(5, devhead_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeFixed32(6, devtail_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(3, offset_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed32Size(5, devhead_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFixed32Size(6, devtail_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_direction_sgv_time_offset_device}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_deviceOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timestamp_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        devhead_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        devtail_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        offset_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device build() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device result = new com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.devhead_ = devhead_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.devtail_ = devtail_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.offset_ = offset_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.direction_ = direction_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          setTimestamp(other.getTimestamp());
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDevhead()) {
-          setDevhead(other.getDevhead());
-        }
-        if (other.hasDevtail()) {
-          setDevtail(other.getDevtail());
-        }
-        if (other.hasOffset()) {
-          setOffset(other.getOffset());
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        if (!hasOffset()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required uint32 timestamp = 1;
-      private int timestamp_ ;
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public int getTimestamp() {
-        return timestamp_;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder setTimestamp(int value) {
-        bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional fixed32 devhead = 5;
-      private int devhead_ ;
-      /**
-       * <code>optional fixed32 devhead = 5;</code>
-       */
-      public boolean hasDevhead() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional fixed32 devhead = 5;</code>
-       */
-      public int getDevhead() {
-        return devhead_;
-      }
-      /**
-       * <code>optional fixed32 devhead = 5;</code>
-       */
-      public Builder setDevhead(int value) {
-        bitField0_ |= 0x00000004;
-        devhead_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional fixed32 devhead = 5;</code>
-       */
-      public Builder clearDevhead() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        devhead_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional fixed32 devtail = 6;
-      private int devtail_ ;
-      /**
-       * <code>optional fixed32 devtail = 6;</code>
-       */
-      public boolean hasDevtail() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional fixed32 devtail = 6;</code>
-       */
-      public int getDevtail() {
-        return devtail_;
-      }
-      /**
-       * <code>optional fixed32 devtail = 6;</code>
-       */
-      public Builder setDevtail(int value) {
-        bitField0_ |= 0x00000008;
-        devtail_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional fixed32 devtail = 6;</code>
-       */
-      public Builder clearDevtail() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        devtail_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required sint32 offset = 3;
-      private int offset_ ;
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public boolean hasOffset() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public int getOffset() {
-        return offset_;
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public Builder setOffset(int value) {
-        bitField0_ |= 0x00000010;
-        offset_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public Builder clearOffset() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        offset_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_direction_sgv_time_offset_device.Direction direction = 4;
-      private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction.NONE;
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000020;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device.Direction direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_direction_sgv_time_offset_device)
-    }
-
-    static {
-      defaultInstance = new propose_direction_sgv_time_offset_device(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_direction_sgv_time_offset_device)
-  }
-
-  public interface propose_direction_sgv_time_offset_device_bOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required uint32 timestamp = 1;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    boolean hasTimestamp();
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    int getTimestamp();
-
-    // required uint32 sgv = 2;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    boolean hasSgv();
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    int getSgv();
-
-    // optional bytes device = 5;
-    /**
-     * <code>optional bytes device = 5;</code>
-     */
-    boolean hasDevice();
-    /**
-     * <code>optional bytes device = 5;</code>
-     */
-    com.google.protobuf.ByteString getDevice();
-
-    // required sint32 offset = 3;
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    boolean hasOffset();
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    int getOffset();
-
-    // optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-     */
-    com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction getDirection();
-  }
-  /**
-   * Protobuf type {@code propose_direction_sgv_time_offset_device_b}
-   */
-  public static final class propose_direction_sgv_time_offset_device_b extends
-      com.google.protobuf.GeneratedMessage
-      implements propose_direction_sgv_time_offset_device_bOrBuilder {
-    // Use propose_direction_sgv_time_offset_device_b.newBuilder() to construct.
-    private propose_direction_sgv_time_offset_device_b(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private propose_direction_sgv_time_offset_device_b(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final propose_direction_sgv_time_offset_device_b defaultInstance;
-    public static propose_direction_sgv_time_offset_device_b getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public propose_direction_sgv_time_offset_device_b getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private propose_direction_sgv_time_offset_device_b(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              timestamp_ = input.readUInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sgv_ = input.readUInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000008;
-              offset_ = input.readSInt32();
-              break;
-            }
-            case 32: {
-              int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction value = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(4, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                direction_ = value;
-              }
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000004;
-              device_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_b_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_b_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<propose_direction_sgv_time_offset_device_b> PARSER =
-        new com.google.protobuf.AbstractParser<propose_direction_sgv_time_offset_device_b>() {
-      public propose_direction_sgv_time_offset_device_b parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new propose_direction_sgv_time_offset_device_b(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<propose_direction_sgv_time_offset_device_b> getParserForType() {
-      return PARSER;
-    }
-
-    /**
-     * Protobuf enum {@code propose_direction_sgv_time_offset_device_b.Direction}
-     */
-    public enum Direction
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0, 0),
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      DoubleUp(1, 1),
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      SingleUp(2, 2),
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      FortyFiveUp(3, 3),
-      /**
-       * <code>Flat = 4;</code>
-       */
-      Flat(4, 4),
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      FortyFiveDown(5, 5),
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      SingleDown(6, 6),
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      DoubleDown(7, 7),
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      NOT_COMPUTABLE(8, 8),
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      RATE_OUT_OF_RANGE(9, 9),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DoubleUp = 1;</code>
-       */
-      public static final int DoubleUp_VALUE = 1;
-      /**
-       * <code>SingleUp = 2;</code>
-       */
-      public static final int SingleUp_VALUE = 2;
-      /**
-       * <code>FortyFiveUp = 3;</code>
-       */
-      public static final int FortyFiveUp_VALUE = 3;
-      /**
-       * <code>Flat = 4;</code>
-       */
-      public static final int Flat_VALUE = 4;
-      /**
-       * <code>FortyFiveDown = 5;</code>
-       */
-      public static final int FortyFiveDown_VALUE = 5;
-      /**
-       * <code>SingleDown = 6;</code>
-       */
-      public static final int SingleDown_VALUE = 6;
-      /**
-       * <code>DoubleDown = 7;</code>
-       */
-      public static final int DoubleDown_VALUE = 7;
-      /**
-       * <code>NOT_COMPUTABLE = 8;</code>
-       */
-      public static final int NOT_COMPUTABLE_VALUE = 8;
-      /**
-       * <code>RATE_OUT_OF_RANGE = 9;</code>
-       */
-      public static final int RATE_OUT_OF_RANGE_VALUE = 9;
-
-
-      public final int getNumber() { return value; }
-
-      public static Direction valueOf(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DoubleUp;
-          case 2: return SingleUp;
-          case 3: return FortyFiveUp;
-          case 4: return Flat;
-          case 5: return FortyFiveDown;
-          case 6: return SingleDown;
-          case 7: return DoubleDown;
-          case 8: return NOT_COMPUTABLE;
-          case 9: return RATE_OUT_OF_RANGE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Direction[] VALUES = values();
-
-      public static Direction valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int index;
-      private final int value;
-
-      private Direction(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:propose_direction_sgv_time_offset_device_b.Direction)
-    }
-
-    private int bitField0_;
-    // required uint32 timestamp = 1;
-    public static final int TIMESTAMP_FIELD_NUMBER = 1;
-    private int timestamp_;
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required uint32 timestamp = 1;</code>
-     */
-    public int getTimestamp() {
-      return timestamp_;
-    }
-
-    // required uint32 sgv = 2;
-    public static final int SGV_FIELD_NUMBER = 2;
-    private int sgv_;
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public boolean hasSgv() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required uint32 sgv = 2;</code>
-     */
-    public int getSgv() {
-      return sgv_;
-    }
-
-    // optional bytes device = 5;
-    public static final int DEVICE_FIELD_NUMBER = 5;
-    private com.google.protobuf.ByteString device_;
-    /**
-     * <code>optional bytes device = 5;</code>
-     */
-    public boolean hasDevice() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional bytes device = 5;</code>
-     */
-    public com.google.protobuf.ByteString getDevice() {
-      return device_;
-    }
-
-    // required sint32 offset = 3;
-    public static final int OFFSET_FIELD_NUMBER = 3;
-    private int offset_;
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    public boolean hasOffset() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>required sint32 offset = 3;</code>
-     */
-    public int getOffset() {
-      return offset_;
-    }
-
-    // optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction direction_;
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-     */
-    public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction getDirection() {
-      return direction_;
-    }
-
-    private void initFields() {
-      timestamp_ = 0;
-      sgv_ = 0;
-      device_ = com.google.protobuf.ByteString.EMPTY;
-      offset_ = 0;
-      direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction.NONE;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasTimestamp()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSgv()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasOffset()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeSInt32(3, offset_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(4, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(5, device_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, timestamp_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, sgv_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(3, offset_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, direction_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, device_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code propose_direction_sgv_time_offset_device_b}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_bOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_b_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_b_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.class, com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Builder.class);
-      }
-
-      // Construct using com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timestamp_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        sgv_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        device_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        offset_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction.NONE;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_propose_direction_sgv_time_offset_device_b_descriptor;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.getDefaultInstance();
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b build() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b buildPartial() {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b result = new com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timestamp_ = timestamp_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sgv_ = sgv_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.device_ = device_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.offset_ = offset_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.direction_ = direction_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b other) {
-        if (other == com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.getDefaultInstance()) return this;
-        if (other.hasTimestamp()) {
-          setTimestamp(other.getTimestamp());
-        }
-        if (other.hasSgv()) {
-          setSgv(other.getSgv());
-        }
-        if (other.hasDevice()) {
-          setDevice(other.getDevice());
-        }
-        if (other.hasOffset()) {
-          setOffset(other.getOffset());
-        }
-        if (other.hasDirection()) {
-          setDirection(other.getDirection());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasTimestamp()) {
-          
-          return false;
-        }
-        if (!hasSgv()) {
-          
-          return false;
-        }
-        if (!hasOffset()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required uint32 timestamp = 1;
-      private int timestamp_ ;
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public int getTimestamp() {
-        return timestamp_;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder setTimestamp(int value) {
-        bitField0_ |= 0x00000001;
-        timestamp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 timestamp = 1;</code>
-       */
-      public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required uint32 sgv = 2;
-      private int sgv_ ;
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public boolean hasSgv() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public int getSgv() {
-        return sgv_;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder setSgv(int value) {
-        bitField0_ |= 0x00000002;
-        sgv_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint32 sgv = 2;</code>
-       */
-      public Builder clearSgv() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        sgv_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional bytes device = 5;
-      private com.google.protobuf.ByteString device_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes device = 5;</code>
-       */
-      public boolean hasDevice() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional bytes device = 5;</code>
-       */
-      public com.google.protobuf.ByteString getDevice() {
-        return device_;
-      }
-      /**
-       * <code>optional bytes device = 5;</code>
-       */
-      public Builder setDevice(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        device_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bytes device = 5;</code>
-       */
-      public Builder clearDevice() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        device_ = getDefaultInstance().getDevice();
-        onChanged();
-        return this;
-      }
-
-      // required sint32 offset = 3;
-      private int offset_ ;
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public boolean hasOffset() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public int getOffset() {
-        return offset_;
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public Builder setOffset(int value) {
-        bitField0_ |= 0x00000008;
-        offset_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required sint32 offset = 3;</code>
-       */
-      public Builder clearOffset() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        offset_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;
-      private com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction.NONE;
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-       */
-      public boolean hasDirection() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-       */
-      public com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction getDirection() {
-        return direction_;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-       */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000010;
-        direction_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .propose_direction_sgv_time_offset_device_b.Direction direction = 4;</code>
-       */
-      public Builder clearDirection() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        direction_ = com.ktind.cgm.bgscout.SGV.propose_direction_sgv_time_offset_device_b.Direction.NONE;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:propose_direction_sgv_time_offset_device_b)
-    }
-
-    static {
-      defaultInstance = new propose_direction_sgv_time_offset_device_b(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:propose_direction_sgv_time_offset_device_b)
+    // @@protoc_insertion_point(class_scope:ProposeCookieMonsterSGVG4)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_SGVUsed_descriptor;
+    internal_static_ProposedCookieMonsterG4Download_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_SGVUsed_fieldAccessorTable;
+      internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_Practical8601_descriptor;
+    internal_static_ProposeCookieMonsterSGVG4_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Practical8601_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_1_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_1_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_2_timestamp_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_2_timestamp_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_2_timestamp_direction_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_2_timestamp_direction_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_SGVUsed_sgv_int_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_SGVUsed_sgv_int_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_sgv_int_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_sgv_int_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_direction_enum_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_direction_enum_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_direction_sgv_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_direction_sgv_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_direction_sgv_time_offset_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_direction_sgv_time_offset_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_direction_sgv_time_offset_device_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_direction_sgv_time_offset_device_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_propose_direction_sgv_time_offset_device_b_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_propose_direction_sgv_time_offset_device_b_fieldAccessorTable;
+      internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -11623,155 +2453,44 @@ public final class SGV {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tSGV.proto\"[\n\007SGVUsed\022\022\n\ndateString\030\001 \002" +
-      "(\t\022\013\n\003sgv\030\002 \002(\t\022\014\n\004date\030\003 \002(\r\022\021\n\tdirecti" +
-      "on\030\004 \001(\t\022\016\n\006device\030\005 \001(\t\"\306\002\n\rPractical86" +
-      "01\022\021\n\ttimestamp\030\001 \001(\t\022\013\n\003sgv\030\002 \001(\r\022+\n\tdi" +
-      "rection\030\003 \001(\0162\030.Practical8601.Direction\022" +
-      "%\n\006device\030\004 \001(\0162\025.Practical8601.Device\"\024" +
-      "\n\006Device\022\n\n\006dexcom\020\001\"\252\001\n\tDirection\022\010\n\004NO" +
-      "NE\020\000\022\014\n\010DoubleUp\020\001\022\014\n\010SingleUp\020\002\022\017\n\013Fort" +
-      "yFiveUp\020\003\022\010\n\004Flat\020\004\022\021\n\rFortyFiveDown\020\005\022\016" +
-      "\n\nSingleDown\020\006\022\016\n\nDoubleDown\020\007\022\022\n\016NOT_CO",
-      "MPUTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\t\"O\n\tpro" +
-      "pose_1\022\022\n\ndateString\030\001 \002(\t\022\013\n\003sgv\030\002 \002(\t\022" +
-      "\021\n\tdirection\030\004 \001(\t\022\016\n\006device\030\005 \001(\t\"X\n\023pr" +
-      "opose_2_timestamp\022\021\n\ttimestamp\030\001 \002(\t\022\013\n\003" +
-      "sgv\030\002 \002(\r\022\021\n\tdirection\030\004 \001(\t\022\016\n\006device\030\005" +
-      " \001(\t\"\271\002\n\035propose_2_timestamp_direction\022\021" +
-      "\n\ttimestamp\030\001 \002(\t\022\013\n\003sgv\030\002 \002(\r\022\016\n\006device" +
-      "\030\004 \001(\t\022;\n\tdirection\030\003 \001(\0162(.propose_2_ti" +
-      "mestamp_direction.Direction\"\252\001\n\tDirectio" +
-      "n\022\010\n\004NONE\020\000\022\014\n\010DoubleUp\020\001\022\014\n\010SingleUp\020\002\022",
-      "\017\n\013FortyFiveUp\020\003\022\010\n\004Flat\020\004\022\021\n\rFortyFiveD" +
-      "own\020\005\022\016\n\nSingleDown\020\006\022\016\n\nDoubleDown\020\007\022\022\n" +
-      "\016NOT_COMPUTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\t" +
-      "\"c\n\017SGVUsed_sgv_int\022\022\n\ndateString\030\001 \002(\t\022" +
-      "\013\n\003sgv\030\002 \002(\r\022\014\n\004date\030\003 \002(\r\022\021\n\tdirection\030" +
-      "\004 \001(\t\022\016\n\006device\030\005 \001(\t\"U\n\017propose_sgv_int" +
-      "\022\022\n\ndateString\030\001 \002(\t\022\013\n\003sgv\030\002 \002(\r\022\021\n\tdir" +
-      "ection\030\004 \001(\t\022\016\n\006device\030\005 \001(\t\"\254\002\n\026propose" +
-      "_direction_enum\022\022\n\ndateString\030\001 \002(\t\022\013\n\003s" +
-      "gv\030\002 \002(\t\022\016\n\006device\030\004 \001(\t\0224\n\tdirection\030\005 ",
-      "\001(\0162!.propose_direction_enum.Direction\"\252" +
-      "\001\n\tDirection\022\010\n\004NONE\020\000\022\014\n\010DoubleUp\020\001\022\014\n\010" +
-      "SingleUp\020\002\022\017\n\013FortyFiveUp\020\003\022\010\n\004Flat\020\004\022\021\n" +
-      "\rFortyFiveDown\020\005\022\016\n\nSingleDown\020\006\022\016\n\nDoub" +
-      "leDown\020\007\022\022\n\016NOT_COMPUTABLE\020\010\022\025\n\021RATE_OUT" +
-      "_OF_RANGE\020\t\"\252\002\n\025propose_direction_sgv\022\022\n" +
-      "\ndateString\030\001 \002(\t\022\013\n\003sgv\030\002 \002(\r\022\016\n\006device" +
-      "\030\004 \001(\t\0223\n\tdirection\030\005 \001(\0162 .propose_dire" +
-      "ction_sgv.Direction\"\252\001\n\tDirection\022\010\n\004NON" +
-      "E\020\000\022\014\n\010DoubleUp\020\001\022\014\n\010SingleUp\020\002\022\017\n\013Forty",
-      "FiveUp\020\003\022\010\n\004Flat\020\004\022\021\n\rFortyFiveDown\020\005\022\016\n" +
-      "\nSingleDown\020\006\022\016\n\nDoubleDown\020\007\022\022\n\016NOT_COM" +
-      "PUTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\t\"\321\002\n!pro" +
-      "pose_direction_sgv_time_offset\022\021\n\ttimest" +
-      "amp\030\001 \002(\r\022\013\n\003sgv\030\002 \002(\r\022\016\n\006device\030\004 \001(\t\022?" +
-      "\n\tdirection\030\005 \001(\0162,.propose_direction_sg" +
-      "v_time_offset.Direction\022\016\n\006offset\030\006 \002(\021\"" +
-      "\252\001\n\tDirection\022\010\n\004NONE\020\000\022\014\n\010DoubleUp\020\001\022\014\n" +
-      "\010SingleUp\020\002\022\017\n\013FortyFiveUp\020\003\022\010\n\004Flat\020\004\022\021" +
-      "\n\rFortyFiveDown\020\005\022\016\n\nSingleDown\020\006\022\016\n\nDou",
-      "bleDown\020\007\022\022\n\016NOT_COMPUTABLE\020\010\022\025\n\021RATE_OU" +
-      "T_OF_RANGE\020\t\"\361\002\n(propose_direction_sgv_t" +
-      "ime_offset_device\022\021\n\ttimestamp\030\001 \002(\r\022\013\n\003" +
-      "sgv\030\002 \002(\r\022\017\n\007devhead\030\005 \001(\007\022\017\n\007devtail\030\006 " +
-      "\001(\007\022\016\n\006offset\030\003 \002(\021\022F\n\tdirection\030\004 \001(\01623" +
-      ".propose_direction_sgv_time_offset_devic" +
-      "e.Direction\"\252\001\n\tDirection\022\010\n\004NONE\020\000\022\014\n\010D" +
-      "oubleUp\020\001\022\014\n\010SingleUp\020\002\022\017\n\013FortyFiveUp\020\003" +
-      "\022\010\n\004Flat\020\004\022\021\n\rFortyFiveDown\020\005\022\016\n\nSingleD" +
-      "own\020\006\022\016\n\nDoubleDown\020\007\022\022\n\016NOT_COMPUTABLE\020",
-      "\010\022\025\n\021RATE_OUT_OF_RANGE\020\t\"\343\002\n*propose_dir" +
-      "ection_sgv_time_offset_device_b\022\021\n\ttimes" +
-      "tamp\030\001 \002(\r\022\013\n\003sgv\030\002 \002(\r\022\016\n\006device\030\005 \001(\014\022" +
-      "\016\n\006offset\030\003 \002(\021\022H\n\tdirection\030\004 \001(\01625.pro" +
-      "pose_direction_sgv_time_offset_device_b." +
-      "Direction\"\252\001\n\tDirection\022\010\n\004NONE\020\000\022\014\n\010Dou" +
-      "bleUp\020\001\022\014\n\010SingleUp\020\002\022\017\n\013FortyFiveUp\020\003\022\010" +
-      "\n\004Flat\020\004\022\021\n\rFortyFiveDown\020\005\022\016\n\nSingleDow" +
-      "n\020\006\022\016\n\nDoubleDown\020\007\022\022\n\016NOT_COMPUTABLE\020\010\022" +
-      "\025\n\021RATE_OUT_OF_RANGE\020\tB\034\n\025com.ktind.cgm.",
-      "bgscoutB\003SGV"
+      "\n\tSGV.proto\"\272\003\n\037ProposedCookieMonsterG4D" +
+      "ownload\022\'\n\003sgv\030\001 \003(\0132\032.ProposeCookieMons" +
+      "terSGVG4\0224\n\005units\030\002 \001(\0162%.ProposedCookie" +
+      "MonsterG4Download.Unit\022\032\n\022download_times" +
+      "tamp\030\003 \002(\004\022N\n\017download_status\030\004 \001(\0162/.Pr" +
+      "oposedCookieMonsterG4Download.DownloadSt" +
+      "atus:\004NONE\022\030\n\020receiver_battery\030\005 \001(\r\022\030\n\020" +
+      "uploader_battery\030\006 \001(\r\"\032\n\004Unit\022\010\n\004MGDL\020\000" +
+      "\022\010\n\004MMOL\020\001\"|\n\016DownloadStatus\022\013\n\007SUCCESS\020" +
+      "\000\022\013\n\007NO_DATA\020\001\022\024\n\020DEVICE_NOT_FOUND\020\002\022\014\n\010",
+      "IO_ERROR\020\003\022\025\n\021APPLICATION_ERROR\020\004\022\010\n\004NON" +
+      "E\020\006\022\013\n\007UNKNOWN\020\007\"\251\002\n\031ProposeCookieMonste" +
+      "rSGVG4\022\013\n\003sgv\030\001 \002(\r\022\021\n\ttimestamp\030\002 \001(\004\0227" +
+      "\n\tdirection\030\003 \001(\0162$.ProposeCookieMonster" +
+      "SGVG4.Direction\"\262\001\n\tDirection\022\010\n\004NONE\020\000\022" +
+      "\r\n\tDOUBLE_UP\020\001\022\r\n\tSINGLE_UP\020\002\022\021\n\rFORTY_F" +
+      "IVE_UP\020\003\022\010\n\004FLAT\020\004\022\023\n\017FORTY_FIVE_DOWN\020\005\022" +
+      "\017\n\013SINGLE_DOWN\020\006\022\017\n\013DOUBLE_DOWN\020\007\022\022\n\016NOT" +
+      "_COMPUTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\tB\034\n\025" +
+      "com.ktind.cgm.bgscoutB\003SGV"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_SGVUsed_descriptor =
+          internal_static_ProposedCookieMonsterG4Download_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_SGVUsed_fieldAccessorTable = new
+          internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_SGVUsed_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Date", "Direction", "Device", });
-          internal_static_Practical8601_descriptor =
+              internal_static_ProposedCookieMonsterG4Download_descriptor,
+              new java.lang.String[] { "Sgv", "Units", "DownloadTimestamp", "DownloadStatus", "ReceiverBattery", "UploaderBattery", });
+          internal_static_ProposeCookieMonsterSGVG4_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_Practical8601_fieldAccessorTable = new
+          internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Practical8601_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Direction", "Device", });
-          internal_static_propose_1_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_propose_1_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_1_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Direction", "Device", });
-          internal_static_propose_2_timestamp_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_propose_2_timestamp_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_2_timestamp_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Direction", "Device", });
-          internal_static_propose_2_timestamp_direction_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_propose_2_timestamp_direction_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_2_timestamp_direction_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Device", "Direction", });
-          internal_static_SGVUsed_sgv_int_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_SGVUsed_sgv_int_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_SGVUsed_sgv_int_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Date", "Direction", "Device", });
-          internal_static_propose_sgv_int_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_propose_sgv_int_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_sgv_int_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Direction", "Device", });
-          internal_static_propose_direction_enum_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_propose_direction_enum_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_direction_enum_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Device", "Direction", });
-          internal_static_propose_direction_sgv_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_propose_direction_sgv_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_direction_sgv_descriptor,
-              new java.lang.String[] { "DateString", "Sgv", "Device", "Direction", });
-          internal_static_propose_direction_sgv_time_offset_descriptor =
-            getDescriptor().getMessageTypes().get(9);
-          internal_static_propose_direction_sgv_time_offset_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_direction_sgv_time_offset_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Device", "Direction", "Offset", });
-          internal_static_propose_direction_sgv_time_offset_device_descriptor =
-            getDescriptor().getMessageTypes().get(10);
-          internal_static_propose_direction_sgv_time_offset_device_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_direction_sgv_time_offset_device_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Devhead", "Devtail", "Offset", "Direction", });
-          internal_static_propose_direction_sgv_time_offset_device_b_descriptor =
-            getDescriptor().getMessageTypes().get(11);
-          internal_static_propose_direction_sgv_time_offset_device_b_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_propose_direction_sgv_time_offset_device_b_descriptor,
-              new java.lang.String[] { "Timestamp", "Sgv", "Device", "Offset", "Direction", });
+              internal_static_ProposeCookieMonsterSGVG4_descriptor,
+              new java.lang.String[] { "Sgv", "Timestamp", "Direction", });
           return null;
         }
       };
