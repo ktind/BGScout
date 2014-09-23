@@ -85,7 +85,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                 mqttMgr.initConnect(url);
                 Log.d(TAG, "Subscribe start");
 //        mqttMgr.subscribe("/entries/sgv", "/uploader");
-                mqttMgr.subscribe("/entries/sgv","/protobuf/test2");
+                mqttMgr.subscribe("/entries/sgv","/downloads/protobuf");
                 Log.d(TAG,"Connect ended");
             }
         }).start();
@@ -127,7 +127,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
             setLastDownloadObject(ddo);
             onDownload(ddo);
         }
-        if (topic.equals("/protobuf/test2")){
+        if (topic.equals("/downloads/protobuf")){
             try {
                 SGV.ProposedCookieMonsterG4Download protoBufDownload=SGV.ProposedCookieMonsterG4Download.parseFrom(msg.getPayload());
                 Log.d("XXX", "SGV Download status: "+protoBufDownload.getDownloadStatus().name());
@@ -149,6 +149,8 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                         .setEgvRecords(egvRecords)
                         .setRemoteDevice(false)
                         .setDeviceName("dexcom")
+                        .setDeviceBattery(protoBufDownload.getReceiverBattery())
+                        .setUploaderBattery(protoBufDownload.getUploaderBattery())
                         .setUnit(GlucoseUnit.values()[protoBufDownload.getUnits().getNumber()])
                         .setDeviceID("device_1")
                         .setLastReadingDate(egvRecords.get(egvRecords.size()-1).getDate())

@@ -137,8 +137,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             Log.e(TAG, "User and/or password is null. Please verify arguments to the constructor");
             return;
         }
-//        setupNetworkNotifications();
-//        mClient=null;
         stats.addConnect();
         setupOpts(lwt);
         // Save the URL for later re-connections
@@ -149,11 +147,12 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             mClient = new MqttClient(url, mDeviceId, mDataStore);
             mClient.connect(mOpts);
             StaticAlertMessages.removeMessage(MQTTDISCONNECT);
-//            NotifHelper.clearMessage(context,"Disconnected from MQTT");
-//            connected=true;
             setNextKeepAlive();
             state=State.CONNECTED;
         } catch (MqttException e) {
+            Log.e(TAG, "Error while connecting: ", e);
+        } catch (IllegalArgumentException e) {
+            // TODO: here to catch malformed endpoints. Need to add more robust handling later
             Log.e(TAG, "Error while connecting: ", e);
         }
     }
@@ -305,8 +304,6 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RemoteCGM "+deviceIDStr);
             wl.acquire();
-//            connected=false;
-//            if (isOnline())
             reconnectDelayed();
             wl.release();
         } else {
