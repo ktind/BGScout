@@ -85,7 +85,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                 mqttMgr.initConnect(url);
                 Log.d(TAG, "Subscribe start");
 //        mqttMgr.subscribe("/entries/sgv", "/uploader");
-                mqttMgr.subscribe("/entries/sgv","/downloads/protobuf");
+                mqttMgr.subscribe("/entries/sgv",MqttUploader.PROTOBUF_DOWNLOAD_TOPIC);
                 Log.d(TAG,"Connect ended");
             }
         }).start();
@@ -129,7 +129,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
         }
         if (topic.equals("/downloads/protobuf")){
             try {
-                SGV.ProposedCookieMonsterG4Download protoBufDownload=SGV.ProposedCookieMonsterG4Download.parseFrom(msg.getPayload());
+                SGV.CookieMonsterG4Download protoBufDownload=SGV.CookieMonsterG4Download.parseFrom(msg.getPayload());
                 Log.d("XXX", "SGV Download status: "+protoBufDownload.getDownloadStatus().name());
                 Log.d("XXX", "SGV Units: " + protoBufDownload.getUnits().name());
                 Log.d("XXX", "SGV Download timestamp: "+new Date(protoBufDownload.getDownloadTimestamp()));
@@ -139,7 +139,7 @@ public class RemoteMQTTDevice extends AbstractPushDevice implements MQTTMgrObser
                 Log.d("XXX", "SGV timestamp: "+new Date(protoBufDownload.getSgv(0).getTimestamp()));
 
                 ArrayList<EGVRecord> egvRecords = new ArrayList<EGVRecord>();
-                for (SGV.ProposeCookieMonsterSGVG4 sgv: protoBufDownload.getSgvList()){
+                for (SGV.CookieMonsterSGVG4 sgv: protoBufDownload.getSgvList()){
                     egvRecords.add(new EGVRecord(sgv.getSgv(),sgv.getTimestamp(),Trend.values()[sgv.getDirection().getNumber()]));
                 }
                 DownloadObject downloadObject=new DownloadObject();

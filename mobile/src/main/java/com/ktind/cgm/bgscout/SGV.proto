@@ -1,8 +1,8 @@
 option java_package = "com.ktind.cgm.bgscout";
 option java_outer_classname = "SGV";
 
-message ProposedCookieMonsterG4Download {
-    repeated ProposeCookieMonsterSGVG4 sgv = 1; // Glucose records as reported by the G4
+message CookieMonsterG4Download {
+    repeated CookieMonsterSGVG4 sgv = 1; // Glucose records as reported by the G4
     enum Unit {
         MGDL = 0;
         MMOL = 1;
@@ -21,12 +21,10 @@ message ProposedCookieMonsterG4Download {
     optional DownloadStatus download_status = 4 [default = NONE];  // Status of the download
     optional uint32 receiver_battery = 5; // Battery level as reported by the receiver
     optional uint32 uploader_battery = 6; // Battery level as reported by the uploader
-    optional uint32 isig = 7; // Insterstitial Signal
-    optional uint32 rssi = 8; // Received Signal Strength Indication
 }
 
 
-message ProposeCookieMonsterSGVG4 {
+message CookieMonsterSGVG4 {
     required uint32 sgv = 1; // Glucose value
     optional uint64 timestamp = 2; // timestamp of the record
     enum Direction {
@@ -43,6 +41,3 @@ message ProposeCookieMonsterSGVG4 {
     }
     optional Direction direction = 3; // Trend arrow
 }
-
-
-//~/Desktop/protobuf-2.5.0/src/protoc -I=/Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/ --java_out=/Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/ /Users/klee24/Desktop/BGScout/mobile/src/main/java/com/ktind/cgm/bgscout/SGV.proto

@@ -220,17 +220,18 @@ public class MQTTMgr implements MqttCallback,MQTTMgrObservable {
     }
 
     public void publish(String message,String topic){
+        publish(message.getBytes(),topic);
+    }
+
+    public void publish(byte[] message, String topic){
         stats.addPublish(topic);
         Log.d(TAG,"Publishing "+message+" to "+ topic);
         try {
-            mClient.publish(topic,message.getBytes(),2,true);
+            mClient.publish(topic,message,1,true);
         } catch (MqttException e) {
             Log.wtf(TAG,"Unable to publish message: "+message+" to "+topic);
-            e.printStackTrace();
-            // Likely due to disconnected that wasn't detected earlier? Should not happen unless connect was called without initConnect
             reconnectDelayed();
         }
-//        mClient.publish("/entries/sgv",jsonString.getBytes(),MQTT_QOS_1,true);
     }
 
     private boolean isOnline() {

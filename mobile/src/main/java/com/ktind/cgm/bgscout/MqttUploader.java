@@ -3,11 +3,12 @@ package com.ktind.cgm.bgscout;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgr;
 import com.ktind.cgm.bgscout.mqtt.MQTTMgrObserverInterface;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import java.util.Date;
 
 /**
  Copyright (c) 2014, Kevin Lee (klee24@gmail.com)
@@ -39,6 +40,7 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
     private static final String TAG = MqttUploader.class.getSimpleName();
     protected DownloadObject lastDownload=null;
     protected boolean initialUpload=true;
+    public static final String PROTOBUF_DOWNLOAD_TOPIC="/downloads/protobuf";
 
     protected MQTTMgr mqttMgr;
 
@@ -58,10 +60,30 @@ public class MqttUploader extends AbstractMonitor implements MQTTMgrObserverInte
     @Override
     protected void doProcess(DownloadObject d) {
 //        Log.d("XXX","monitor downloadDate=>"+d.getDownloadDate());
-        Gson gson=new Gson();
+//        Gson gson=new Gson();
         if (initialUpload || (lastDownload!=null && ! lastDownload.equals(d))) {
-            mqttMgr.publish(gson.toJson(d), "/entries/sgv");
-            initialUpload=false;
+            try {
+                SGV.CookieMonsterG4Download.Builder recordBuilder = SGV.CookieMonsterG4Download.newBuilder()
+                        .setDownloadStatus(SGV.CookieMonsterG4Download.DownloadStatus.SUCCESS)
+                        .setDownloadTimestamp(new Date().getTime())
+                        .setUploaderBattery((int) d.getUploaderBattery())
+                        .setReceiverBattery(d.getDeviceBattery())
+                        .setUnits(SGV.CookieMonsterG4Download.Unit.MGDL);
+                SGV.CookieMonsterSGVG4 sgv = SGV.CookieMonsterSGVG4.newBuilder()
+                        .setSgv(d.getLastRecord().getEgv())
+                        .setTimestamp(d.getLastRecordReadingDate().getTime())
+                        .setDirection(SGV.CookieMonsterSGVG4.Direction.values()[d.getLastTrend().getVal()])
+                        .build();
+                recordBuilder.addSgv(sgv);
+                SGV.CookieMonsterG4Download download = recordBuilder.build();
+                mqttMgr.publish(download.toByteArray(),PROTOBUF_DOWNLOAD_TOPIC);
+                initialUpload=false;
+            } catch (NoDataException e) {
+                e.printStackTrace();
+            }
+
+            //            mqttMgr.publish(gson.toJson(d), "/entries/sgv");
+
             try {
                 savelastSuccessDate(d.getLastRecordReadingDate().getTime());
             } catch (NoDataException e) {

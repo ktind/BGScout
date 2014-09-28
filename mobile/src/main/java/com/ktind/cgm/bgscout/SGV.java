@@ -8,29 +8,29 @@ public final class SGV {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface ProposedCookieMonsterG4DownloadOrBuilder
+  public interface CookieMonsterG4DownloadOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
+    // repeated .CookieMonsterSGVG4 sgv = 1;
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> 
+    java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> 
         getSgvList();
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index);
+    com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 getSgv(int index);
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
@@ -38,27 +38,27 @@ public final class SGV {
      */
     int getSgvCount();
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+    java.util.List<? extends com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder> 
         getSgvOrBuilderList();
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+    com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder getSgvOrBuilder(
         int index);
 
-    // optional .ProposedCookieMonsterG4Download.Unit units = 2;
+    // optional .CookieMonsterG4Download.Unit units = 2;
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
      *
      * <pre>
      * Units reported by the device
@@ -66,13 +66,13 @@ public final class SGV {
      */
     boolean hasUnits();
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
      *
      * <pre>
      * Units reported by the device
      * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits();
+    com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit getUnits();
 
     // required uint64 download_timestamp = 3;
     /**
@@ -92,9 +92,9 @@ public final class SGV {
      */
     long getDownloadTimestamp();
 
-    // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
+    // optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
      *
      * <pre>
      * Status of the download
@@ -102,13 +102,13 @@ public final class SGV {
      */
     boolean hasDownloadStatus();
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
      *
      * <pre>
      * Status of the download
      * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus();
+    com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus getDownloadStatus();
 
     // optional uint32 receiver_battery = 5;
     /**
@@ -147,24 +147,24 @@ public final class SGV {
     int getUploaderBattery();
   }
   /**
-   * Protobuf type {@code ProposedCookieMonsterG4Download}
+   * Protobuf type {@code CookieMonsterG4Download}
    */
-  public static final class ProposedCookieMonsterG4Download extends
+  public static final class CookieMonsterG4Download extends
       com.google.protobuf.GeneratedMessage
-      implements ProposedCookieMonsterG4DownloadOrBuilder {
-    // Use ProposedCookieMonsterG4Download.newBuilder() to construct.
-    private ProposedCookieMonsterG4Download(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements CookieMonsterG4DownloadOrBuilder {
+    // Use CookieMonsterG4Download.newBuilder() to construct.
+    private CookieMonsterG4Download(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private ProposedCookieMonsterG4Download(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private CookieMonsterG4Download(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final ProposedCookieMonsterG4Download defaultInstance;
-    public static ProposedCookieMonsterG4Download getDefaultInstance() {
+    private static final CookieMonsterG4Download defaultInstance;
+    public static CookieMonsterG4Download getDefaultInstance() {
       return defaultInstance;
     }
 
-    public ProposedCookieMonsterG4Download getDefaultInstanceForType() {
+    public CookieMonsterG4Download getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -174,7 +174,7 @@ public final class SGV {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private ProposedCookieMonsterG4Download(
+    private CookieMonsterG4Download(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -199,15 +199,15 @@ public final class SGV {
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4>();
+                sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              sgv_.add(input.readMessage(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.PARSER, extensionRegistry));
+              sgv_.add(input.readMessage(com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.PARSER, extensionRegistry));
               break;
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit value = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.valueOf(rawValue);
+              com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit value = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -223,7 +223,7 @@ public final class SGV {
             }
             case 32: {
               int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus value = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.valueOf(rawValue);
+              com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus value = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(4, rawValue);
               } else {
@@ -259,33 +259,33 @@ public final class SGV {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
+      return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterG4Download_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable
+      return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterG4Download_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Builder.class);
+              com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<ProposedCookieMonsterG4Download> PARSER =
-        new com.google.protobuf.AbstractParser<ProposedCookieMonsterG4Download>() {
-      public ProposedCookieMonsterG4Download parsePartialFrom(
+    public static com.google.protobuf.Parser<CookieMonsterG4Download> PARSER =
+        new com.google.protobuf.AbstractParser<CookieMonsterG4Download>() {
+      public CookieMonsterG4Download parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ProposedCookieMonsterG4Download(input, extensionRegistry);
+        return new CookieMonsterG4Download(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<ProposedCookieMonsterG4Download> getParserForType() {
+    public com.google.protobuf.Parser<CookieMonsterG4Download> getParserForType() {
       return PARSER;
     }
 
     /**
-     * Protobuf enum {@code ProposedCookieMonsterG4Download.Unit}
+     * Protobuf enum {@code CookieMonsterG4Download.Unit}
      */
     public enum Unit
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -341,7 +341,7 @@ public final class SGV {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDescriptor().getEnumTypes().get(0);
+        return com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Unit[] VALUES = values();
@@ -363,11 +363,11 @@ public final class SGV {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:ProposedCookieMonsterG4Download.Unit)
+      // @@protoc_insertion_point(enum_scope:CookieMonsterG4Download.Unit)
     }
 
     /**
-     * Protobuf enum {@code ProposedCookieMonsterG4Download.DownloadStatus}
+     * Protobuf enum {@code CookieMonsterG4Download.DownloadStatus}
      */
     public enum DownloadStatus
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -468,7 +468,7 @@ public final class SGV {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDescriptor().getEnumTypes().get(1);
+        return com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.getDescriptor().getEnumTypes().get(1);
       }
 
       private static final DownloadStatus[] VALUES = values();
@@ -490,36 +490,36 @@ public final class SGV {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:ProposedCookieMonsterG4Download.DownloadStatus)
+      // @@protoc_insertion_point(enum_scope:CookieMonsterG4Download.DownloadStatus)
     }
 
     private int bitField0_;
-    // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
+    // repeated .CookieMonsterSGVG4 sgv = 1;
     public static final int SGV_FIELD_NUMBER = 1;
-    private java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> sgv_;
+    private java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> sgv_;
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> getSgvList() {
+    public java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> getSgvList() {
       return sgv_;
     }
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    public java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+    public java.util.List<? extends com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder> 
         getSgvOrBuilderList() {
       return sgv_;
     }
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
@@ -529,32 +529,32 @@ public final class SGV {
       return sgv_.size();
     }
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index) {
+    public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 getSgv(int index) {
       return sgv_.get(index);
     }
     /**
-     * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+     * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
      *
      * <pre>
      * Glucose records as reported by the G4
      * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+    public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder getSgvOrBuilder(
         int index) {
       return sgv_.get(index);
     }
 
-    // optional .ProposedCookieMonsterG4Download.Unit units = 2;
+    // optional .CookieMonsterG4Download.Unit units = 2;
     public static final int UNITS_FIELD_NUMBER = 2;
-    private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit units_;
+    private com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit units_;
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
      *
      * <pre>
      * Units reported by the device
@@ -564,13 +564,13 @@ public final class SGV {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+     * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
      *
      * <pre>
      * Units reported by the device
      * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits() {
+    public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit getUnits() {
       return units_;
     }
 
@@ -598,11 +598,11 @@ public final class SGV {
       return downloadTimestamp_;
     }
 
-    // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
+    // optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
     public static final int DOWNLOAD_STATUS_FIELD_NUMBER = 4;
-    private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus downloadStatus_;
+    private com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus downloadStatus_;
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
      *
      * <pre>
      * Status of the download
@@ -612,13 +612,13 @@ public final class SGV {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+     * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
      *
      * <pre>
      * Status of the download
      * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus() {
+    public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus getDownloadStatus() {
       return downloadStatus_;
     }
 
@@ -672,9 +672,9 @@ public final class SGV {
 
     private void initFields() {
       sgv_ = java.util.Collections.emptyList();
-      units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+      units_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit.MGDL;
       downloadTimestamp_ = 0L;
-      downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
+      downloadStatus_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus.NONE;
       receiverBattery_ = 0;
       uploaderBattery_ = 0;
     }
@@ -763,53 +763,53 @@ public final class SGV {
       return super.writeReplace();
     }
 
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(byte[] data)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseDelimitedFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseDelimitedFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -818,7 +818,7 @@ public final class SGV {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download prototype) {
+    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -830,24 +830,24 @@ public final class SGV {
       return builder;
     }
     /**
-     * Protobuf type {@code ProposedCookieMonsterG4Download}
+     * Protobuf type {@code CookieMonsterG4Download}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4DownloadOrBuilder {
+       implements com.ktind.cgm.bgscout.SGV.CookieMonsterG4DownloadOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterG4Download_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterG4Download_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Builder.class);
+                com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.class, com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Builder.class);
       }
 
-      // Construct using com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.newBuilder()
+      // Construct using com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -874,11 +874,11 @@ public final class SGV {
         } else {
           sgvBuilder_.clear();
         }
-        units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+        units_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit.MGDL;
         bitField0_ = (bitField0_ & ~0x00000002);
         downloadTimestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
-        downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
+        downloadStatus_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus.NONE;
         bitField0_ = (bitField0_ & ~0x00000008);
         receiverBattery_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -893,23 +893,23 @@ public final class SGV {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposedCookieMonsterG4Download_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterG4Download_descriptor;
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDefaultInstance();
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download getDefaultInstanceForType() {
+        return com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.getDefaultInstance();
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download build() {
-        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download result = buildPartial();
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download build() {
+        com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download buildPartial() {
-        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download result = new com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download(this);
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download buildPartial() {
+        com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download result = new com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (sgvBuilder_ == null) {
@@ -947,16 +947,16 @@ public final class SGV {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download)other);
+        if (other instanceof com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download) {
+          return mergeFrom((com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download other) {
-        if (other == com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download other) {
+        if (other == com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.getDefaultInstance()) return this;
         if (sgvBuilder_ == null) {
           if (!other.sgv_.isEmpty()) {
             if (sgv_.isEmpty()) {
@@ -1020,11 +1020,11 @@ public final class SGV {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download parsedMessage = null;
+        com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download) e.getUnfinishedMessage();
+          parsedMessage = (com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -1035,27 +1035,27 @@ public final class SGV {
       }
       private int bitField0_;
 
-      // repeated .ProposeCookieMonsterSGVG4 sgv = 1;
-      private java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> sgv_ =
+      // repeated .CookieMonsterSGVG4 sgv = 1;
+      private java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> sgv_ =
         java.util.Collections.emptyList();
       private void ensureSgvIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4>(sgv_);
+          sgv_ = new java.util.ArrayList<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4>(sgv_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> sgvBuilder_;
+          com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder> sgvBuilder_;
 
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> getSgvList() {
+      public java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> getSgvList() {
         if (sgvBuilder_ == null) {
           return java.util.Collections.unmodifiableList(sgv_);
         } else {
@@ -1063,7 +1063,7 @@ public final class SGV {
         }
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
@@ -1077,13 +1077,13 @@ public final class SGV {
         }
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getSgv(int index) {
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 getSgv(int index) {
         if (sgvBuilder_ == null) {
           return sgv_.get(index);
         } else {
@@ -1091,14 +1091,14 @@ public final class SGV {
         }
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder setSgv(
-          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+          int index, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 value) {
         if (sgvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1112,14 +1112,14 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder setSgv(
-          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+          int index, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder builderForValue) {
         if (sgvBuilder_ == null) {
           ensureSgvIsMutable();
           sgv_.set(index, builderForValue.build());
@@ -1130,13 +1130,13 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public Builder addSgv(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+      public Builder addSgv(com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 value) {
         if (sgvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1150,14 +1150,14 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder addSgv(
-          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 value) {
+          int index, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 value) {
         if (sgvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1171,14 +1171,14 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder addSgv(
-          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+          com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder builderForValue) {
         if (sgvBuilder_ == null) {
           ensureSgvIsMutable();
           sgv_.add(builderForValue.build());
@@ -1189,14 +1189,14 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder addSgv(
-          int index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder builderForValue) {
+          int index, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder builderForValue) {
         if (sgvBuilder_ == null) {
           ensureSgvIsMutable();
           sgv_.add(index, builderForValue.build());
@@ -1207,14 +1207,14 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
       public Builder addAllSgv(
-          java.lang.Iterable<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4> values) {
+          java.lang.Iterable<? extends com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4> values) {
         if (sgvBuilder_ == null) {
           ensureSgvIsMutable();
           super.addAll(values, sgv_);
@@ -1225,7 +1225,7 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
@@ -1242,7 +1242,7 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
@@ -1259,24 +1259,24 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder getSgvBuilder(
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder getSgvBuilder(
           int index) {
         return getSgvFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder getSgvOrBuilder(
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder getSgvOrBuilder(
           int index) {
         if (sgvBuilder_ == null) {
           return sgv_.get(index);  } else {
@@ -1284,13 +1284,13 @@ public final class SGV {
         }
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public java.util.List<? extends com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+      public java.util.List<? extends com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder> 
            getSgvOrBuilderList() {
         if (sgvBuilder_ != null) {
           return sgvBuilder_.getMessageOrBuilderList();
@@ -1299,45 +1299,45 @@ public final class SGV {
         }
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder addSgvBuilder() {
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder addSgvBuilder() {
         return getSgvFieldBuilder().addBuilder(
-            com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance());
+            com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.getDefaultInstance());
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder addSgvBuilder(
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder addSgvBuilder(
           int index) {
         return getSgvFieldBuilder().addBuilder(
-            index, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance());
+            index, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.getDefaultInstance());
       }
       /**
-       * <code>repeated .ProposeCookieMonsterSGVG4 sgv = 1;</code>
+       * <code>repeated .CookieMonsterSGVG4 sgv = 1;</code>
        *
        * <pre>
        * Glucose records as reported by the G4
        * </pre>
        */
-      public java.util.List<com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder> 
+      public java.util.List<com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder> 
            getSgvBuilderList() {
         return getSgvFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder> 
+          com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder> 
           getSgvFieldBuilder() {
         if (sgvBuilder_ == null) {
           sgvBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder>(
+              com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder>(
                   sgv_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -1347,10 +1347,10 @@ public final class SGV {
         return sgvBuilder_;
       }
 
-      // optional .ProposedCookieMonsterG4Download.Unit units = 2;
-      private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+      // optional .CookieMonsterG4Download.Unit units = 2;
+      private com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit units_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit.MGDL;
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
        *
        * <pre>
        * Units reported by the device
@@ -1360,23 +1360,23 @@ public final class SGV {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
        *
        * <pre>
        * Units reported by the device
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit getUnits() {
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit getUnits() {
         return units_;
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
        *
        * <pre>
        * Units reported by the device
        * </pre>
        */
-      public Builder setUnits(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit value) {
+      public Builder setUnits(com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1386,7 +1386,7 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.Unit units = 2;</code>
+       * <code>optional .CookieMonsterG4Download.Unit units = 2;</code>
        *
        * <pre>
        * Units reported by the device
@@ -1394,7 +1394,7 @@ public final class SGV {
        */
       public Builder clearUnits() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        units_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.Unit.MGDL;
+        units_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.Unit.MGDL;
         onChanged();
         return this;
       }
@@ -1448,10 +1448,10 @@ public final class SGV {
         return this;
       }
 
-      // optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
-      private com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
+      // optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];
+      private com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus downloadStatus_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus.NONE;
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
        *
        * <pre>
        * Status of the download
@@ -1461,23 +1461,23 @@ public final class SGV {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
        *
        * <pre>
        * Status of the download
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus getDownloadStatus() {
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus getDownloadStatus() {
         return downloadStatus_;
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
        *
        * <pre>
        * Status of the download
        * </pre>
        */
-      public Builder setDownloadStatus(com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus value) {
+      public Builder setDownloadStatus(com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1487,7 +1487,7 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>optional .ProposedCookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
+       * <code>optional .CookieMonsterG4Download.DownloadStatus download_status = 4 [default = NONE];</code>
        *
        * <pre>
        * Status of the download
@@ -1495,7 +1495,7 @@ public final class SGV {
        */
       public Builder clearDownloadStatus() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        downloadStatus_ = com.ktind.cgm.bgscout.SGV.ProposedCookieMonsterG4Download.DownloadStatus.NONE;
+        downloadStatus_ = com.ktind.cgm.bgscout.SGV.CookieMonsterG4Download.DownloadStatus.NONE;
         onChanged();
         return this;
       }
@@ -1598,18 +1598,18 @@ public final class SGV {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:ProposedCookieMonsterG4Download)
+      // @@protoc_insertion_point(builder_scope:CookieMonsterG4Download)
     }
 
     static {
-      defaultInstance = new ProposedCookieMonsterG4Download(true);
+      defaultInstance = new CookieMonsterG4Download(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:ProposedCookieMonsterG4Download)
+    // @@protoc_insertion_point(class_scope:CookieMonsterG4Download)
   }
 
-  public interface ProposeCookieMonsterSGVG4OrBuilder
+  public interface CookieMonsterSGVG4OrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // required uint32 sgv = 1;
@@ -1648,9 +1648,9 @@ public final class SGV {
      */
     long getTimestamp();
 
-    // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
+    // optional .CookieMonsterSGVG4.Direction direction = 3;
     /**
-     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
      *
      * <pre>
      * Trend arrow
@@ -1658,33 +1658,33 @@ public final class SGV {
      */
     boolean hasDirection();
     /**
-     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
      *
      * <pre>
      * Trend arrow
      * </pre>
      */
-    com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection();
+    com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction getDirection();
   }
   /**
-   * Protobuf type {@code ProposeCookieMonsterSGVG4}
+   * Protobuf type {@code CookieMonsterSGVG4}
    */
-  public static final class ProposeCookieMonsterSGVG4 extends
+  public static final class CookieMonsterSGVG4 extends
       com.google.protobuf.GeneratedMessage
-      implements ProposeCookieMonsterSGVG4OrBuilder {
-    // Use ProposeCookieMonsterSGVG4.newBuilder() to construct.
-    private ProposeCookieMonsterSGVG4(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements CookieMonsterSGVG4OrBuilder {
+    // Use CookieMonsterSGVG4.newBuilder() to construct.
+    private CookieMonsterSGVG4(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private ProposeCookieMonsterSGVG4(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private CookieMonsterSGVG4(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final ProposeCookieMonsterSGVG4 defaultInstance;
-    public static ProposeCookieMonsterSGVG4 getDefaultInstance() {
+    private static final CookieMonsterSGVG4 defaultInstance;
+    public static CookieMonsterSGVG4 getDefaultInstance() {
       return defaultInstance;
     }
 
-    public ProposeCookieMonsterSGVG4 getDefaultInstanceForType() {
+    public CookieMonsterSGVG4 getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -1694,7 +1694,7 @@ public final class SGV {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private ProposeCookieMonsterSGVG4(
+    private CookieMonsterSGVG4(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1729,7 +1729,7 @@ public final class SGV {
             }
             case 24: {
               int rawValue = input.readEnum();
-              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction value = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.valueOf(rawValue);
+              com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction value = com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(3, rawValue);
               } else {
@@ -1752,33 +1752,33 @@ public final class SGV {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
+      return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterSGVG4_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable
+      return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterSGVG4_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder.class);
+              com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<ProposeCookieMonsterSGVG4> PARSER =
-        new com.google.protobuf.AbstractParser<ProposeCookieMonsterSGVG4>() {
-      public ProposeCookieMonsterSGVG4 parsePartialFrom(
+    public static com.google.protobuf.Parser<CookieMonsterSGVG4> PARSER =
+        new com.google.protobuf.AbstractParser<CookieMonsterSGVG4>() {
+      public CookieMonsterSGVG4 parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ProposeCookieMonsterSGVG4(input, extensionRegistry);
+        return new CookieMonsterSGVG4(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<ProposeCookieMonsterSGVG4> getParserForType() {
+    public com.google.protobuf.Parser<CookieMonsterSGVG4> getParserForType() {
       return PARSER;
     }
 
     /**
-     * Protobuf enum {@code ProposeCookieMonsterSGVG4.Direction}
+     * Protobuf enum {@code CookieMonsterSGVG4.Direction}
      */
     public enum Direction
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -1906,7 +1906,7 @@ public final class SGV {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDescriptor().getEnumTypes().get(0);
+        return com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Direction[] VALUES = values();
@@ -1928,7 +1928,7 @@ public final class SGV {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:ProposeCookieMonsterSGVG4.Direction)
+      // @@protoc_insertion_point(enum_scope:CookieMonsterSGVG4.Direction)
     }
 
     private int bitField0_;
@@ -1980,11 +1980,11 @@ public final class SGV {
       return timestamp_;
     }
 
-    // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
+    // optional .CookieMonsterSGVG4.Direction direction = 3;
     public static final int DIRECTION_FIELD_NUMBER = 3;
-    private com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction direction_;
+    private com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction direction_;
     /**
-     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
      *
      * <pre>
      * Trend arrow
@@ -1994,20 +1994,20 @@ public final class SGV {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+     * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
      *
      * <pre>
      * Trend arrow
      * </pre>
      */
-    public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection() {
+    public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction getDirection() {
       return direction_;
     }
 
     private void initFields() {
       sgv_ = 0;
       timestamp_ = 0L;
-      direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
+      direction_ = com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction.NONE;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2067,53 +2067,53 @@ public final class SGV {
       return super.writeReplace();
     }
 
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(byte[] data)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseDelimitedFrom(java.io.InputStream input)
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseDelimitedFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parseFrom(
+    public static com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2122,7 +2122,7 @@ public final class SGV {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 prototype) {
+    public static Builder newBuilder(com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -2134,24 +2134,24 @@ public final class SGV {
       return builder;
     }
     /**
-     * Protobuf type {@code ProposeCookieMonsterSGVG4}
+     * Protobuf type {@code CookieMonsterSGVG4}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4OrBuilder {
+       implements com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4OrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterSGVG4_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterSGVG4_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Builder.class);
+                com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.class, com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Builder.class);
       }
 
-      // Construct using com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.newBuilder()
+      // Construct using com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2175,7 +2175,7 @@ public final class SGV {
         bitField0_ = (bitField0_ & ~0x00000001);
         timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
-        direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
+        direction_ = com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction.NONE;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
@@ -2186,23 +2186,23 @@ public final class SGV {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.ktind.cgm.bgscout.SGV.internal_static_ProposeCookieMonsterSGVG4_descriptor;
+        return com.ktind.cgm.bgscout.SGV.internal_static_CookieMonsterSGVG4_descriptor;
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 getDefaultInstanceForType() {
-        return com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance();
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 getDefaultInstanceForType() {
+        return com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.getDefaultInstance();
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 build() {
-        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 result = buildPartial();
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 build() {
+        com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 buildPartial() {
-        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 result = new com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4(this);
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 buildPartial() {
+        com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 result = new com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -2223,16 +2223,16 @@ public final class SGV {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4) {
-          return mergeFrom((com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4)other);
+        if (other instanceof com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4) {
+          return mergeFrom((com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 other) {
-        if (other == com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 other) {
+        if (other == com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.getDefaultInstance()) return this;
         if (other.hasSgv()) {
           setSgv(other.getSgv());
         }
@@ -2258,11 +2258,11 @@ public final class SGV {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4 parsedMessage = null;
+        com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4 parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4) e.getUnfinishedMessage();
+          parsedMessage = (com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -2371,10 +2371,10 @@ public final class SGV {
         return this;
       }
 
-      // optional .ProposeCookieMonsterSGVG4.Direction direction = 3;
-      private com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
+      // optional .CookieMonsterSGVG4.Direction direction = 3;
+      private com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction direction_ = com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction.NONE;
       /**
-       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
        *
        * <pre>
        * Trend arrow
@@ -2384,23 +2384,23 @@ public final class SGV {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
        *
        * <pre>
        * Trend arrow
        * </pre>
        */
-      public com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction getDirection() {
+      public com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction getDirection() {
         return direction_;
       }
       /**
-       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
        *
        * <pre>
        * Trend arrow
        * </pre>
        */
-      public Builder setDirection(com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction value) {
+      public Builder setDirection(com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2410,7 +2410,7 @@ public final class SGV {
         return this;
       }
       /**
-       * <code>optional .ProposeCookieMonsterSGVG4.Direction direction = 3;</code>
+       * <code>optional .CookieMonsterSGVG4.Direction direction = 3;</code>
        *
        * <pre>
        * Trend arrow
@@ -2418,32 +2418,32 @@ public final class SGV {
        */
       public Builder clearDirection() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        direction_ = com.ktind.cgm.bgscout.SGV.ProposeCookieMonsterSGVG4.Direction.NONE;
+        direction_ = com.ktind.cgm.bgscout.SGV.CookieMonsterSGVG4.Direction.NONE;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:ProposeCookieMonsterSGVG4)
+      // @@protoc_insertion_point(builder_scope:CookieMonsterSGVG4)
     }
 
     static {
-      defaultInstance = new ProposeCookieMonsterSGVG4(true);
+      defaultInstance = new CookieMonsterSGVG4(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:ProposeCookieMonsterSGVG4)
+    // @@protoc_insertion_point(class_scope:CookieMonsterSGVG4)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ProposedCookieMonsterG4Download_descriptor;
+    internal_static_CookieMonsterG4Download_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable;
+      internal_static_CookieMonsterG4Download_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ProposeCookieMonsterSGVG4_descriptor;
+    internal_static_CookieMonsterSGVG4_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable;
+      internal_static_CookieMonsterSGVG4_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2453,43 +2453,42 @@ public final class SGV {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tSGV.proto\"\272\003\n\037ProposedCookieMonsterG4D" +
-      "ownload\022\'\n\003sgv\030\001 \003(\0132\032.ProposeCookieMons" +
-      "terSGVG4\0224\n\005units\030\002 \001(\0162%.ProposedCookie" +
-      "MonsterG4Download.Unit\022\032\n\022download_times" +
-      "tamp\030\003 \002(\004\022N\n\017download_status\030\004 \001(\0162/.Pr" +
-      "oposedCookieMonsterG4Download.DownloadSt" +
-      "atus:\004NONE\022\030\n\020receiver_battery\030\005 \001(\r\022\030\n\020" +
-      "uploader_battery\030\006 \001(\r\"\032\n\004Unit\022\010\n\004MGDL\020\000" +
-      "\022\010\n\004MMOL\020\001\"|\n\016DownloadStatus\022\013\n\007SUCCESS\020" +
-      "\000\022\013\n\007NO_DATA\020\001\022\024\n\020DEVICE_NOT_FOUND\020\002\022\014\n\010",
-      "IO_ERROR\020\003\022\025\n\021APPLICATION_ERROR\020\004\022\010\n\004NON" +
-      "E\020\006\022\013\n\007UNKNOWN\020\007\"\251\002\n\031ProposeCookieMonste" +
-      "rSGVG4\022\013\n\003sgv\030\001 \002(\r\022\021\n\ttimestamp\030\002 \001(\004\0227" +
-      "\n\tdirection\030\003 \001(\0162$.ProposeCookieMonster" +
-      "SGVG4.Direction\"\262\001\n\tDirection\022\010\n\004NONE\020\000\022" +
-      "\r\n\tDOUBLE_UP\020\001\022\r\n\tSINGLE_UP\020\002\022\021\n\rFORTY_F" +
-      "IVE_UP\020\003\022\010\n\004FLAT\020\004\022\023\n\017FORTY_FIVE_DOWN\020\005\022" +
-      "\017\n\013SINGLE_DOWN\020\006\022\017\n\013DOUBLE_DOWN\020\007\022\022\n\016NOT" +
-      "_COMPUTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\tB\034\n\025" +
-      "com.ktind.cgm.bgscoutB\003SGV"
+      "\n\tSGV.proto\"\233\003\n\027CookieMonsterG4Download\022" +
+      " \n\003sgv\030\001 \003(\0132\023.CookieMonsterSGVG4\022,\n\005uni" +
+      "ts\030\002 \001(\0162\035.CookieMonsterG4Download.Unit\022" +
+      "\032\n\022download_timestamp\030\003 \002(\004\022F\n\017download_" +
+      "status\030\004 \001(\0162\'.CookieMonsterG4Download.D" +
+      "ownloadStatus:\004NONE\022\030\n\020receiver_battery\030" +
+      "\005 \001(\r\022\030\n\020uploader_battery\030\006 \001(\r\"\032\n\004Unit\022" +
+      "\010\n\004MGDL\020\000\022\010\n\004MMOL\020\001\"|\n\016DownloadStatus\022\013\n" +
+      "\007SUCCESS\020\000\022\013\n\007NO_DATA\020\001\022\024\n\020DEVICE_NOT_FO" +
+      "UND\020\002\022\014\n\010IO_ERROR\020\003\022\025\n\021APPLICATION_ERROR",
+      "\020\004\022\010\n\004NONE\020\006\022\013\n\007UNKNOWN\020\007\"\233\002\n\022CookieMons" +
+      "terSGVG4\022\013\n\003sgv\030\001 \002(\r\022\021\n\ttimestamp\030\002 \001(\004" +
+      "\0220\n\tdirection\030\003 \001(\0162\035.CookieMonsterSGVG4" +
+      ".Direction\"\262\001\n\tDirection\022\010\n\004NONE\020\000\022\r\n\tDO" +
+      "UBLE_UP\020\001\022\r\n\tSINGLE_UP\020\002\022\021\n\rFORTY_FIVE_U" +
+      "P\020\003\022\010\n\004FLAT\020\004\022\023\n\017FORTY_FIVE_DOWN\020\005\022\017\n\013SI" +
+      "NGLE_DOWN\020\006\022\017\n\013DOUBLE_DOWN\020\007\022\022\n\016NOT_COMP" +
+      "UTABLE\020\010\022\025\n\021RATE_OUT_OF_RANGE\020\tB\034\n\025com.k" +
+      "tind.cgm.bgscoutB\003SGV"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_ProposedCookieMonsterG4Download_descriptor =
+          internal_static_CookieMonsterG4Download_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_ProposedCookieMonsterG4Download_fieldAccessorTable = new
+          internal_static_CookieMonsterG4Download_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ProposedCookieMonsterG4Download_descriptor,
+              internal_static_CookieMonsterG4Download_descriptor,
               new java.lang.String[] { "Sgv", "Units", "DownloadTimestamp", "DownloadStatus", "ReceiverBattery", "UploaderBattery", });
-          internal_static_ProposeCookieMonsterSGVG4_descriptor =
+          internal_static_CookieMonsterSGVG4_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_ProposeCookieMonsterSGVG4_fieldAccessorTable = new
+          internal_static_CookieMonsterSGVG4_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ProposeCookieMonsterSGVG4_descriptor,
+              internal_static_CookieMonsterSGVG4_descriptor,
               new java.lang.String[] { "Sgv", "Timestamp", "Direction", });
           return null;
         }
