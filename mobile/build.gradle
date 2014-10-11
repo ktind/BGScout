@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
@@ -18,17 +17,22 @@ android {
         }
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile files('libs/org.eclipse.paho.client.mqttv3-1.0.0.jar')
-    compile files('libs/protobuf-java-2.5.0.jar')
-    compile files('libs/acra-4.5.0.jar')
     compile 'com.google.android.gms:play-services-wearable:5.0.77'
     compile 'com.android.support:support-v4:20.0.+'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support:support-v13:20.0.0'
-    compile project(':PEBBLE_KIT')
+    compile 'com.google.protobuf:protobuf-java:2.6.0'
+    compile 'org.mongodb:mongo-java-driver:2.12.3'
+    compile 'com.getpebble:pebblekit:2.5.0'
+    compile 'ch.acra:acra:4.5.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public/" }
 }
